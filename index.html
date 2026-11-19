@@ -1,0 +1,1846 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2F5FC">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Speak Daily">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="스픽 3단계 학습법 기반 영어 스피킹 웹앱 — 핵심 패턴, 패턴 변형, 실전 롤플레이">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%233B6EF6'/%3E%3Cpath d='M30 38h40M30 52h28M30 66h34' stroke='white' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Speak Daily · 영어 스피킹</title>
+<style>
+/* ============================================================
+   Speak Daily — 모바일 영어 스피킹 학습 앱
+   ============================================================ */
+:root{
+  --bg:#F2F5FC; --bg-grad1:#EAF0FE; --bg-grad2:#F7F9FE;
+  --card:#FFFFFF; --card-2:#F6F8FE; --card-3:#EEF3FE;
+  --text:#0F172A; --text-2:#5B6986; --text-3:#8A97B0;
+  --line:#E3E9F5; --line-strong:#D3DDF0;
+  --primary:#3B6EF6; --primary-d:#2A55D4; --primary-soft:#E7EEFF; --primary-soft-2:#D8E4FF;
+  --ok:#0FA968; --ok-soft:#E3F8EE;
+  --warn:#F79009; --warn-soft:#FEF3E2;
+  --bad:#EC4A3A; --bad-soft:#FDECEA;
+  --shadow:0 8px 26px rgba(23,44,92,.08);
+  --shadow-sm:0 2px 10px rgba(23,44,92,.06);
+  --r-lg:22px; --r-md:16px; --r-sm:12px; --r-full:999px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-t:env(safe-area-inset-top,0px);
+}
+[data-theme="dark"]{
+  --bg:#080D1A; --bg-grad1:#0E1730; --bg-grad2:#080D1A;
+  --card:#121A2E; --card-2:#0E1526; --card-3:#18223A;
+  --text:#EAF0FB; --text-2:#9DACC7; --text-3:#7A88A3;
+  --line:#222D46; --line-strong:#2C3860;
+  --primary:#5B87FF; --primary-d:#7CA0FF; --primary-soft:#182440; --primary-soft-2:#1E2C4E;
+  --ok:#3BD68C; --ok-soft:#12291F;
+  --warn:#FBBF4D; --warn-soft:#2A2114;
+  --bad:#FF7A6B; --bad-soft:#2C1614;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --shadow-sm:0 2px 12px rgba(0,0,0,.28);
+}
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; padding:0; }
+html{ background:var(--bg); }
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Segoe UI",system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+button, input, textarea, select{ font-family:inherit; font-size:inherit; color:inherit; }
+button{ border:0; background:none; cursor:pointer; padding:0; }
+[hidden]{ display:none !important; }
+
+.app{
+  max-width:560px; margin:0 auto; min-height:100vh; min-height:100dvh;
+  display:flex; flex-direction:column;
+  background:linear-gradient(180deg,var(--bg-grad1) 0%, var(--bg-grad2) 260px, var(--bg) 520px);
+  position:relative;
+}
+.app::before{
+  content:""; position:fixed; inset:0; pointer-events:none;
+  background:radial-gradient(720px 320px at 50% -140px, rgba(59,110,246,.20), transparent 70%);
+  z-index:0;
+}
+[data-theme="dark"] .app::before{ background:radial-gradient(720px 320px at 50% -140px, rgba(91,135,255,.16), transparent 70%); }
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:20;
+  padding:calc(10px + var(--safe-t)) 18px 10px;
+  display:flex; align-items:center; gap:10px;
+  background:linear-gradient(180deg, var(--bg-grad1) 60%, rgba(242,245,252,0));
+  backdrop-filter:blur(8px);
+}
+[data-theme="dark"] .topbar{ background:linear-gradient(180deg, var(--bg) 60%, rgba(8,13,26,0)); }
+.brand{ display:flex; align-items:center; gap:9px; flex:1; min-width:0; }
+.brand-mark{
+  width:34px; height:34px; border-radius:11px; flex:none;
+  background:linear-gradient(145deg,#4B7BFF,#2A55D4);
+  color:#fff; display:grid; place-items:center; font-weight:800; font-size:17px;
+  box-shadow:0 6px 16px rgba(59,110,246,.35);
+}
+.brand-name{ font-weight:800; font-size:17px; letter-spacing:-.3px; }
+.brand-sub{ font-size:11px; color:var(--text-3); font-weight:600; margin-top:-2px; }
+.streak{
+  display:flex; align-items:center; gap:5px; padding:7px 12px 7px 10px;
+  border-radius:var(--r-full); background:var(--card); border:1px solid var(--line);
+  box-shadow:var(--shadow-sm); font-weight:800; font-size:14px; flex:none;
+}
+.streak .flame{ font-size:15px; }
+.streak small{ font-weight:700; color:var(--text-3); font-size:11px; }
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; display:grid; place-items:center;
+  background:var(--card); border:1px solid var(--line); color:var(--text-2);
+  box-shadow:var(--shadow-sm); flex:none;
+}
+
+/* ---------- content ---------- */
+.content{ flex:1; position:relative; z-index:1; padding:4px 16px calc(96px + var(--safe-b)); }
+.section-title{ font-size:13px; font-weight:800; color:var(--text-3); letter-spacing:.4px; text-transform:uppercase; margin:22px 2px 10px; }
+.h1{ font-size:24px; font-weight:800; letter-spacing:-.6px; margin:6px 2px 2px; }
+.h1 em{ font-style:normal; color:var(--primary); }
+.sub{ color:var(--text-2); font-size:14px; margin:4px 2px 0; }
+
+/* ---------- track tabs ---------- */
+.tracktabs{
+  display:flex; gap:6px; padding:5px; margin:10px 0 4px;
+  background:var(--card-3); border-radius:16px; position:relative;
+}
+.tracktabs button{
+  flex:1; padding:11px 6px; border-radius:12px; font-weight:800; font-size:13.5px;
+  color:var(--text-2); transition:.18s; line-height:1.2;
+}
+.tracktabs button .tnum{ display:block; font-size:10.5px; font-weight:700; color:var(--text-3); margin-top:2px; }
+.tracktabs button[aria-selected="true"]{
+  background:var(--card); color:var(--primary); box-shadow:0 3px 12px rgba(23,44,92,.10);
+}
+.tracktabs button[aria-selected="true"] .tnum{ color:var(--primary); opacity:.75; }
+
+/* ---------- track header card ---------- */
+.trackcard{
+  margin-top:12px; padding:16px 18px; border-radius:var(--r-lg);
+  background:linear-gradient(135deg, #3B6EF6, #2A55D4 65%, #2346B8);
+  color:#fff; box-shadow:0 12px 28px rgba(43,86,214,.28); position:relative; overflow:hidden;
+}
+.trackcard::after{
+  content:""; position:absolute; right:-40px; top:-50px; width:170px; height:170px;
+  border-radius:50%; background:rgba(255,255,255,.10);
+}
+.trackcard h2{ margin:0; font-size:18px; letter-spacing:-.3px; }
+.trackcard p{ margin:5px 0 0; font-size:12.5px; opacity:.86; line-height:1.45; }
+.tc-bar{ margin-top:14px; height:8px; border-radius:99px; background:rgba(255,255,255,.24); overflow:hidden; }
+.tc-bar > i{ display:block; height:100%; border-radius:99px; background:#fff; transition:width .45s ease; }
+.tc-foot{ display:flex; justify-content:space-between; font-size:11.5px; font-weight:700; margin-top:7px; opacity:.9; }
+
+/* ---------- chapter chips ---------- */
+.chips{ display:flex; gap:8px; overflow-x:auto; padding:14px 2px 2px; margin:0 -2px; scrollbar-width:none; }
+.chips::-webkit-scrollbar{ display:none; }
+.chip{
+  flex:none; padding:9px 14px; border-radius:var(--r-full); font-size:13px; font-weight:700;
+  background:var(--card); border:1px solid var(--line); color:var(--text-2); white-space:nowrap;
+  box-shadow:var(--shadow-sm); transition:.15s;
+}
+.chip[aria-selected="true"]{ background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 6px 16px rgba(59,110,246,.32); }
+.chip .cnt{ opacity:.65; font-weight:700; font-size:11.5px; margin-left:3px; }
+
+/* ---------- day grid ---------- */
+.daygrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+.daycard{
+  position:relative; text-align:left; padding:14px 13px 13px; border-radius:var(--r-md);
+  background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column; gap:7px; min-height:104px; transition:transform .12s, box-shadow .18s;
+}
+.daycard:active{ transform:scale(.975); }
+.daycard .dnum{
+  font-size:11px; font-weight:800; color:var(--primary); letter-spacing:.3px;
+  display:flex; align-items:center; gap:5px;
+}
+.daycard .dtitle{ font-size:13.5px; font-weight:700; line-height:1.35; letter-spacing:-.2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.daycard .dkey{ font-size:11.5px; color:var(--text-3); line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:auto; }
+.daycard.done{ background:linear-gradient(160deg,var(--ok-soft),var(--card) 75%); border-color:rgba(15,169,104,.30); }
+.daycard.done .dnum{ color:var(--ok); }
+.daycard .badge{
+  position:absolute; top:11px; right:11px; width:20px; height:20px; border-radius:50%;
+  background:var(--ok); color:#fff; display:none; place-items:center; font-size:12px; font-weight:900;
+}
+.daycard.done .badge{ display:grid; }
+.daycard.review .dnum::before{ content:"↻"; font-size:12px; }
+
+/* ---------- empty state / banners ---------- */
+.empty{
+  text-align:center; padding:42px 20px; border-radius:var(--r-lg);
+  background:var(--card); border:1px dashed var(--line-strong); margin-top:16px;
+}
+.empty .emoji{ font-size:38px; }
+.empty h3{ margin:12px 0 6px; font-size:16.5px; }
+.empty p{ margin:0; color:var(--text-2); font-size:13.5px; line-height:1.55; }
+
+/* ---------- bottom nav ---------- */
+.tabbar{
+  position:fixed; bottom:0; left:0; right:0; z-index:30;
+  max-width:560px; margin:0 auto;
+  padding:8px 14px calc(8px + var(--safe-b));
+  display:flex; gap:4px;
+  background:var(--card);
+  background:color-mix(in srgb, var(--card) 88%, transparent);
+  backdrop-filter:blur(14px) saturate(1.4);
+  border-top:1px solid var(--line);
+}
+.tabbar button{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 0 4px;
+  color:var(--text-3); font-size:10.5px; font-weight:800; border-radius:12px;
+}
+.tabbar button[ aria-current="page" ]{ color:var(--primary); }
+.tabbar button[aria-current="page"] .ico{ background:var(--primary-soft); }
+.tabbar .ico{ width:44px; height:26px; border-radius:99px; display:grid; place-items:center; transition:.18s; }
+.ico svg{ width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ============================================================
+   Lesson
+   ============================================================ */
+.lesson{
+  position:fixed; inset:0; z-index:60; max-width:560px; margin:0 auto;
+  background:var(--bg); display:flex; flex-direction:column;
+  animation:slideUp .26s cubic-bezier(.22,.9,.3,1);
+}
+@keyframes slideUp{ from{ transform:translateY(18px); opacity:0 } to{ transform:none; opacity:1 } }
+.lhead{
+  padding:calc(8px + var(--safe-t)) 12px 8px; display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid var(--line); background:var(--card);
+}
+.lhead .lclose{ width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:var(--text-2); }
+.lhead .lmeta{ flex:1; min-width:0; }
+.lhead .lmeta .k{ font-size:10.5px; font-weight:800; color:var(--primary); letter-spacing:.4px; }
+.lhead .lmeta .t{ font-size:14px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lsteps{ display:flex; gap:5px; padding:10px 16px 4px; }
+.lsteps .s{ flex:1; height:4px; border-radius:99px; background:var(--line-strong); transition:.25s; }
+.lsteps .s.on{ background:var(--primary); }
+.lsteps .s.done{ background:var(--primary); opacity:.45; }
+.lbody{ flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px 16px 22px; }
+.lfoot{
+  padding:10px 16px calc(12px + var(--safe-b)); border-top:1px solid var(--line);
+  background:var(--card); display:flex; gap:10px;
+}
+.steplabel{ font-size:11.5px; font-weight:800; color:var(--primary); letter-spacing:.3px; }
+.stepdesc{ color:var(--text-2); font-size:13px; margin:5px 0 0; }
+
+/* sentence card */
+.scard{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:20px 18px; box-shadow:var(--shadow); margin-top:12px;
+}
+.scard .en{ font-size:23px; font-weight:800; line-height:1.34; letter-spacing:-.5px; }
+.scard .en .hl{ color:var(--primary); }
+.scard .ko{ margin-top:10px; font-size:14.5px; color:var(--text-2); line-height:1.5; }
+.scard .ko.blur{ filter:blur(6px); opacity:.6; user-select:none; }
+.srow{ display:flex; align-items:center; gap:8px; margin-top:16px; flex-wrap:wrap; }
+.playbtn{
+  display:inline-flex; align-items:center; gap:7px; padding:9px 15px 9px 12px; border-radius:99px;
+  background:var(--primary); color:#fff; font-weight:800; font-size:13.5px;
+  box-shadow:0 6px 16px rgba(59,110,246,.30);
+}
+.playbtn svg{ width:17px; height:17px; stroke:#fff; fill:none; stroke-width:2; }
+.playbtn.ghost{ background:var(--primary-soft); color:var(--primary); box-shadow:none; }
+.playbtn.ghost svg{ stroke:var(--primary); }
+.playbtn:active{ transform:scale(.96); }
+.speed{
+  display:inline-flex; padding:3px; border-radius:99px; background:var(--card-2);
+  border:1px solid var(--line); font-size:12px; font-weight:800; color:var(--text-2);
+}
+.speed button{ padding:6px 11px; border-radius:99px; }
+.speed button[aria-pressed="true"]{ background:var(--card); color:var(--primary); box-shadow:var(--shadow-sm); }
+
+.nuance{
+  margin-top:16px; padding:14px 15px; border-radius:var(--r-md);
+  background:var(--primary-soft); border:1px solid var(--primary-soft-2);
+}
+.nuance .nt{ font-size:11.5px; font-weight:900; color:var(--primary); letter-spacing:.3px; margin-bottom:5px; }
+.nuance p{ margin:0; font-size:13.5px; line-height:1.6; color:var(--text); }
+.tipbox{ margin-top:12px; padding:13px 15px; border-radius:var(--r-md); background:var(--card-2); border:1px solid var(--line); }
+.tipbox ul{ margin:0; padding-left:17px; }
+.tipbox li{ font-size:13px; color:var(--text-2); line-height:1.6; margin:2px 0; }
+
+/* variation cards */
+.vcard{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
+  padding:15px 15px 13px; margin-top:10px; box-shadow:var(--shadow-sm);
+}
+.vcard .vtop{ display:flex; align-items:flex-start; gap:10px; }
+.vcard .vnum{
+  flex:none; width:24px; height:24px; border-radius:8px; background:var(--primary-soft); color:var(--primary);
+  display:grid; place-items:center; font-size:12px; font-weight:900; margin-top:1px;
+}
+.vcard .ven{ font-size:16.5px; font-weight:700; line-height:1.4; letter-spacing:-.2px; }
+.vcard .vko{ font-size:13px; color:var(--text-2); margin-top:6px; line-height:1.5; }
+.vcard .vnote{ font-size:12px; color:var(--text-3); margin-top:5px; }
+.vacts{ display:flex; gap:7px; margin-top:11px; flex-wrap:wrap; }
+.icobtn{
+  display:inline-flex; align-items:center; gap:6px; padding:8px 13px; border-radius:99px;
+  background:var(--card-2); border:1px solid var(--line); color:var(--text-2);
+  font-size:12.5px; font-weight:800;
+}
+.icobtn svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.icobtn.rec{ background:var(--bad-soft); border-color:rgba(236,74,58,.3); color:var(--bad); }
+.icobtn.busy{ animation:pulse 1.1s infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1 } 50%{ opacity:.45 } }
+
+/* result */
+.result{ margin-top:11px; padding-top:11px; border-top:1px dashed var(--line); }
+.said{ font-size:12.5px; color:var(--text-2); margin-bottom:7px; }
+.said b{ color:var(--text); font-weight:700; }
+.marks{ font-size:14.5px; line-height:1.6; font-weight:600; }
+.marks .w{ padding:1px 2px; border-radius:4px; }
+.marks .ok{ color:var(--ok); }
+.marks .miss{ color:var(--bad); background:var(--bad-soft); }
+.mbar{ height:7px; border-radius:99px; background:var(--line); margin-top:10px; overflow:hidden; }
+.mbar i{ display:block; height:100%; border-radius:99px; transition:width .4s; }
+.mscore{ display:flex; align-items:center; justify-content:space-between; margin-top:7px; font-size:12px; font-weight:800; color:var(--text-2); }
+.mscore .num{ font-size:17px; }
+.fb{ margin-top:8px; font-size:12.5px; font-weight:700; }
+.fb.good{ color:var(--ok); } .fb.mid{ color:var(--warn); } .fb.low{ color:var(--text-2); }
+
+.txtinput{ display:flex; gap:8px; margin-top:10px; }
+.txtinput input{
+  flex:1; min-width:0; padding:11px 13px; border-radius:12px; border:1px solid var(--line-strong);
+  background:var(--card-2); font-size:14px; outline:none;
+}
+.txtinput input:focus{ border-color:var(--primary); background:var(--card); }
+.txtinput button{ padding:0 15px; border-radius:12px; background:var(--primary); color:#fff; font-weight:800; font-size:13px; }
+
+/* roleplay */
+.rp-sit{ background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg); padding:17px; box-shadow:var(--shadow-sm); }
+.rp-sit .label{ font-size:11px; font-weight:900; color:var(--warn); letter-spacing:.4px; }
+.rp-sit p{ margin:7px 0 0; font-size:14px; line-height:1.6; }
+.rp-q{ margin-top:14px; padding:15px; border-radius:var(--r-md); background:var(--primary-soft); border:1px solid var(--primary-soft-2); }
+.rp-q .q{ font-size:16px; font-weight:700; line-height:1.45; }
+.rp-q .qko{ font-size:12.5px; color:var(--text-2); margin-top:6px; }
+.micwrap{ display:flex; flex-direction:column; align-items:center; gap:10px; margin:20px 0 6px; }
+.micbig{
+  width:76px; height:76px; border-radius:50%; display:grid; place-items:center;
+  background:linear-gradient(145deg,#4B7BFF,#2A55D4); color:#fff;
+  box-shadow:0 12px 26px rgba(59,110,246,.38); transition:.15s; position:relative;
+}
+.micbig svg{ width:30px; height:30px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.micbig:active{ transform:scale(.94); }
+.micbig.on{ background:linear-gradient(145deg,#F0604E,#D8382A); box-shadow:0 0 0 0 rgba(236,74,58,.5); animation:ring 1.4s infinite; }
+@keyframes ring{
+  0%{ box-shadow:0 0 0 0 rgba(236,74,58,.45) }
+  70%{ box-shadow:0 0 0 18px rgba(236,74,58,0) }
+  100%{ box-shadow:0 0 0 0 rgba(236,74,58,0) }
+}
+.micwrap .hint{ font-size:12.5px; color:var(--text-3); font-weight:600; }
+.alt{ text-align:center; margin-top:4px; }
+.alt button{ font-size:12.5px; color:var(--primary); font-weight:800; text-decoration:underline; text-underline-offset:3px; }
+.model{
+  margin-top:16px; padding:16px; border-radius:var(--r-md); background:var(--ok-soft);
+  border:1px solid rgba(15,169,104,.28);
+}
+.model .mt{ font-size:11px; font-weight:900; color:var(--ok); letter-spacing:.4px; }
+.model .en{ font-size:16px; font-weight:700; margin-top:7px; line-height:1.5; }
+.model .ko{ font-size:13px; color:var(--text-2); margin-top:6px; line-height:1.5; }
+.model ul{ margin:10px 0 0; padding-left:17px; }
+.model li{ font-size:12.5px; color:var(--text-2); line-height:1.55; }
+
+/* AI box */
+.aibox{ margin-top:16px; border:1px solid var(--line); border-radius:var(--r-md); background:var(--card); overflow:hidden; }
+.aihead{ display:flex; align-items:center; gap:8px; padding:12px 14px; border-bottom:1px solid var(--line); }
+.aihead .dot{ width:9px; height:9px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px var(--ok-soft); }
+.aihead .t{ font-size:13px; font-weight:800; flex:1; }
+.aihead .t span{ display:block; font-size:11px; color:var(--text-3); font-weight:600; }
+.aihead button{ font-size:12px; font-weight:800; color:var(--primary); padding:6px 10px; border-radius:9px; background:var(--primary-soft); }
+.ailog{ max-height:280px; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; background:var(--card-2); }
+.msg{ max-width:86%; padding:10px 12px; border-radius:14px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; }
+.msg.ai{ align-self:flex-start; background:var(--card); border:1px solid var(--line); border-bottom-left-radius:5px; }
+.msg.me{ align-self:flex-end; background:var(--primary); color:#fff; border-bottom-right-radius:5px; }
+.msg.sys{ align-self:center; background:transparent; color:var(--text-3); font-size:11.5px; text-align:center; max-width:100%; }
+.aiform{ display:flex; gap:7px; padding:9px; border-top:1px solid var(--line); background:var(--card); }
+.aiform input{ flex:1; min-width:0; padding:10px 12px; border-radius:10px; border:1px solid var(--line-strong); background:var(--card-2); font-size:13.5px; outline:none; }
+.aiform button{ width:40px; border-radius:10px; background:var(--primary); color:#fff; display:grid; place-items:center; }
+.aiform button svg{ width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2; }
+.ainote{ padding:10px 14px 12px; font-size:11px; color:var(--text-3); line-height:1.5; }
+
+/* buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:14px 18px; border-radius:14px; font-weight:800; font-size:15px; letter-spacing:-.2px;
+  background:var(--card-2); color:var(--text); border:1px solid var(--line);
+}
+.btn.primary{ background:var(--primary); color:#fff; border-color:transparent; box-shadow:0 8px 20px rgba(59,110,246,.30); }
+.btn.primary:active{ transform:scale(.98); }
+.btn:disabled{ opacity:.45; }
+.btn.block{ width:100%; }
+.btn.sm{ padding:10px 14px; font-size:13px; border-radius:11px; }
+.lesson .lfoot .btn{ flex:1; }
+.lesson .lfoot .btn.ghost{ flex:0 0 auto; min-width:86px; }
+
+/* ---------- review ---------- */
+.quizhero{
+  border-radius:var(--r-lg); padding:20px; color:#fff;
+  background:linear-gradient(135deg,#7C5CFF,#4B47E0 60%,#3538C0);
+  box-shadow:0 12px 26px rgba(76,70,220,.30); margin-top:6px;
+}
+.quizhero h2{ margin:0; font-size:20px; letter-spacing:-.4px; }
+.quizhero p{ margin:7px 0 0; font-size:13px; opacity:.9; line-height:1.5; }
+.quizhero .stat{ display:flex; gap:18px; margin-top:16px; }
+.quizhero .stat div{ font-size:11.5px; opacity:.8; font-weight:700; }
+.quizhero .stat b{ display:block; font-size:21px; opacity:1; margin-bottom:1px; }
+.qcard{ background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg); padding:20px 18px; box-shadow:var(--shadow); margin-top:14px; }
+.qcard .qidx{ font-size:11.5px; font-weight:900; color:var(--primary); letter-spacing:.4px; }
+.qcard .qko{ font-size:19px; font-weight:800; line-height:1.45; margin-top:10px; letter-spacing:-.3px; }
+.qcard .qhint{ font-size:12.5px; color:var(--text-3); margin-top:8px; }
+
+/* ---------- stats ---------- */
+.statgrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+.statbox{ background:var(--card); border:1px solid var(--line); border-radius:var(--r-md); padding:15px; box-shadow:var(--shadow-sm); }
+.statbox .k{ font-size:11.5px; font-weight:800; color:var(--text-3); }
+.statbox .v{ font-size:26px; font-weight:900; letter-spacing:-1px; margin-top:3px; }
+.statbox .v small{ font-size:13px; font-weight:800; color:var(--text-3); letter-spacing:0; }
+.dots{ display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.dot{ width:26px; height:26px; border-radius:8px; background:var(--card-3); border:1px solid var(--line); display:grid; place-items:center; font-size:9px; font-weight:800; color:var(--text-3); }
+.dot.on{ background:var(--ok); border-color:var(--ok); color:#fff; }
+.proglist{ margin-top:12px; display:flex; flex-direction:column; gap:12px; }
+.progrow .pt{ display:flex; justify-content:space-between; font-size:13px; font-weight:800; margin-bottom:6px; }
+.progrow .pt span{ color:var(--text-3); font-weight:700; font-size:12px; }
+.progrow .pbar{ height:8px; border-radius:99px; background:var(--card-3); overflow:hidden; }
+.progrow .pbar i{ display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#5B87FF,#3B6EF6); }
+
+/* ---------- modal ---------- */
+.modal{ position:fixed; inset:0; z-index:80; display:flex; align-items:flex-end; justify-content:center; }
+.modal .backdrop{ position:absolute; inset:0; background:rgba(6,12,28,.5); backdrop-filter:blur(2px); animation:fade .2s; }
+@keyframes fade{ from{opacity:0} to{opacity:1} }
+.sheet{
+  position:relative; width:100%; max-width:560px; max-height:88vh; overflow-y:auto;
+  background:var(--card); border-radius:24px 24px 0 0; padding:8px 18px calc(20px + var(--safe-b));
+  animation:sheetUp .26s cubic-bezier(.22,.9,.3,1);
+}
+@keyframes sheetUp{ from{ transform:translateY(40px) } to{ transform:none } }
+.sheet .grab{ width:42px; height:4px; border-radius:99px; background:var(--line-strong); margin:6px auto 12px; }
+.sheet h2{ margin:0 0 4px; font-size:19px; letter-spacing:-.3px; }
+.sheet .sdesc{ font-size:12.5px; color:var(--text-2); margin:0 0 16px; line-height:1.5; }
+.field{ margin-bottom:16px; }
+.field > label{ display:block; font-size:12.5px; font-weight:800; color:var(--text-2); margin-bottom:7px; }
+.field input[type=text], .field input[type=password], .field select{
+  width:100%; padding:12px 13px; border-radius:12px; border:1px solid var(--line-strong);
+  background:var(--card-2); font-size:14px; outline:none;
+}
+.field input:focus, .field select:focus{ border-color:var(--primary); }
+.field .help{ font-size:11.5px; color:var(--text-3); margin-top:6px; line-height:1.5; }
+.field textarea{
+  width:100%; min-height:78px; padding:11px 13px; border-radius:12px; border:1px solid var(--line-strong);
+  background:var(--card-2); color:var(--text); font-size:12px; line-height:1.45; outline:none; resize:vertical;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; word-break:break-all;
+}
+.field textarea:focus{ border-color:var(--primary); }
+.btnrow{ display:flex; gap:8px; flex-wrap:wrap; }
+.field .okmsg{ font-size:11.5px; color:var(--ok); margin-top:6px; line-height:1.5; font-weight:700; }
+.seg{ display:flex; gap:6px; background:var(--card-3); padding:4px; border-radius:12px; }
+.seg button{ flex:1; padding:9px; border-radius:9px; font-size:12.5px; font-weight:800; color:var(--text-2); }
+.seg button[aria-pressed="true"]{ background:var(--card); color:var(--primary); box-shadow:var(--shadow-sm); }
+.switchrow{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid var(--line); }
+.switchrow .lab{ font-size:13.5px; font-weight:700; }
+.switchrow .lab span{ display:block; font-size:11.5px; color:var(--text-3); font-weight:600; margin-top:2px; }
+.switch{ width:48px; height:28px; border-radius:99px; background:var(--line-strong); position:relative; transition:.2s; flex:none; }
+.switch::after{ content:""; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.switch[aria-checked="true"]{ background:var(--primary); }
+.switch[aria-checked="true"]::after{ transform:translateX(20px); }
+.danger{ color:var(--bad); font-size:13.5px; font-weight:800; }
+.mic-status{ display:flex; gap:8px; align-items:center; font-size:12px; font-weight:700; padding:10px 12px; border-radius:10px; background:var(--card-2); border:1px solid var(--line); }
+.mic-status .dot{ width:8px; height:8px; border-radius:50%; background:var(--text-3); }
+.mic-status.ok .dot{ background:var(--ok); } .mic-status.no .dot{ background:var(--warn); }
+
+/* toast */
+.toast{
+  position:fixed; left:50%; bottom:calc(84px + var(--safe-b)); transform:translate(-50%,20px);
+  background:#111A2E; color:#fff; padding:12px 18px; border-radius:99px; font-size:13px; font-weight:700;
+  opacity:0; pointer-events:none; transition:.25s; z-index:100; max-width:88vw; text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+[data-theme="dark"] .toast{ background:#EAF0FB; color:#0B1020; }
+.toast.show{ opacity:1; transform:translate(-50%,0); }
+
+/* completion */
+.donebox{ text-align:center; padding:30px 20px; }
+.donebox .big{ font-size:56px; line-height:1; animation:pop .5s cubic-bezier(.2,1.6,.4,1); }
+@keyframes pop{ from{ transform:scale(.4); opacity:0 } to{ transform:none; opacity:1 } }
+.donebox h2{ margin:16px 0 6px; font-size:22px; letter-spacing:-.4px; }
+.donebox p{ margin:0 auto; color:var(--text-2); font-size:13.5px; max-width:300px; line-height:1.6; }
+.donebox .stats{ display:flex; justify-content:center; gap:26px; margin:22px 0 8px; }
+.donebox .stats div{ font-size:11.5px; color:var(--text-3); font-weight:700; }
+.donebox .stats b{ display:block; font-size:24px; color:var(--text); letter-spacing:-.5px; }
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div>
+        <div class="brand-name">Speak Daily</div>
+        <div class="brand-sub">스픽 3단계 스피킹</div>
+      </div>
+    </div>
+    <div class="streak" id="streakBox" title="연속 학습">
+      <span class="flame">🔥</span>
+      <span id="streakNum">0</span><small>일</small>
+    </div>
+    <button class="icon-btn" data-act="settings" aria-label="설정">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:21px;height:21px"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.55-1.1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.88V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </header>
+  <main id="main" class="content"></main>
+  <nav class="tabbar" aria-label="메인 탭">
+    <button data-act="tab" data-tab="home" aria-current="page">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10a3 3 0 0 1 2 5.2V20a3 3 0 0 0-2-1H5.5A1.5 1.5 0 0 1 4 17.5v-12z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14a3 3 0 0 0-2 5.2V20a3 3 0 0 1 2-1h4.5a1.5 1.5 0 0 0 1.5-1.5v-12z"/></svg></span>
+      학습
+    </button>
+    <button data-act="tab" data-tab="review">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 10a7 7 0 0 1 12-4l2 2"/><path d="M18 4v4h-4"/><path d="M20 14a7 7 0 0 1-12 4l-2-2"/><path d="M6 20v-4h4"/></svg></span>
+      복습
+    </button>
+    <button data-act="tab" data-tab="stats">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5h16"/><path d="M7 19V11"/><path d="M12 19V5.5"/><path d="M17 19v-5"/></svg></span>
+      기록
+    </button>
+  </nav>
+</div>
+
+<div id="lesson" class="lesson" hidden></div>
+<div id="modal" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script id="app-data" type="application/json">{"tracks":[{"id":"A","name":"비즈니스 실무","short":"실무","cardTitle":"비즈니스 실무 영어","tagline":"회의·발표·협의·업무 공유까지, 실무에서 바로 쓰는 29일","chapters":[{"id":"A","name":"비즈니스 실무 영어","subtitle":"회의 진행 · 발표 · 의견 조율 · 업무 공유","days":[{"n":0,"title":"1:1 면담 일정 잡기","key":"We should schedule a 1-on-1 meeting.","keyKo":"면담 일정을 잡는 게 좋겠어요.","nuance":"1:1 면담은 one-on-one 또는 1-on-1이라고 씁니다. should는 must보다 부드러운 제안이라 상사에게도, 동료에게도 쓸 수 있어요.","usage":"분기 목표나 커리어 이야기를 하려고 상사에게 시간을 요청할 때 가장 먼저 나오는 문장입니다.","tips":["schedule은 격식 있는 '일정을 잡다', 캐주얼하게는 set up을 씁니다.","시간을 구체적으로(30 minutes) 붙이면 답장을 받기 쉬워요."],"variations":[{"en":"Could we schedule a quick 1-on-1 this week?","ko":"이번 주에 잠깐 1:1 면담 일정을 잡을 수 있을까요?","note":"Could we ~ 로 시작하면 더 공손해요."},{"en":"Let's set up a 1-on-1 with the new hire.","ko":"신입 사원과 1:1 면담을 잡아요.","note":"set up a meeting = schedule a meeting."},{"en":"I'd like to schedule a 1-on-1 to go over my goals.","ko":"제 목표를 함께 짚어보고 싶어서 1:1 면담을 잡고 싶습니다.","note":"go over = 함께 훑어보다."}],"roleplay":{"situation":"분기 목표를 논의하고 싶어서 팀장님께 1:1 면담을 요청해야 합니다.","question":"Ask your manager for a 1-on-1 meeting this week to talk about your goals.","questionKo":"이번 주에 목표 이야기를 하려고 팀장님께 1:1 면담을 요청해 보세요.","model":"Hi, do you have 30 minutes this week? I'd like to schedule a 1-on-1 to go over my quarterly goals.","modelKo":"안녕하세요, 이번 주에 30분 시간 괜찮으실까요? 분기 목표를 함께 짚어보고 싶어서 1:1 면담을 잡고 싶습니다.","tips":["목적을 먼저 말하면 상대가 일정을 잡기 쉬워요.","30 minutes처럼 길이를 제안하면 답이 빨라집니다."]}},{"n":1,"title":"화상회의 음성이 끊길 때","key":"Your sound cuts in and out.","keyKo":"목소리가 나왔다 안 나왔다 끊겨요.","nuance":"cut in and out은 소리가 들렸다 끊겼다 반복된다는 뜻이에요. sound 대신 audio를 써도 같은 의미입니다.","usage":"화상 통화에서 상대의 말이 자꾸 끊겨 다시 말해 달라고 해야 할 때 씁니다.","tips":["Sorry를 앞에 붙이면 지적이 아니라 상황 설명처럼 들려요.","You're breaking up도 똑같이 자주 쓰는 표현입니다."],"variations":[{"en":"Sorry, you're breaking up. Can you say that again?","ko":"미안한데 목소리가 끊겨요. 다시 한번 말해줄래요?","note":"breaking up = 통화 품질이 나쁜 상태."},{"en":"I think my connection is unstable. Let me turn off my video.","ko":"연결이 불안정한 것 같아요. 영상 꺼볼게요.","note":"unstable connection = 불안정한 연결."},{"en":"Can you hear me now? I'll try reconnecting.","ko":"지금 제 말 들리세요? 다시 연결해볼게요.","note":"reconnect = 다시 접속하다."}],"roleplay":{"situation":"화상회의 중 거래처 담당자의 목소리가 계속 끊깁니다.","question":"Your client's audio keeps cutting out. What do you say?","questionKo":"거래처 담당자의 소리가 계속 끊길 때 뭐라고 말할까요?","model":"Sorry, your sound keeps cutting in and out. Could you say that one more time? I'll turn my video off to save bandwidth.","modelKo":"죄송해요, 소리가 계속 끊겨요. 한 번만 더 말씀해 주시겠어요? 대역폭을 아끼려고 영상은 꺼둘게요.","tips":["keeps cutting in and out처럼 keeps를 붙이면 반복되는 상황이 돼요.","bandwidth는 인터넷 대역폭, 회사에서는 '업무 여유'라는 뜻으로도 씁니다."]}},{"n":2,"title":"앞 회의가 늦어질 때","key":"My meeting is running over.","keyKo":"앞에 회의가 좀 늦어지고 있어요.","nuance":"run over는 정해진 시간을 넘겨 계속되다는 뜻입니다. 진행 중이면 running over로 씁니다.","usage":"다음 일정에 늦을 것 같아 미리 양해를 구할 때 문자나 통화 첫마디로 씁니다.","tips":["I'm running behind도 같은 뜻의 더 캐주얼한 표현이에요.","몇 분 늦을지 숫자로 말하면 상대가 일정을 조정하기 쉬워요."],"variations":[{"en":"Sorry, I'm running a little behind.","ko":"죄송해요, 제가 조금 늦어지고 있어요.","note":"a little behind = 조금 늦는 중."},{"en":"My previous meeting ran over. Can we start 10 minutes late?","ko":"앞 회의가 늦어졌어요. 10분 늦게 시작해도 될까요?","note":"ran over = 이미 늦어진(과거)."},{"en":"I'll be there as soon as this meeting wraps up.","ko":"이 회의 끝나는 대로 갈게요.","note":"wrap up = 마무리하다."}],"roleplay":{"situation":"앞 회의가 길어져 다음 통화에 늦을 것 같습니다.","question":"Apologize for being late to a call and give a time when you'll join.","questionKo":"통화에 늦는 것을 사과하고 언제 들어갈 수 있는지 말해 보세요.","model":"I'm so sorry — my previous meeting is running over. I'll join in about 10 minutes.","modelKo":"정말 죄송합니다. 앞 회의가 늦어지고 있어서요. 10분쯤 뒤에 들어가겠습니다.","tips":["I'll join in about ~ minutes가 가장 자연스러운 예고입니다.","사과는 짧게, 대신 언제 들어가겠다는 정보를 꼭 넣으세요."]}},{"n":3,"title":"본론에서 벗어날 때","key":"We are getting a bit sidetracked here.","keyKo":"지금 우리가 본론에서 좀 벗어나고 있어요.","nuance":"sidetracked는 원래 하던 이야기에서 옆길로 새는 것. a bit을 넣으면 지적이 훨씬 부드러워집니다.","usage":"회의가 다른 주제로 흘러갈 때, 진행자로서 자연스럽게 되돌릴 때 씁니다.","tips":["get back on track = 다시 본론으로 돌아가다.","go off on a tangent = 옆길로 새다."],"variations":[{"en":"Let's get back on track.","ko":"다시 본론으로 돌아가죠.","note":"짧고 힘 있는 진행자 표현."},{"en":"That's a good point, but let's come back to it later.","ko":"좋은 지적이에요, 근데 나중에 다시 다뤄요.","note":"상대 의견을 인정하고 미루는 방식."},{"en":"Sorry, I think we're going off on a tangent.","ko":"죄송해요, 우리가 옆길로 새는 것 같아요.","note":"tangent = 본론에서 벗어난 이야기."}],"roleplay":{"situation":"예산 회의가 갑자기 사무실 인테리어 이야기로 흘렀습니다.","question":"Bring the meeting back to the budget topic politely.","questionKo":"회의를 예산 주제로 부드럽게 되돌려 보세요.","model":"Sorry to interrupt — I think we're getting a bit sidetracked. Can we get back to the budget issue?","modelKo":"끼어들어 죄송해요. 우리가 좀 옆길로 새는 것 같아요. 예산 문제로 다시 돌아갈 수 있을까요?","tips":["Sorry to interrupt로 시작하면 끼어드는 부담이 줄어요.","되돌릴 주제를 마지막에 콕 집어 말하세요."]}},{"n":4,"title":"이메일 전달·참조","key":"I forwarded the email for your reference.","keyKo":"참고하시라고 이메일을 포워드 해드렸어요.","nuance":"forward는 받은 메일을 그대로 넘기는 것, cc는 참조로 넣는 것. for your reference는 '참고하시라고'라는 뜻입니다.","usage":"거래처와 주고받은 메일을 상사나 관련 팀에 공유할 때 씁니다.","tips":["FYI(for your information)도 같은 역할의 줄임말이에요.","loop someone in = 특정 사람을 대화에 끌어들이다."],"variations":[{"en":"I've cc'd you on the email.","ko":"그 메일에 참조로 넣었습니다.","note":"cc = 참조, bcc = 숨은 참조."},{"en":"I forwarded you the file — please take a look when you get a chance.","ko":"파일 전달드렸어요, 시간 되실 때 봐주세요.","note":"when you get a chance = 시간 될 때."},{"en":"I'm looping in the design team for their reference.","ko":"디자인팀도 참고하라고 참조에 넣을게요.","note":"loop in = 대화에 포함시키다."}],"roleplay":{"situation":"수정된 계약서를 거래처에 보내고, 같은 내용을 팀장님께도 전달했습니다.","question":"Tell your manager that you sent the revised contract to the client and forwarded it to them.","questionKo":"거래처에 수정 계약서를 보냈고 팀장님께도 전달했다고 말해 보세요.","model":"I just sent the revised contract to the client and forwarded it to you for your reference.","modelKo":"방금 거래처에 수정 계약서를 보냈고, 참고하시라고 팀장님께도 전달드렸습니다.","tips":["revised = 수정된, updated도 같은 뜻으로 씁니다.","보낸 대상과 전달한 대상을 순서대로 말하면 명확해요."]}},{"n":5,"title":"회의 마무리와 다음 단계","key":"Before we wrap up, what are the next steps?","keyKo":"회의 마무리하기 전에, 다음으로 할 일이 뭐죠?","nuance":"wrap up은 회의·발표를 마무리한다는 뜻. 마무리 직전에 다음 단계를 확인하는 진행자의 정석 표현입니다.","usage":"회의 끝에 누가 무엇을 언제까지 하는지 정리할 때 씁니다.","tips":["action items = 해야 할 일 목록.","Before we wrap up은 마무리 신호라서 참석자들이 긴장을 늦추지 않아요."],"variations":[{"en":"Let's wrap up here.","ko":"여기서 마무리하죠.","note":"회의를 끝내겠다는 신호."},{"en":"Before we wrap up, does anyone have any questions?","ko":"마무리 전에 질문 있으신 분?","note":"질문 시간을 확보하는 표현."},{"en":"Can we quickly go over the action items?","ko":"액션 아이템만 빠르게 짚어볼까요?","note":"go over = 하나씩 확인하다."}],"roleplay":{"situation":"주간 팀 회의를 마무리하면서 담당자와 마감일을 정해야 합니다.","question":"Wrap up the meeting and confirm who does what by when.","questionKo":"회의를 마무리하고 누가 무엇을 언제까지 할지 확인해 보세요.","model":"Before we wrap up, let's confirm the next steps. Jina, can you send the pricing sheet by Thursday?","modelKo":"마무리하기 전에 다음 단계를 확인하죠. 지나 님, 목요일까지 가격표를 보내주실 수 있나요?","tips":["이름 + 할 일 + 마감일 순서로 말하면 액션이 명확해져요.","let's confirm으로 시작하면 지시가 아니라 합의처럼 들립니다."]}},{"n":6,"title":"복습 · 효율적인 회의","review":true,"key":"We should schedule a 1-on-1 meeting.","keyKo":"면담 일정을 잡는 게 좋겠어요.","nuance":"이번 주 회의 표현을 한 번에 정리합니다. 일정 잡기 → 음성 문제 → 늦어짐 → 본론 복귀 → 마무리 순서로 이어 말해 보세요.","usage":"회의를 여는 순간부터 닫는 순간까지 한 흐름으로 연습하면 실제 회의에서 입이 먼저 나갑니다.","tips":["각 문장을 3초 안에 말할 수 있으면 실전에서 쓸 수 있는 수준이에요.","모르는 문장은 다시 Day 0~5로 돌아가 들어보세요."],"variations":[{"en":"Sorry, your sound is cutting in and out.","ko":"죄송한데 소리가 끊겨요.","note":"Day 1 · 음성 문제."},{"en":"My meeting is running over — can we start 10 minutes late?","ko":"회의가 늦어지고 있어요. 10분 늦게 시작해도 될까요?","note":"Day 2 · 지연 양해."},{"en":"I think we're getting a bit sidetracked. Let's get back on track.","ko":"우리가 좀 옆길로 새는 것 같아요. 본론으로 돌아가죠.","note":"Day 3 · 진행 관리."},{"en":"Before we wrap up, what are the next steps?","ko":"마무리 전에 다음 단계가 뭐죠?","note":"Day 5 · 마무리."}],"roleplay":{"situation":"회의 시간이 다 됐는데 논의가 길어졌습니다. 마무리하고 다음 단계를 정해야 합니다.","question":"You're leading a weekly call that is running long. Wrap it up and assign next steps.","questionKo":"길어지고 있는 주간 회의를 마무리하고 다음 단계를 정해 보세요.","model":"We're almost out of time, so let's wrap up here. Jina, can you send the notes by tomorrow?","modelKo":"시간이 거의 다 됐으니 여기서 마무리하죠. 지나 님, 내일까지 회의록 보내주실 수 있나요?","tips":["We're almost out of time으로 마무리 이유를 먼저 말하면 자연스러워요.","마무리 멘트 뒤에는 반드시 액션 한두 개를 붙이세요."]}},{"n":7,"title":"발표 도입부 — 목적 말하기","key":"The goal of this presentation is to outline our marketing strategy.","keyKo":"발표의 취지는 마케팅 전략을 간략하게 설명해 드리는 겁니다.","nuance":"goal 대신 purpose를 써도 됩니다. outline은 세부보다 큰 틀을 설명한다는 뉘앙스예요.","usage":"발표 첫 10초에 오늘 무엇을 들을지 알려주면 청중의 집중도가 확 올라갑니다.","tips":["I'll cover three things: A, B, and C로 목차를 예고하면 좋아요.","walk you through = 하나하나 설명해 주다."],"variations":[{"en":"Today I'm going to walk you through our Q2 results.","ko":"오늘은 2분기 실적을 설명드리겠습니다.","note":"walk through = 차근차근 설명하다."},{"en":"The purpose of today's meeting is to align on next year's budget.","ko":"오늘 회의 목적은 내년 예산에 대한 의견을 맞추는 것입니다.","note":"align on = 의견을 맞추다."},{"en":"I'll cover three things: the market, our results, and the plan.","ko":"시장, 실적, 계획 세 가지를 다루겠습니다.","note":"cover = 다루다."}],"roleplay":{"situation":"신제품 로드맵 발표를 시작합니다. 첫 문장으로 발표 목적을 말해야 합니다.","question":"Open your presentation by stating its goal.","questionKo":"발표 목적을 밝히며 발표를 시작해 보세요.","model":"Good morning, everyone. The goal of today's presentation is to outline our product roadmap for next year.","modelKo":"좋은 아침입니다. 오늘 발표의 목적은 내년 제품 로드맵을 개괄적으로 설명드리는 것입니다.","tips":["Good morning, everyone.으로 시작하면 발표자 자리가 잡혀요.","목적 한 문장 뒤에는 목차 한 문장을 붙이면 완성도가 올라갑니다."]}},{"n":8,"title":"전사 협조 요청","key":"To that end, we need all hands on deck.","keyKo":"목표 달성을 위해서, 전사적인 노력이 필요합니다.","nuance":"to that end는 방금 말한 목표를 이루기 위해. all hands on deck은 배에서 온 표현으로 '전원 총동원'을 뜻합니다.","usage":"목표를 말한 뒤, 팀 전체의 협조가 필요하다고 강조할 때 씁니다.","tips":["pitch in = 힘을 보태다.","get involved = 참여하다."],"variations":[{"en":"With that in mind, let's take a look at the numbers.","ko":"그런 점을 염두에 두고 숫자를 보시죠.","note":"with that in mind = 그걸 고려해서."},{"en":"That means everyone needs to pitch in.","ko":"그 말은 모두가 힘을 보태야 한다는 뜻이에요.","note":"pitch in = 함께 돕다."},{"en":"We'll need the whole team to get involved.","ko":"팀 전체가 참여해야 합니다.","note":"get involved = 관여하다."}],"roleplay":{"situation":"납기를 맞추려면 전 팀의 도움이 필요합니다. 팀장들에게 협조를 요청하세요.","question":"Explain that hitting the deadline requires the whole team's help.","questionKo":"납기를 맞추려면 팀 전체의 도움이 필요하다고 설명해 보세요.","model":"To hit the deadline, we need all hands on deck — even a few hours a week from each team will help.","modelKo":"납기를 맞추려면 전원이 힘을 모아야 합니다. 각 팀에서 주당 몇 시간만 도와주셔도 큰 힘이 됩니다.","tips":["To hit the deadline처럼 목적을 앞에 두면 요청이 논리적으로 들려요.","even a few hours처럼 부담을 낮춰 말하면 수락률이 높아집니다."]}},{"n":9,"title":"수치로 성과 강조하기","key":"We could see as much as a 20% increase in productivity.","keyKo":"무려 20%의 생산성 증가를 기대할 수 있습니다.","nuance":"as much as ~는 '무려 ~까지'라는 강조. could see는 '기대할 수 있다'는 전망 표현입니다.","usage":"예상 효과를 수치로 제시해 설득력을 높일 때 씁니다.","tips":["up to ~ = 최대 ~까지.","roughly / approximately = 대략."],"variations":[{"en":"Sales are expected to grow by up to 15% next quarter.","ko":"다음 분기 매출은 최대 15% 성장이 예상됩니다.","note":"be expected to = ~할 것으로 예상되다."},{"en":"We're looking at roughly a 5% drop in costs.","ko":"비용은 대략 5% 감소할 것으로 봅니다.","note":"we're looking at = ~을 예상하고 있다."},{"en":"That's nearly double what we saw last year.","ko":"작년의 거의 두 배입니다.","note":"double = 두 배."}],"roleplay":{"situation":"내년 매출이 최대 10% 늘어날 수 있다는 전망을 발표합니다.","question":"Present a forecast: revenue may rise by up to 10%.","questionKo":"매출이 최대 10% 오를 수 있다는 전망을 말해 보세요.","model":"Based on this forecast, we could see as much as a 10% increase in revenue next year.","modelKo":"이 전망에 따르면 내년 매출은 최대 10%까지 늘어날 수 있습니다.","tips":["Based on ~으로 근거를 먼저 말하면 숫자가 믿음직하게 들려요.","increase in revenue / growth in sales처럼 명사로 받아주세요."]}},{"n":10,"title":"데이터로 설명하기","key":"As you can see from this data, there's a slight bump in numbers.","keyKo":"데이터에서 보시다시피, 수치가 약간 상승했습니다.","nuance":"bump는 작은 상승, dip은 작은 하락. slight를 붙여 변화가 크지 않음을 강조합니다.","usage":"차트를 띄우고 변화의 방향과 크기를 한 문장으로 설명할 때 씁니다.","tips":["As you can see from this chart/data = 화면을 보며 설명하는 정석.","flat = 변화 없이 평평한."],"variations":[{"en":"There's a slight dip in revenue this month.","ko":"이번 달 매출이 소폭 하락했습니다.","note":"dip = 소폭 하락."},{"en":"As you can see from this chart, sales have been flat.","ko":"차트에서 보시다시피 매출은 정체 상태입니다.","note":"flat = 평평한, 변화 없음."},{"en":"The numbers have been climbing steadily since March.","ko":"3월부터 수치가 꾸준히 오르고 있습니다.","note":"climb steadily = 꾸준히 상승."}],"roleplay":{"situation":"10월 매출이 9월보다 약 3% 올랐다는 차트를 보여줍니다.","question":"Show a chart where sales rose slightly in October.","questionKo":"10월 매출이 소폭 상승한 차트를 설명해 보세요.","model":"As you can see from this data, there's a slight bump in October — about 3% compared to September.","modelKo":"이 데이터에서 보시다시피 10월에 소폭 상승이 있었습니다. 9월 대비 약 3%입니다.","tips":["compared to ~로 비교 대상을 붙이면 숫자가 해석됩니다.","about / around으로 어림값임을 표시하세요."]}},{"n":11,"title":"다음 주제로 전환","key":"Now, let's move on to the next topic.","keyKo":"이제 다음 주제로 넘어가겠습니다.","nuance":"move on to ~는 발표에서 다음 주제로 넘어가는 신호입니다. Now를 붙이면 전환 지점이 분명해져요.","usage":"한 주제를 끝내고 다음 섹션으로 넘어갈 때 씁니다.","tips":["That brings me to my next point도 같은 역할.","I'll come back to that later = 그건 나중에 다시 다루겠습니다."],"variations":[{"en":"That brings me to my next point.","ko":"그러면 다음 포인트로 넘어가겠습니다.","note":"자연스러운 연결 표현."},{"en":"Let's turn to the budget.","ko":"예산으로 넘어가죠.","note":"turn to = 화제를 돌리다."},{"en":"I'll come back to that in a moment.","ko":"그건 잠시 후에 다시 말씀드리겠습니다.","note":"질문을 받았을 때 유용."}],"roleplay":{"situation":"매출 실적 설명을 마치고 마케팅 계획으로 넘어갑니다.","question":"Move from the sales results to the marketing plan.","questionKo":"매출 실적에서 마케팅 계획으로 화제를 전환해 보세요.","model":"Now, let's move on to the next topic: our marketing plan for Q1.","modelKo":"이제 다음 주제인 1분기 마케팅 계획으로 넘어가겠습니다.","tips":["주제를 콜론으로 바로 붙이면 듣는 사람이 따라오기 쉬워요.","전환 후 첫 문장은 반드시 짧게."]}},{"n":12,"title":"복습 · 깊은 인상을 남기는 발표","review":true,"key":"Now, let's move on to the next topic.","keyKo":"이제 다음 주제로 넘어가겠습니다.","nuance":"발표의 뼈대는 목적 → 근거 → 전환 → 마무리입니다. 순서를 기억하면 내용이 바뀌어도 말할 수 있어요.","usage":"발표 전체를 1분으로 압축해서 말해 보세요.","tips":["목적·수치·전환·마무리를 각각 한 문장으로 말해 보세요.","막히면 Day 7~11로 돌아가 반복하세요."],"variations":[{"en":"The goal of this presentation is to outline our marketing strategy.","ko":"발표의 취지는 마케팅 전략을 설명하는 것입니다.","note":"Day 7 · 목적."},{"en":"We could see as much as a 20% increase in productivity.","ko":"무려 20%의 생산성 증가를 기대할 수 있습니다.","note":"Day 9 · 수치."},{"en":"As you can see from this data, there's a slight bump in numbers.","ko":"데이터에서 보시다시피 수치가 약간 올랐습니다.","note":"Day 10 · 근거."},{"en":"That concludes my presentation.","ko":"이상으로 발표를 마치겠습니다.","note":"마무리 표현."}],"roleplay":{"situation":"발표를 마치고 질문을 받을 차례입니다.","question":"Close your presentation and invite questions.","questionKo":"발표를 마무리하고 질문을 청해 보세요.","model":"That concludes my presentation. Thanks for listening — any thoughts, comments, or feedback?","modelKo":"이상으로 발표를 마치겠습니다. 들어주셔서 감사합니다. 의견이나 피드백 있으신가요?","tips":["That concludes my presentation은 가장 격식 있는 마무리입니다.","질문을 청할 때 침묵이 생기면 특정인에게 눈을 맞추세요."]}},{"n":13,"title":"상대 의도 확인하기","key":"So, are you saying that you'd like to delay the decision?","keyKo":"결정을 보류하자는 말씀이신 거죠?","nuance":"are you saying that ~?은 상대 말을 내 언어로 정리해 확인하는 질문. 오해를 막는 가장 강력한 도구입니다.","usage":"협상 중 상대 요구가 애매할 때, 결정 전에 반드시 확인해야 할 때 씁니다.","tips":["Just to make sure I understand로 시작하면 더 부드러워요.","So your point is that ~도 같은 기능."],"variations":[{"en":"Just to make sure I understand — you want to push the launch to March?","ko":"제가 제대로 이해한 건지 확인차, 출시를 3월로 미루자는 말씀이시죠?","note":"push the launch = 출시를 미루다."},{"en":"So your point is that the budget is too small.","ko":"그러니까 예산이 너무 적다는 말씀이시군요.","note":"So your point is that ~ 정리 확인."},{"en":"Are you suggesting we wait another quarter?","ko":"한 분기 더 기다리자는 제안이신가요?","note":"suggest = 제안하다."}],"roleplay":{"situation":"거래처가 일정이 촉박하다고만 말하고 결정은 미루려 합니다.","question":"A client says the timeline feels rushed. Confirm what they mean before you respond.","questionKo":"거래처가 일정이 촉박하다고 합니다. 답하기 전에 의도를 확인해 보세요.","model":"So, are you saying that you'd like to delay the decision until you've seen the updated numbers?","modelKo":"그러니까 업데이트된 수치를 보실 때까지 결정을 미루고 싶다는 말씀이신가요?","tips":["상대 말을 되짚으면 감정적 대응을 피할 수 있어요.","확인 질문 뒤에는 반드시 대안을 준비하세요."]}},{"n":14,"title":"완곡하게 반대하기","key":"Don't you think the deadline is too tight?","keyKo":"마감이 너무 빠듯하다고 생각하지 않으세요?","nuance":"부정 의문문은 단정적인 반대를 부드럽게 만듭니다. tight는 시간·예산이 빠듯하다는 뜻이에요.","usage":"상사의 제안에 정면 반박 대신 의문형으로 우려를 전달할 때 씁니다.","tips":["With all due respect는 격식 있는 반대의 시작.","realistic = 현실적인."],"variations":[{"en":"I'm not sure that timeline is realistic.","ko":"그 일정이 현실적이라고 생각하지 않아요.","note":"I'm not sure ~ 로 완곡하게."},{"en":"Isn't that a bit too aggressive?","ko":"그건 좀 무리 아닐까요?","note":"aggressive = (일정이) 빡빡한."},{"en":"With all due respect, I think we need more time.","ko":"외람되지만 시간이 더 필요할 것 같습니다.","note":"격식 있는 반대 표현."}],"roleplay":{"situation":"상사가 2주 안에 끝내자고 합니다. 무리라고 생각됩니다.","question":"Disagree with a two-week deadline politely.","questionKo":"2주 마감이 무리라고 정중하게 반대해 보세요.","model":"Don't you think the deadline is too tight? Two weeks may not be enough to test everything properly.","modelKo":"마감이 너무 빠듯하지 않으세요? 2주로는 모든 걸 제대로 테스트하기 어려울 것 같습니다.","tips":["이유를 숫자나 절차로 붙이면 반대가 설득력 있어져요.","may not be enough는 단정 대신 가능성으로 말합니다."]}},{"n":15,"title":"대안 제안하기","key":"What if we run a promotion?","keyKo":"프로모션을 진행해 보면 어때요?","nuance":"What if we ~?는 회의에서 가장 자주 쓰는 제안 표현. 상대를 몰아붙이지 않고 선택지를 던집니다.","usage":"문제를 지적만 하지 않고 해결책을 꺼낼 때 씁니다.","tips":["How about we ~?도 같은 뜻으로 더 캐주얼해요.","run a promotion = 프로모션을 진행하다."],"variations":[{"en":"What if we split the cost 50/50?","ko":"비용을 반반 나누면 어때요?","note":"split = 나누다."},{"en":"How about we test it with one store first?","ko":"한 매장에서 먼저 테스트해보는 건 어때요?","note":"How about we ~? 캐주얼 제안."},{"en":"What if we push the launch back a week?","ko":"출시를 일주일 미루면 어때요?","note":"push back = 미루다."}],"roleplay":{"situation":"재고가 쌓였습니다. 새 모델 출시 전에 처리할 방법을 제안하세요.","question":"Propose a short discount period to clear slow-selling inventory.","questionKo":"재고를 털어낼 짧은 할인 기간을 제안해 보세요.","model":"What if we run a two-week promotion? It could help clear the inventory before the new model arrives.","modelKo":"2주짜리 프로모션을 진행하면 어때요? 새 모델이 들어오기 전에 재고를 정리하는 데 도움이 될 거예요.","tips":["제안 + 기대 효과를 한 세트로 말하면 채택률이 올라가요.","It could help ~ = ~에 도움이 될 수 있다."]}},{"n":16,"title":"반대 의견 뒤에 가능성 말하기","key":"But I think it's still doable.","keyKo":"해볼 만하다고 생각해요.","nuance":"doable은 '해낼 수 있는'. 상대의 우려를 인정한 뒤 긍정으로 방향을 트는 표현입니다.","usage":"팀이 불가능하다고 할 때, 조건을 붙여 가능하다고 설득할 때 씁니다.","tips":["It's tight, but ~ = 빠듯하지만 ~.","pull it off = 해내다."],"variations":[{"en":"I think we can make it work.","ko":"해낼 수 있다고 봐요.","note":"make it work = 어떻게든 되게 하다."},{"en":"It's tight, but it's not impossible.","ko":"빠듯하지만 불가능한 건 아니에요.","note":"tight = 빠듯한."},{"en":"Let's see if we can pull it off.","ko":"해낼 수 있을지 한번 해보죠.","note":"pull it off = 성공시키다."}],"roleplay":{"situation":"팀은 일정이 불가능하다고 하지만, 인력만 보강하면 가능하다고 봅니다.","question":"Your team says the schedule is impossible. Explain why you think it can still work.","questionKo":"팀은 불가능하다고 하지만, 보강하면 가능하다고 설명해 보세요.","model":"I know it's tight, but I think it's still doable if we bring in two more people.","modelKo":"빠듯한 건 알지만, 두 명만 더 투입하면 여전히 해볼 만하다고 생각해요.","tips":["I know it's tight로 상대 우려를 먼저 인정하세요.","if we ~ 조건을 붙이면 '무리한 요구'가 아니라 '계획'이 됩니다."]}},{"n":17,"title":"복습 · 반대 의견 다루기","review":true,"key":"Don't you think the deadline is too tight?","keyKo":"마감이 너무 빠듯하다고 생각하지 않으세요?","nuance":"확인 → 완곡한 반대 → 대안 → 조건부 수용의 4단계로 이어 말해 보세요. 회의 갈등의 대부분은 이 흐름으로 풀립니다.","usage":"상대와 의견이 다를 때 감정 없이 논리로 말하는 연습입니다.","tips":["반대만 하고 끝내면 안 되고, 반드시 대안을 붙이세요.","Day 13~16을 오가며 네 문장을 이어 말해 보세요."],"variations":[{"en":"So, are you saying that you'd like to delay the decision?","ko":"결정을 보류하자는 말씀이신가요?","note":"Day 13 · 확인."},{"en":"What if we run a promotion?","ko":"프로모션을 진행해 보면 어때요?","note":"Day 15 · 대안."},{"en":"But I think it's still doable.","ko":"그래도 해볼 만하다고 생각해요.","note":"Day 16 · 가능성."},{"en":"With all due respect, I think we need more time.","ko":"외람되지만 시간이 더 필요할 것 같습니다.","note":"Day 14 · 반대."}],"roleplay":{"situation":"동료가 출시 연기를 주장합니다. 일부 동의하지만 절충안을 내고 싶습니다.","question":"A coworker wants to delay the launch. Agree partly, then propose a compromise.","questionKo":"동료의 연기 주장에 일부 동의하고 절충안을 제안해 보세요.","model":"I see your point, and I agree the deadline is tight. What if we delay only the launch event and keep the product date?","modelKo":"무슨 말씀인지 알겠고, 마감이 빠듯한 것도 동의해요. 출시 행사만 미루고 제품 출시일은 지키면 어떨까요?","tips":["I see your point로 시작하면 협력적으로 들립니다.","only를 넣어 양보 범위를 좁히세요."]}},{"n":18,"title":"핵심 성과 강조하기","key":"I'd like to highlight that customer satisfaction levels are at an all-time high.","keyKo":"고객 만족도가 역대 최고라는 걸 특별히 강조하고 싶습니다.","nuance":"highlight / emphasize는 '강조하다'. all-time high는 '역대 최고'로 최상급 강조 표현입니다.","usage":"보고에서 좋은 소식을 청중 기억에 남기고 싶을 때 씁니다.","tips":["It's worth noting that ~ = ~라는 점도 짚을 만합니다.","key takeaway = 핵심 요점."],"variations":[{"en":"I'd like to emphasize that we beat our Q1 target.","ko":"1분기 목표를 넘었다는 점을 강조하고 싶습니다.","note":"beat a target = 목표를 넘다."},{"en":"It's worth noting that complaints have dropped by half.","ko":"불만이 절반으로 줄었다는 점도 짚고 싶습니다.","note":"drop by half = 절반으로 줄다."},{"en":"The key takeaway is that customers trust us more.","ko":"핵심은 고객의 신뢰가 높아졌다는 겁니다.","note":"takeaway = 핵심 요점."}],"roleplay":{"situation":"고객 만족도가 87%에서 94%로 올랐습니다. 보고에서 이 점을 강조하세요.","question":"Emphasize record customer satisfaction in your report.","questionKo":"역대 최고 고객 만족도를 보고에서 강조해 보세요.","model":"I'd like to highlight that customer satisfaction is at an all-time high — 94%, up from 87% last year.","modelKo":"고객 만족도가 역대 최고라는 점을 강조하고 싶습니다. 작년 87%에서 94%로 올랐습니다.","tips":["숫자를 두 개 붙이면 변화가 한눈에 보여요.","up from ~ = ~에서 올라서."]}},{"n":19,"title":"본질로 돌아가기","key":"At the end of the day, we just need more time.","keyKo":"결국엔 시간이 더 많이 필요해요.","nuance":"at the end of the day는 '결국, 궁극적으로'. 긴 논의를 한 문장으로 정리할 때 씁니다.","usage":"논의가 길어지고 핵심이 흐려질 때 본질을 다시 꺼낼 때 씁니다.","tips":["when it comes down to it도 같은 뜻.","ultimately = 궁극적으로."],"variations":[{"en":"At the end of the day, it's about trust.","ko":"결국 중요한 건 신뢰예요.","note":"it's about ~ = 핵심은 ~이다."},{"en":"When it comes down to it, we can't do it alone.","ko":"결국 우리 힘만으로는 안 됩니다.","note":"when it comes down to it = 결국 따져보면."},{"en":"Ultimately, we need more funding.","ko":"궁극적으로 자금이 더 필요합니다.","note":"ultimately = 결국."}],"roleplay":{"situation":"회의에서 여러 문제가 나왔지만 결국 사람이 부족합니다.","question":"Summarize the core problem in one sentence.","questionKo":"핵심 문제를 한 문장으로 정리해 보세요.","model":"At the end of the day, we just need more people — the process is fine, but we're understaffed.","modelKo":"결국 사람이 더 필요합니다. 프로세스는 괜찮은데 인력이 부족해요.","tips":["문제 → 이유 순서로 한 문장에 담으세요.","understaffed = 인력이 부족한."]}},{"n":20,"title":"상황을 감안해 판단 묻기","key":"Given the circumstances, does it make sense to hire a contractor?","keyKo":"상황을 감안했을 때, 계약직을 고용하는 것이 합리적인가요?","nuance":"Given ~ = ~을 감안하면. does it make sense to ~?는 판단을 함께 묻는 표현이라 독단적으로 보이지 않습니다.","usage":"예산·일정 등 제약이 있을 때 선택지의 타당성을 함께 검토할 때 씁니다.","tips":["outsource = 외주를 주다.","Given the budget / Given the timeline처럼 조건을 바꿔 연습하세요."],"variations":[{"en":"Given the budget, is it worth renting a smaller office?","ko":"예산을 감안하면 더 작은 사무실을 빌리는 게 나을까요?","note":"is it worth ~ing = ~할 가치가 있나."},{"en":"Does it make sense to outsource production?","ko":"생산을 외주로 돌리는 게 합리적일까요?","note":"outsource = 외주화하다."},{"en":"Considering the timeline, maybe we should skip the pilot.","ko":"일정을 고려하면 파일럿은 건너뛰는 게 나을지도요.","note":"considering = ~을 고려하면."}],"roleplay":{"situation":"업무량이 급증했습니다. 3개월 계약직 채용이 합리적인지 상사에게 묻습니다.","question":"Ask whether hiring a freelancer is sensible given the workload.","questionKo":"업무량을 감안해 프리랜서 채용이 합리적인지 물어보세요.","model":"Given the circumstances, does it make sense to hire a freelancer for three months?","modelKo":"상황을 감안하면 3개월 프리랜서를 쓰는 게 합리적일까요?","tips":["기간(three months)을 붙이면 비용 검토가 쉬워져요.","질문형으로 물으면 상사의 결정 부담이 줄어듭니다."]}},{"n":21,"title":"절충안 제시하기","key":"What if we meet halfway by looking for other vendors?","keyKo":"다른 업체를 찾는 선에서 절충하는 게 어때요?","nuance":"meet halfway는 '중간에서 만나다', 즉 절충. by ~ing는 절충의 방법을 붙입니다.","usage":"가격·일정 협상에서 양보와 요구를 동시에 제시할 때 씁니다.","tips":["split the difference = 차액을 반씩 나누다.","compromise on ~ = ~에서 타협하다."],"variations":[{"en":"What if we split the difference?","ko":"차액을 반씩 나누면 어때요?","note":"split the difference = 중간값으로 합의."},{"en":"Can we compromise on the price?","ko":"가격에서 절충할 수 있을까요?","note":"compromise on = ~에서 타협."},{"en":"What if we meet halfway by cutting the scope?","ko":"범위를 줄이는 선에서 절충하면 어때요?","note":"scope = 업무 범위."}],"roleplay":{"situation":"공급업체가 가격을 5% 올리겠다고 합니다. 절충안을 제시하세요.","question":"The supplier wants a 5% price increase. Propose a middle ground.","questionKo":"공급업체가 5% 인상을 요구합니다. 절충안을 제안해 보세요.","model":"What if we meet halfway? We can accept a 3% increase, and you keep the delivery date.","modelKo":"절충하면 어떨까요? 3% 인상은 받아들이는 대신 납기일은 지켜주세요.","tips":["양보 + 조건을 한 문장에 담으면 협상이 빨라져요.","we can accept ~ 로 수용 범위를 명확히 하세요."]}},{"n":22,"title":"마무리 작업 말하기","key":"We need to put the finishing touches on the project.","keyKo":"프로젝트의 마무리 작업을 해야 해요.","nuance":"put the finishing touches on ~은 '~에 마지막 손질을 하다'. 거의 다 됐고 조금만 더 다듬으면 된다는 뉘앙스입니다.","usage":"완성 직전 상태를 보고할 때, 마감이 임박했음을 알릴 때 씁니다.","tips":["iron out the details = 세부 사항을 정리하다.","finalize = 확정하다."],"variations":[{"en":"I need to put the finishing touches on the presentation.","ko":"발표 자료 마무리 손질을 해야 해요.","note":"자료 마무리에 자주 쓰는 문장."},{"en":"Let's iron out the details of the contract.","ko":"계약서 세부 사항을 정리합시다.","note":"iron out = 문제를 풀어 정리하다."},{"en":"If we can, let's finalize the details before the day ends.","ko":"가능하면 오늘 안으로 세부 사항을 확정합시다.","note":"finalize = 최종 확정하다."}],"roleplay":{"situation":"발표 자료가 거의 완성됐습니다. 마지막 슬라이드만 다듬으면 됩니다.","question":"Tell the team the deck just needs final polish before you send it.","questionKo":"자료를 보내기 전 마지막 손질만 하면 된다고 팀에 알려 보세요.","model":"The deck is almost ready — I just need to put the finishing touches on the last few slides.","modelKo":"자료는 거의 준비됐고, 마지막 몇 장만 손보면 됩니다.","tips":["almost ready + just need로 상태를 정확히 전달하세요.","deck = 발표 자료(슬라이드 묶음)."]}},{"n":23,"title":"복습 · 업무 협의","review":true,"key":"Given the circumstances, does it make sense to hire a contractor?","keyKo":"상황을 감안했을 때, 계약직을 고용하는 것이 합리적인가요?","nuance":"협의의 흐름은 강조 → 결론 → 판단 질문 → 절충 → 마무리입니다. 상대와 숫자가 오갈 때 이 순서가 특히 유용해요.","usage":"가격·인력·일정 협의를 한 흐름으로 연습합니다.","tips":["Day 18~22를 이어서 말해 보세요.","절충안에는 반드시 조건을 붙이세요."],"variations":[{"en":"At the end of the day, we just need more time.","ko":"결국 시간이 더 필요합니다.","note":"Day 19 · 본질."},{"en":"What if we meet halfway by looking for other vendors?","ko":"다른 업체를 찾는 선에서 절충하면 어때요?","note":"Day 21 · 절충."},{"en":"We need to put the finishing touches on the project.","ko":"프로젝트 마무리 작업을 해야 합니다.","note":"Day 22 · 마무리."},{"en":"I'd like to highlight that customer satisfaction levels are at an all-time high.","ko":"고객 만족도가 역대 최고임을 강조하고 싶습니다.","note":"Day 18 · 강조."}],"roleplay":{"situation":"공급업체가 원자재 가격 상승으로 인상을 요구합니다. 인정하고 절충안을 제시하세요.","question":"Negotiate with a vendor who raised prices: acknowledge, then propose a compromise.","questionKo":"가격을 올린 업체와 협상해 보세요. 인정한 뒤 절충안을 제시하세요.","model":"I understand costs have gone up. What if we meet halfway — a 3% increase now, and we revisit in six months?","modelKo":"비용이 오른 건 이해합니다. 절충하면 어떨까요? 지금은 3% 인상하고, 6개월 뒤에 다시 논의하는 거죠.","tips":["감정 없이 사실을 인정하는 첫 문장이 협상의 판을 만듭니다.","revisit = 다시 논의하다."]}},{"n":24,"title":"이메일 후속 확인","key":"I just wanted to follow up on my email.","keyKo":"다름 아니라, 제가 보내드린 이메일에 대해 추가로 확인하고 싶습니다.","nuance":"follow up on ~은 '~에 대해 후속 확인하다'. just wanted to ~는 요청을 가볍게 만드는 완충 장치입니다.","usage":"답장이 없을 때 재촉하지 않고 정중하게 확인할 때 씁니다.","tips":["Have you had a chance to ~? = ~해 보실 기회 있었나요?","checking in = 확인차 연락드려요."],"variations":[{"en":"I just wanted to follow up on our conversation from yesterday.","ko":"어제 나눈 대화에 대해 다시 확인하고 싶었어요.","note":"conversation from yesterday = 어제 대화."},{"en":"Have you had a chance to look at the proposal?","ko":"제안서 검토해 보실 기회가 있었나요?","note":"재촉 없이 확인하는 표현."},{"en":"Just checking in on the contract.","ko":"계약서 관련해 확인차 연락드려요.","note":"check in = 상황 확인차 연락하다."}],"roleplay":{"situation":"3일 전에 견적서를 메일로 보냈는데 답이 없습니다. 정중히 확인하세요.","question":"You emailed a quote three days ago. Ask politely for feedback.","questionKo":"3일 전 보낸 견적서에 대해 정중히 피드백을 요청해 보세요.","model":"Hi, I just wanted to follow up on my email from Monday. Have you had a chance to review the quote?","modelKo":"안녕하세요, 월요일에 보낸 메일에 대해 확인차 연락드렸습니다. 견적서 검토해 보실 기회가 있었나요?","tips":["언제 보냈는지 밝히면 상대가 바로 찾을 수 있어요.","질문으로 끝내면 재촉이 아니라 확인이 됩니다."]}},{"n":25,"title":"문제 조사 약속하기","key":"I'll take a deeper look into the issue.","keyKo":"문제를 좀 더 자세히 알아볼게요.","nuance":"look into는 '조사하다'. deeper를 붙이면 표면적 답변이 아니라 원인까지 보겠다는 뜻이 됩니다.","usage":"고객 불만이나 내부 오류를 접수하고 후속 조치를 약속할 때 씁니다.","tips":["get back to you = 다시 연락드리다.","identify root causes = 근본 원인을 찾다."],"variations":[{"en":"I'll look into the issue and get back to you.","ko":"문제를 살펴보고 다시 연락드릴게요.","note":"가장 기본적인 후속 조치 표현."},{"en":"I'll investigate the complaint right away.","ko":"불만 사항을 바로 조사하겠습니다.","note":"right away = 즉시."},{"en":"I'll get back to you once I have more details.","ko":"자세한 내용 파악되면 연락드리겠습니다.","note":"once ~ = ~하면."}],"roleplay":{"situation":"고객이 선적이 누락됐다고 항의합니다. 조사하고 언제 답을 주겠다고 약속하세요.","question":"A customer reports a missing shipment. Promise to investigate and say when you'll respond.","questionKo":"선적 누락 항의에 조사하겠다고 답하고 언제 연락할지 약속해 보세요.","model":"I'm sorry about that. I'll take a deeper look into the shipment and get back to you by tomorrow.","modelKo":"불편을 드려 죄송합니다. 선적 건을 자세히 확인해서 내일까지 연락드리겠습니다.","tips":["사과 → 조치 → 기한 순서가 신뢰를 만듭니다.","by tomorrow = 내일까지(기한)."]}},{"n":26,"title":"의견 묻기","key":"What are your thoughts on the survey results?","keyKo":"설문 결과에 대해 어떻게 생각하세요?","nuance":"thoughts on ~은 격식 있는 '의견'. What's your take on it?은 같은 뜻의 캐주얼한 버전입니다.","usage":"회의에서 특정 사람의 의견을 끌어낼 때, 침묵을 깰 때 씁니다.","tips":["Any thoughts, comments, or feedback? = 의견 있으신가요?","How do you feel about ~? = ~에 대해 어떻게 생각하세요?"],"variations":[{"en":"What's your take on the new design?","ko":"새 디자인에 대한 의견은 어때요?","note":"take = 의견(캐주얼)."},{"en":"Any thoughts, comments, or feedback?","ko":"의견이나 피드백 있으신가요?","note":"회의 마무리 질문."},{"en":"How do you feel about moving the launch date?","ko":"출시일 변경에 대해 어떻게 생각하세요?","note":"how do you feel about ~."}],"roleplay":{"situation":"설문 결과를 공유했는데 가격 관련 응답이 많았습니다. 동료 의견을 묻습니다.","question":"Ask a colleague's opinion on the survey results.","questionKo":"설문 결과에 대한 동료의 의견을 물어보세요.","model":"What are your thoughts on the survey results? I was surprised by the price feedback.","modelKo":"설문 결과에 대해 어떻게 생각하세요? 가격 관련 피드백이 많아서 놀랐어요.","tips":["내 반응을 덧붙이면 대화가 자연스럽게 이어져요.","be surprised by ~ = ~에 놀라다."]}},{"n":27,"title":"정중한 회신 요청","key":"Please let me know at your earliest convenience.","keyKo":"가능한 빨리 알려주세요. (공손한 표현)","nuance":"at your earliest convenience는 '가능한 한 빠른 시일 내에'라는 격식 표현. 재촉처럼 들리지 않습니다.","usage":"이메일 끝에 회신 기한을 부드럽게 요청할 때 씁니다.","tips":["If you could let me know by Friday, I'd appreciate it. = 금요일까지 알려주시면 감사하겠습니다.","I'd appreciate it if ~ = ~해주시면 감사하겠습니다."],"variations":[{"en":"If you could let me know by Friday, I'd appreciate it.","ko":"금요일까지 알려주시면 감사하겠습니다.","note":"구체적 기한을 붙인 공손 요청."},{"en":"Could you please let me know if this looks okay?","ko":"이대로 괜찮은지 알려주실 수 있나요?","note":"확인 요청."},{"en":"I'd appreciate it if you could confirm by tomorrow.","ko":"내일까지 확인해주시면 감사하겠습니다.","note":"confirm = 확인하다."}],"roleplay":{"situation":"거래처에 회의 시간을 제안했습니다. 확정 여부를 정중히 부탁하세요.","question":"Ask a client to confirm a meeting time politely.","questionKo":"거래처에 회의 시간 확정을 정중히 부탁해 보세요.","model":"Please let me know at your earliest convenience, and I'll send the calendar invite.","modelKo":"가능하실 때 빨리 알려주시면 캘린더 초대를 보내드리겠습니다.","tips":["다음 행동(send the invite)을 붙이면 요청이 자연스러워요.","at your earliest convenience는 격식 메일에서만 쓰세요."]}},{"n":28,"title":"복습 · 효율적인 업무 공유","review":true,"key":"I just wanted to follow up on my email.","keyKo":"보내드린 이메일에 대해 확인하고 싶습니다.","nuance":"업무 공유의 기본은 '확인 → 조사 → 의견 → 회신'입니다. 이 네 문장만 입에 붙으면 메일·메신저가 훨씬 빨라져요.","usage":"이메일과 메신저에서 반복되는 후속 업무 표현을 정리합니다.","tips":["Day 24~27을 한 흐름으로 말해 보세요.","실제 업무 메일을 쓸 때 이 문장을 그대로 복사해 쓰세요."],"variations":[{"en":"I'll take a deeper look into the issue.","ko":"문제를 좀 더 자세히 알아볼게요.","note":"Day 25 · 조사."},{"en":"What are your thoughts on the survey results?","ko":"설문 결과에 대해 어떻게 생각하세요?","note":"Day 26 · 의견."},{"en":"Please let me know at your earliest convenience.","ko":"가능한 빨리 알려주세요.","note":"Day 27 · 회신."},{"en":"If you could let me know by Friday, I'd appreciate it.","ko":"금요일까지 알려주시면 감사하겠습니다.","note":"Day 27 · 기한."}],"roleplay":{"situation":"화요일에 보고서를 보냈고, 금요일까지 피드백을 받고 싶습니다.","question":"Follow up on a report you sent and set a deadline for feedback.","questionKo":"보낸 보고서에 대해 후속 확인하고 피드백 기한을 정해 보세요.","model":"I just wanted to follow up on the report I sent Tuesday. If you could let me know by Friday, I'd appreciate it.","modelKo":"화요일에 보낸 보고서 관련해 확인차 연락드렸습니다. 금요일까지 알려주시면 감사하겠습니다.","tips":["무엇을 언제 보냈는지 먼저 밝히세요.","I'd appreciate it으로 끝내면 압박 없이 기한을 전달할 수 있어요."]}}]}]},{"id":"B","name":"비즈니스 회사생활","short":"회사생활","cardTitle":"비즈니스 회사생활 영어","tagline":"동료·상사와 자연스럽게 통하는 회사 영어 28일","chapters":[{"id":"B","name":"비즈니스 회사생활 영어","subtitle":"자기소개 · 협업 · 회식 · 보고 · 프로젝트","days":[{"n":0,"title":"자기소개 — 입사","key":"I just joined this company last year.","keyKo":"저는 작년에 입사했어요.","nuance":"join a company는 '입사하다'. just를 넣으면 '얼마 안 됐다'는 뉘앙스가 살아납니다.","usage":"새 팀, 새 거래처, 사내 네트워킹 자리에서 첫 자기소개로 씁니다.","tips":["I've been with the company for ~ = ~동안 다녔어요.","소속을 먼저 말하면 상대가 기억하기 쉬워요."],"variations":[{"en":"I've been with the company for about a year.","ko":"회사에 온 지 1년쯤 됐어요.","note":"be with the company = 회사에 다니다."},{"en":"I started in the overseas sales team last March.","ko":"작년 3월에 해외영업팀으로 들어왔어요.","note":"start in + 팀."},{"en":"I'm fairly new here — this is my second year.","ko":"여기 온 지 얼마 안 됐어요. 2년 차예요.","note":"fairly new = 꽤 새로운."}],"roleplay":{"situation":"점심시간에 다른 팀 동료와 처음 인사합니다.","question":"Introduce yourself to a new colleague at lunch.","questionKo":"점심시간에 처음 만난 동료에게 자신을 소개해 보세요.","model":"Hi, I'm Hoon from the overseas sales team. I just joined the company last year.","modelKo":"안녕하세요, 해외영업팀의 훈입니다. 작년에 입사했어요.","tips":["이름 + 팀 + 입사 시기 순서가 가장 자연스러워요.","Hi, I'm ~으로 시작하면 부담 없어 보입니다."]}},{"n":1,"title":"먼저 도움 제안하기","key":"Feel free to reach out if you need anything.","keyKo":"뭐든 필요하면 부담 갖지 말고 연락 주세요.","nuance":"reach out은 '연락하다'의 부드러운 표현. feel free to ~는 '부담 없이 ~하세요'입니다.","usage":"새로 온 동료에게, 혹은 협업을 시작하는 상대에게 신뢰를 만드는 첫 문장입니다.","tips":["Don't hesitate to ask도 같은 뜻.","구체적인 채널(Teams, email)을 붙이면 더 실용적이에요."],"variations":[{"en":"Don't hesitate to ask if you have questions.","ko":"질문 있으면 망설이지 말고 물어보세요.","note":"don't hesitate to = 주저하지 말고."},{"en":"Let me know if you need a hand.","ko":"도움 필요하면 말씀하세요.","note":"need a hand = 도움이 필요하다."},{"en":"You can always ping me on Teams.","ko":"언제든 팀즈로 연락 주세요.","note":"ping = 짧게 연락하다."}],"roleplay":{"situation":"새로 온 팀원에게 먼저 다가가 도움을 제안합니다.","question":"Welcome a new team member and offer help.","questionKo":"새 팀원을 환영하고 도움을 제안해 보세요.","model":"Welcome aboard! Feel free to reach out if you need anything — I sit right over there.","modelKo":"입사를 환영해요! 필요한 게 있으면 부담 없이 연락 주세요. 저는 바로 저쪽에 앉아 있어요.","tips":["Welcome aboard는 회사에서 쓰는 '입사 축하' 인사.","자리 위치를 알려주면 실제로 찾아오기 쉬워요."]}},{"n":2,"title":"새 프로젝트를 맡았을 때","key":"I recently took on a new project.","keyKo":"최근에 신규 프로젝트를 맡았어.","nuance":"take on은 '일·책임을 맡다'. 수동태(was assigned)보다 주도적인 느낌을 줍니다.","usage":"근황을 물었을 때, 업무가 바뀌었음을 알릴 때 씁니다.","tips":["be put in charge of ~ = ~을 맡게 되다.","handle = 담당하다."],"variations":[{"en":"I've taken on the Taiwan account.","ko":"대만 거래처를 맡게 됐어요.","note":"account = 거래처."},{"en":"I was put in charge of the new product launch.","ko":"신제품 출시를 맡게 됐습니다.","note":"in charge of = ~을 책임지는."},{"en":"I'm handling the Costco project now.","ko":"이제 코스트코 프로젝트를 담당하고 있어요.","note":"handle = 처리하다, 담당하다."}],"roleplay":{"situation":"베트남 시장 신제품 출시 프로젝트를 맡게 됐습니다.","question":"Tell a colleague about the new project you were assigned.","questionKo":"새로 맡은 프로젝트에 대해 동료에게 이야기해 보세요.","model":"I recently took on a new project — we're launching a new line for the Vietnam market.","modelKo":"최근에 새 프로젝트를 맡았어요. 베트남 시장용 신제품 라인을 출시하는 일이에요.","tips":["무엇을 맡았는지 한 문장으로 덧붙이면 대화가 이어져요.","launch a line = 라인을 출시하다."]}},{"n":3,"title":"아직 못 했다고 말하기","key":"I haven't gotten around to it yet.","keyKo":"아직 그것을 미처 못 했어.","nuance":"get around to ~는 '(미뤄둔 일을) 이제서야 하다'. 변명이 아니라 솔직한 진행 보고로 들립니다.","usage":"상사에게 밀린 일을 보고할 때, 다음 일정을 약속할 때 씁니다.","tips":["I've been meaning to ~ = ~하려고 했는데.","반드시 다음 행동 시점을 붙이세요."],"variations":[{"en":"I still haven't gotten around to reading that report.","ko":"그 보고서 아직 못 읽었어요.","note":"still을 넣어 솔직하게."},{"en":"I'll get to it by the end of the week.","ko":"이번 주 안으로 할게요.","note":"get to it = 그것을 하다."},{"en":"I've been meaning to call them back.","ko":"그쪽에 다시 전화하려고 했는데요.","note":"have been meaning to = 하려고 벼르던."}],"roleplay":{"situation":"상사가 어제 부탁한 보고서를 아직 못 했습니다.","question":"Your boss asks about a report you haven't finished. Respond honestly and give a new deadline.","questionKo":"못 끝낸 보고서에 대해 솔직히 말하고 새 기한을 제시해 보세요.","model":"Sorry, I haven't gotten around to it yet. I'll have it on your desk by tomorrow morning.","modelKo":"죄송합니다, 아직 미처 못 했어요. 내일 아침까지 책상에 올려두겠습니다.","tips":["사과 + 솔직한 상태 + 새 기한, 3단 콤보가 신뢰를 지켜요.","on your desk = 책상 위에(제출)."]}},{"n":4,"title":"감을 잡아가는 중","key":"I'm slowly getting the hang of it.","keyKo":"조금씩 감을 잡아가고 있어요.","nuance":"get the hang of ~는 '요령을 익히다'. slowly를 넣으면 겸손하게 진행 중임을 전달합니다.","usage":"새 시스템·새 업무에 적응 중이라고 말할 때 씁니다.","tips":["get used to ~ = ~에 익숙해지다.","It took me a while to ~ = ~하는 데 시간이 걸렸다."],"variations":[{"en":"It took me a while to get the hang of the system.","ko":"시스템 요령을 익히는 데 시간이 좀 걸렸어요.","note":"it took me a while = 시간이 좀 걸렸다."},{"en":"I'm still getting used to the new process.","ko":"새 프로세스에 아직 적응 중이에요.","note":"get used to = 적응하다."},{"en":"I think I finally got the hang of it.","ko":"이제 드디어 감을 잡은 것 같아요.","note":"finally = 마침내."}],"roleplay":{"situation":"새로 온 동료가 업무 적응이 어떠냐고 묻습니다.","question":"A new coworker asks how you're adjusting. Answer honestly.","questionKo":"적응이 어떠냐는 질문에 솔직하게 답해 보세요.","model":"It's a lot at first, but I'm slowly getting the hang of it.","modelKo":"처음엔 양이 많지만, 조금씩 감을 잡아가고 있어요.","tips":["It's a lot at first로 공감을 만들고 긍정으로 마무리하세요.","but을 넣어 반전을 주면 밝게 들립니다."]}},{"n":5,"title":"복습 · 회사 생활 적응","review":true,"key":"I just joined this company last year.","keyKo":"저는 작년에 입사했어요.","nuance":"자기소개 → 도움 제안 → 근황 → 솔직한 진행 상황 → 적응. 새 회사에서 가장 자주 쓰는 다섯 문장입니다.","usage":"첫 한 달 동안 매일 나오는 대화를 통째로 연습합니다.","tips":["Day 0~4를 순서대로 이어 말해 보세요.","모르는 문장은 다시 듣고 한 번 더."],"variations":[{"en":"Feel free to reach out if you need anything.","ko":"필요한 게 있으면 부담 없이 연락 주세요.","note":"Day 1 · 도움 제안."},{"en":"I recently took on a new project.","ko":"최근에 새 프로젝트를 맡았어요.","note":"Day 2 · 근황."},{"en":"I haven't gotten around to it yet.","ko":"아직 미처 못 했어요.","note":"Day 3 · 솔직한 보고."},{"en":"I'm slowly getting the hang of it.","ko":"조금씩 감을 잡아가고 있어요.","note":"Day 4 · 적응."}],"roleplay":{"situation":"입사 첫 주, 경비 처리 시스템을 몰라 동료에게 도움을 청합니다.","question":"Ask a colleague for help with the expense system, and introduce yourself briefly.","questionKo":"자기소개를 짧게 하고 경비 시스템 도움을 청해 보세요.","model":"Hi, I'm new here — I just joined the overseas team. Could you walk me through the expense system? I'm slowly getting the hang of everything else.","modelKo":"안녕하세요, 여기 온 지 얼마 안 됐어요. 해외팀에 입사했거든요. 경비 시스템 좀 알려주실 수 있나요? 다른 건 조금씩 익숙해지고 있어요.","tips":["walk me through = 하나하나 알려주다.","도움 요청 앞에 자기소개를 붙이면 훨씬 자연스러워요."]}},{"n":6,"title":"고생해 준 동료에게 감사","key":"Thanks for taking the trouble.","keyKo":"고생해 주셔서 감사해요.","nuance":"take the trouble은 '수고를 감수하다'. 단순 thanks보다 무게가 있는 감사 표현입니다.","usage":"야근해서 도와준 동료, 무리한 요청을 들어준 상대에게 씁니다.","tips":["go out of one's way = 일부러 수고하다.","I owe you one = 신세졌어요."],"variations":[{"en":"Thanks for going out of your way.","ko":"일부러 수고해 주셔서 고마워요.","note":"go out of your way = 애써 주다."},{"en":"I really appreciate you staying late for this.","ko":"이 일 때문에 늦게까지 계셔서 정말 감사합니다.","note":"appreciate = 감사하다(격식)."},{"en":"Thanks for having my back.","ko":"뒤에서 지원해줘서 고마워.","note":"have someone's back = 지원하다."}],"roleplay":{"situation":"동료가 밤늦게까지 보고서 작성을 도와줬습니다.","question":"Thank a colleague who stayed late to help finish a report.","questionKo":"늦게까지 보고서를 도와준 동료에게 감사 인사를 해 보세요.","model":"Thanks for taking the trouble to help me with the report last night. I owe you one.","modelKo":"어젯밤 보고서 도와주시느라 고생하셨어요. 신세졌습니다.","tips":["무엇을 도와줬는지 구체적으로 말하면 진심이 전해져요.","I owe you one은 사무실에서 자주 쓰는 가벼운 감사 인사."]}},{"n":7,"title":"실수로 혼났을 때","key":"I got in trouble at work for missing a deadline.","keyKo":"마감을 못 맞춰서 회사에서 혼났어.","nuance":"get in trouble은 '문제가 되어 혼나다'. for ~ing로 이유를 붙입니다.","usage":"동료에게 실수를 털어놓을 때, 같은 실수를 반복하지 않겠다고 말할 때 씁니다.","tips":["get an earful = 한소리 듣다.","give someone a hard time = ~을 힘들게 하다, 혼내다."],"variations":[{"en":"My boss gave me a hard time about the delay.","ko":"지연 때문에 상사한테 좀 혼났어.","note":"give someone a hard time = 혼내다."},{"en":"I missed the deadline and had to explain everything.","ko":"마감을 못 맞춰서 다 설명해야 했어.","note":"have to explain = 해명해야 하다."},{"en":"I got an earful from the client.","ko":"고객한테 한소리 들었어.","note":"get an earful = 잔소리를 듣다."}],"roleplay":{"situation":"지난주 마감을 놓쳐 혼났던 일을 동료에게 이야기합니다.","question":"Tell a coworker about a mistake you made last week and what you learned.","questionKo":"지난주 실수와 배운 점을 동료에게 이야기해 보세요.","model":"I got in trouble at work for missing a deadline — the client wasn't happy, so I'm being extra careful now.","modelKo":"마감을 놓쳐서 회사에서 혼났어요. 고객도 좋아하지 않아서 지금은 더 꼼꼼히 챙기고 있어요.","tips":["실수 + 결과 + 달라진 점으로 말하면 성숙하게 들려요.","be extra careful = 각별히 조심하다."]}},{"n":8,"title":"퇴근 후 약속 잡기","key":"Are you down for some chicken and beer after work?","keyKo":"일 끝나고 치맥 어때?","nuance":"be down for ~는 '~할래?'의 캐주얼한 표현. 직장 동료끼리 편하게 씁니다.","usage":"퇴근 후 회식이나 가벼운 약속을 제안할 때 씁니다.","tips":["be up for ~도 같은 뜻으로 조금 더 중립적.","grab dinner = 저녁 먹다."],"variations":[{"en":"Are you up for a quick drink after work?","ko":"퇴근하고 한잔 어때?","note":"be up for = ~할 생각 있어."},{"en":"Do you want to grab dinner with us?","ko":"우리랑 저녁 먹을래요?","note":"grab = 간단히 먹다."},{"en":"We're getting together on Friday — join us if you can.","ko":"금요일에 모이는데, 시간 되면 와요.","note":"get together = 모이다."}],"roleplay":{"situation":"팀원들에게 퇴근 후 치맥을 제안합니다.","question":"Invite a teammate to dinner after work.","questionKo":"퇴근 후 저녁을 함께 하자고 제안해 보세요.","model":"We're thinking of grabbing chicken and beer after work. Are you down for it?","modelKo":"퇴근하고 치맥 먹을까 생각 중인데, 너도 갈래?","tips":["We're thinking of ~로 분위기를 만들고 끝에 초대하세요.","Are you down for it?은 아주 편한 사이에서만 쓰세요."]}},{"n":9,"title":"연차 말하기","key":"I'm going to take some PTO.","keyKo":"나 연차 쓸 거야.","nuance":"PTO는 paid time off의 약자로 미국 회사에서 '연차'를 뜻합니다. take time off도 같은 의미예요.","usage":"상사에게 휴가를 알릴 때, 동료에게 자리 비움을 공유할 때 씁니다.","tips":["I'll be out on ~ = ~에는 자리에 없어요.","make sure everything is covered = 업무 공백을 메우다."],"variations":[{"en":"I'm taking a few days off next week.","ko":"다음 주에 며칠 쉴 거예요.","note":"take days off = 휴가를 내다."},{"en":"I need to take some time off to recharge.","ko":"재충전을 위해 좀 쉬어야겠어요.","note":"recharge = 재충전하다."},{"en":"I'm on PTO until Thursday.","ko":"목요일까지 휴가예요.","note":"be on PTO = 휴가 중이다."}],"roleplay":{"situation":"다음 주 월·화요일에 연차를 쓰려고 합니다. 상사에게 알리세요.","question":"Tell your manager you'll be on leave next Monday and Tuesday.","questionKo":"다음 주 월·화요일 연차를 상사에게 알려 보세요.","model":"I'm going to take some PTO next Monday and Tuesday. I'll make sure everything is covered before I go.","modelKo":"다음 주 월요일과 화요일에 연차를 쓸게요. 가기 전에 업무 공백이 없도록 챙겨두겠습니다.","tips":["휴가 날짜 + 업무 처리 계획을 함께 말하면 승인이 빨라요.","be covered = (업무가) 처리되다."]}},{"n":10,"title":"복습 · 회식도 하고 연차도 쓰면서","review":true,"key":"I'm going to take some PTO.","keyKo":"나 연차 쓸 거야.","nuance":"감사 → 실수 → 회식 → 연차. 회사 생활의 감정선이 담긴 네 문장입니다. 억양을 살려 말해 보세요.","usage":"동료와 가까워지는 대화를 연습합니다.","tips":["Day 6~9를 이어 말해 보세요.","감사와 사과는 짧고 분명하게."],"variations":[{"en":"Thanks for taking the trouble.","ko":"고생해 주셔서 감사해요.","note":"Day 6 · 감사."},{"en":"I got in trouble at work for missing a deadline.","ko":"마감을 못 맞춰서 혼났어.","note":"Day 7 · 실수."},{"en":"Are you down for some chicken and beer after work?","ko":"퇴근 후 치맥 어때?","note":"Day 8 · 회식."},{"en":"I'm on PTO until Thursday.","ko":"목요일까지 휴가예요.","note":"Day 9 · 연차."}],"roleplay":{"situation":"다음 주 금요일 연차를 쓰고 싶습니다. 업무를 누구에게 넘길지도 함께 제안하세요.","question":"Ask your boss for a day off and suggest who will cover your work.","questionKo":"연차를 요청하고 업무를 대신 맡을 사람을 제안해 보세요.","model":"I'd like to take some PTO next Friday. I'll hand the client emails over to Jina that day — would that work?","modelKo":"다음 주 금요일에 연차를 쓰고 싶습니다. 그날 거래처 메일은 지나 님께 넘길게요. 괜찮을까요?","tips":["hand over = 넘기다.","마지막에 would that work?로 상사 결정권을 존중하세요."]}},{"n":11,"title":"회의 밖으로 빼기","key":"Why don't we discuss the issue offline?","keyKo":"그 이슈는 따로 논의하는 게 어때요?","nuance":"offline은 '회의 밖에서'라는 뜻으로 쓰입니다. 온라인/오프라인이 아니라 '별도로'의 뉘앙스예요.","usage":"회의가 한 주제에 막혔을 때, 민감한 사안을 공개석상에서 피할 때 씁니다.","tips":["take this offline이 더 짧은 버전.","keep the meeting moving = 회의를 계속 진행하다."],"variations":[{"en":"Let's take this offline.","ko":"이건 따로 얘기하죠.","note":"가장 짧고 자주 쓰는 표현."},{"en":"Can we discuss this after the meeting?","ko":"회의 끝나고 논의할 수 있을까요?","note":"직접적인 대안."},{"en":"Let's follow up on this separately.","ko":"이건 별도로 이어서 논의합시다.","note":"separately = 따로."}],"roleplay":{"situation":"회의에서 세부 사항 하나 때문에 진도가 안 나갑니다.","question":"A meeting is stuck on one detail. Move it out of the meeting.","questionKo":"회의가 세부 사항에 막혔을 때 밖으로 빼 보세요.","model":"Good point — why don't we discuss the issue offline and keep the meeting moving?","modelKo":"좋은 지적이에요. 그 이슈는 따로 논의하고 회의는 계속 진행하는 게 어때요?","tips":["Good point로 상대 기여를 인정한 뒤 전환하세요.","keep the meeting moving이 자연스러운 마무리입니다."]}},{"n":12,"title":"잠깐 맞춰보기","key":"We need to touch base.","keyKo":"우리 잠깐 확인차 대화해야 돼요.","nuance":"touch base는 '짧게 상황을 맞춰보다'. 미국 회사에서 아주 자주 쓰는 표현입니다.","usage":"통화 전, 주간 미팅 전, 진행 상황을 빠르게 공유할 때 씁니다.","tips":["sync up = 맞춰보다(캐주얼).","before the call = 통화 전에."],"variations":[{"en":"Let's touch base tomorrow morning.","ko":"내일 아침에 잠깐 상황 공유하죠.","note":"가장 기본 형태."},{"en":"Can we sync up before the call?","ko":"통화 전에 잠깐 맞춰볼까요?","note":"sync up = 짧게 맞추다."},{"en":"I'll touch base with the factory on Monday.","ko":"월요일에 공장 쪽과 확인해볼게요.","note":"touch base with + 사람/조직."}],"roleplay":{"situation":"거래처 통화 전에 팀원과 상황을 맞춰야 합니다.","question":"Ask a teammate for a quick status check before a client call.","questionKo":"거래처 통화 전에 팀원에게 짧게 상황을 맞춰보자고 해 보세요.","model":"We need to touch base before the client call — can we sync up at 3?","modelKo":"거래처 통화 전에 우리 잠깐 맞춰야 해요. 3시에 될까요?","tips":["이유 + 시간 제안을 한 문장에 담으세요.","at 3처럼 시간을 콕 집으면 바로 잡힙니다."]}},{"n":13,"title":"진행 상황 공유 요청","key":"Please keep me in the loop.","keyKo":"나에게 진행 상황을 계속 알려주세요.","nuance":"in the loop은 '정보가 도는 범위 안'. keep me in the loop은 계속 공유해 달라는 뜻입니다.","usage":"내가 빠진 회의·협의에 대해 계속 보고받고 싶을 때 씁니다.","tips":["keep me posted = 계속 알려주세요(더 캐주얼).","loop someone in = 특정인을 공유 대상에 넣다."],"variations":[{"en":"Please keep me posted.","ko":"계속 알려주세요.","note":"짧고 자주 쓰는 표현."},{"en":"Loop me in when you hear back.","ko":"연락 오면 저도 참조해 주세요.","note":"loop me in = 나도 포함시켜 주세요."},{"en":"I'd like to stay in the loop on this.","ko":"이 건은 계속 공유받고 싶어요.","note":"stay in the loop = 공유망 안에 있다."}],"roleplay":{"situation":"내일 자리에 없습니다. 업체 협상 진행 상황을 계속 공유받고 싶습니다.","question":"Tell a colleague you'll be out tomorrow and ask to be updated.","questionKo":"내일 자리에 없다고 말하고 계속 공유해 달라고 해 보세요.","model":"I'll be out tomorrow — please keep me in the loop on the vendor negotiation.","modelKo":"내일 자리에 없어요. 업체 협상 건은 계속 공유해 주세요.","tips":["부재 + 요청을 한 문장에 넣으면 기억하기 쉬워요.","on ~ = ~에 관해."]}},{"n":14,"title":"도착하면 연락 달라고 하기","key":"Just ping me when you get here.","keyKo":"도착하면 그냥 메시지 하나 보내주세요.","nuance":"ping은 '짧게 연락하다'. just를 붙이면 '부담 갖지 말고'라는 뜻이 됩니다.","usage":"방문객을 맞이할 때, 동료와 만나기로 했을 때 씁니다.","tips":["give me a shout = 연락 주세요(영국식).","text me = 문자해."],"variations":[{"en":"Just text me when you're outside.","ko":"밖에 도착하면 문자 주세요.","note":"text = 문자하다."},{"en":"Give me a shout when you're free.","ko":"시간 되면 연락 주세요.","note":"give me a shout = 알려줘."},{"en":"Ping me on Teams if anything comes up.","ko":"뭐 생기면 팀즈로 알려주세요.","note":"come up = (일이) 생기다."}],"roleplay":{"situation":"거래처 담당자가 사무실을 방문합니다. 도착하면 연락 달라고 하세요.","question":"Tell a visiting client to message you when they arrive at the lobby.","questionKo":"방문객에게 로비에 도착하면 연락 달라고 말해 보세요.","model":"Just ping me when you get to the lobby and I'll come down.","modelKo":"로비에 도착하면 연락 주세요. 제가 내려가겠습니다.","tips":["and I'll ~로 내 다음 행동을 붙이면 친절하게 들려요.","come down = 내려가다."]}},{"n":15,"title":"오늘 짬 내서 하기","key":"I can squeeze that in today.","keyKo":"오늘 짬 내서 할 수 있어.","nuance":"squeeze in은 빡빡한 일정에 '억지로 끼워 넣다'. 바쁘지만 해주겠다는 뉘앙스가 있습니다.","usage":"바쁜데도 짧은 요청을 들어줄 때, 혹은 못 들어줄 때 씁니다.","tips":["I'm swamped = 일이 산더미예요.","fit it in = 시간을 내다."],"variations":[{"en":"I can fit it in after lunch.","ko":"점심 후에 시간 낼 수 있어요.","note":"fit in = 끼워 넣다."},{"en":"Let me squeeze you in at 4.","ko":"4시에 잠깐 시간 내줄게요.","note":"squeeze someone in = 시간을 내주다."},{"en":"I don't think I can squeeze it in today.","ko":"오늘은 도저히 시간이 안 나요.","note":"정중한 거절."}],"roleplay":{"situation":"동료가 오늘 10분만 시간을 달라고 합니다. 바쁘지만 4시 30분은 가능합니다.","question":"A colleague asks for 10 minutes today. You're busy but can manage later.","questionKo":"바쁘지만 늦게 시간을 낼 수 있다고 답해 보세요.","model":"I'm swamped, but I can squeeze that in at 4:30 — does that work?","modelKo":"일이 많긴 한데 4시 30분에 잠깐 시간 낼 수 있어요. 괜찮으세요?","tips":["I'm swamped, but ~으로 상황을 솔직히 알리세요.","does that work?로 상대 일정을 확인하세요."]}},{"n":16,"title":"복습 · 찐 미국 회사 표현","review":true,"key":"We need to touch base.","keyKo":"우리 잠깐 확인차 대화해야 돼요.","nuance":"offline → touch base → keep in the loop → ping → squeeze in. 회의 밖에서 일이 굴러가는 다섯 문장입니다.","usage":"메신저와 짧은 대화에서 쓰는 실전 표현을 정리합니다.","tips":["Day 11~15를 이어 말해 보세요.","실제 메신저에 그대로 써 보면 기억이 오래갑니다."],"variations":[{"en":"Why don't we discuss the issue offline?","ko":"그 이슈는 따로 논의하는 게 어때요?","note":"Day 11 · 회의 밖으로."},{"en":"Please keep me in the loop.","ko":"저도 계속 공유해 주세요.","note":"Day 13 · 공유 요청."},{"en":"Just ping me when you get here.","ko":"도착하면 연락 주세요.","note":"Day 14 · 연락."},{"en":"I can squeeze that in today.","ko":"오늘 짬 내서 할 수 있어요.","note":"Day 15 · 시간 내기."}],"roleplay":{"situation":"바쁜 하루 중에 동료와 2시에 잠깐 맞추고, 가격 메일은 계속 공유받고 싶습니다.","question":"Set a quick sync and ask to be kept updated on the pricing email.","questionKo":"2시에 짧게 맞추자고 하고, 가격 메일은 계속 공유해 달라고 해 보세요.","model":"Let's touch base at 2 — and please keep me in the loop on the pricing email.","modelKo":"2시에 잠깐 맞춰요. 그리고 가격 메일 건은 계속 공유해 주세요.","tips":["요청 두 개를 and로 연결하면 한 번에 처리됩니다.","on the pricing email처럼 대상을 특정하세요."]}},{"n":17,"title":"업무 분담하기","key":"I will take care of the marketing side of things.","keyKo":"마케팅적인 부분은 제가 맡아서 처리할 거예요.","nuance":"take care of는 '처리하다'와 '돌보다' 둘 다. the ~ side of things는 '~쪽 부분'이라는 실무 표현입니다.","usage":"프로젝트에서 역할을 나눌 때 내 몫을 먼저 말할 때 씁니다.","tips":["I'll handle ~도 같은 뜻으로 더 짧아요.","paperwork = 서류 작업."],"variations":[{"en":"I'll handle the logistics.","ko":"물류는 제가 처리할게요.","note":"logistics = 물류."},{"en":"I'll take care of it and let you know.","ko":"제가 처리하고 알려드릴게요.","note":"가장 범용적인 표현."},{"en":"Who's taking care of the paperwork?","ko":"서류는 누가 처리하나요?","note":"담당자 확인 질문."}],"roleplay":{"situation":"신제품 프로젝트에서 마케팅은 내가, 가격은 누가 할지 정해야 합니다.","question":"Divide tasks: you take marketing and ask who handles pricing.","questionKo":"마케팅은 내가 맡겠다고 하고 가격 담당을 물어보세요.","model":"I'll take care of the marketing side of things. Who's handling the pricing?","modelKo":"마케팅 쪽은 제가 맡을게요. 가격은 누가 담당하나요?","tips":["내 몫을 먼저 말하면 상대도 자연스럽게 자기 몫을 말해요.","Who's handling ~?이 가장 짧은 담당 확인 질문."]}},{"n":18,"title":"여유가 되는지 묻기","key":"Do you have the bandwidth to prepare the meeting?","keyKo":"회의를 준비할 여유가 되세요?","nuance":"bandwidth는 원래 통신 대역폭이지만, 회사에서는 '업무를 더 받을 여유'를 뜻합니다.","usage":"일을 부탁하기 전에 상대 여유를 확인할 때 씁니다. 부담을 줄여주는 배려 표현입니다.","tips":["Are you free to ~? = ~할 시간 되세요?","I don't have the bandwidth for ~ = ~할 여유가 없어요."],"variations":[{"en":"Do you have time to review this today?","ko":"오늘 이거 검토할 시간 되세요?","note":"가장 기본적인 여유 확인."},{"en":"I don't have the bandwidth for another project.","ko":"다른 프로젝트 할 여유가 없어요.","note":"정중한 거절."},{"en":"Are you free to join the call?","ko":"통화 참여 가능하세요?","note":"be free to = ~할 시간이 되다."}],"roleplay":{"situation":"내일 회의 자료를 동료가 준비할 수 있는지 확인해야 합니다.","question":"Ask a colleague if they can prepare slides for tomorrow's meeting.","questionKo":"내일 회의 자료를 준비할 수 있는지 동료에게 물어보세요.","model":"Do you have the bandwidth to prepare the slides for tomorrow's meeting?","modelKo":"내일 회의 슬라이드 준비할 여유가 되세요?","tips":["부탁 대신 여유를 묻는 형태라 거절하기도 편해요.","for tomorrow's meeting처럼 목적을 붙이세요."]}},{"n":19,"title":"회의 요점 듣기","key":"Could you give me a quick rundown of the meeting?","keyKo":"회의의 요점을 잠깐 설명해 줄 수 있어요?","nuance":"rundown은 '요점 정리'. summary보다 구어적이고 회의 직후에 자주 씁니다.","usage":"회의에 못 들어갔을 때, 보고를 받을 때 씁니다.","tips":["What's the gist of ~? = ~의 요지는?","walk me through ~ = ~을 설명해 주다."],"variations":[{"en":"Can you give me a quick summary?","ko":"간단히 요약해줄 수 있어요?","note":"가장 일반적인 표현."},{"en":"Walk me through what happened.","ko":"무슨 일이 있었는지 설명해 주세요.","note":"순서대로 설명 요청."},{"en":"What's the gist of the client's feedback?","ko":"고객 피드백 요지는 뭐예요?","note":"gist = 요지."}],"roleplay":{"situation":"다른 회의 때문에 참석하지 못했습니다. 무슨 결정이 났는지 물어보세요.","question":"You missed a meeting. Ask a colleague for a rundown.","questionKo":"회의에 못 갔으니 동료에게 요점을 물어보세요.","model":"I missed the meeting — could you give me a quick rundown of what was decided?","modelKo":"회의에 못 갔어요. 어떤 게 결정됐는지 간단히 알려줄 수 있나요?","tips":["what was decided처럼 알고 싶은 범위를 좁히세요.","Could you ~로 부탁하면 부드럽습니다."]}},{"n":20,"title":"밀린 일 처리하기","key":"I have a lot of emails to catch up on.","keyKo":"처리해야 할 밀린 이메일이 많아요.","nuance":"catch up on은 '밀린 것을 따라잡다'. I have ~ to catch up on 구조로 자주 씁니다.","usage":"출장 복귀 후, 바쁜 날에 약속을 미룰 때 씁니다.","tips":["I'm still catching up from the trip. = 출장 다녀와서 아직 정리 중이에요.","behind on ~ = ~이 밀린."],"variations":[{"en":"I need to catch up on some work.","ko":"밀린 일을 좀 해야 해요.","note":"범용 표현."},{"en":"I'm still catching up from the trip.","ko":"출장 다녀와서 아직 밀린 일을 처리 중이에요.","note":"from the trip = 출장에서."},{"en":"Let me catch up on emails first.","ko":"이메일부터 좀 처리할게요.","note":"let me ~ = 제가 먼저 할게요."}],"roleplay":{"situation":"출장에서 돌아와 밀린 이메일이 많습니다. 3시 이후로 약속을 미루고 싶습니다.","question":"Decline a meeting time because you're behind on email, and suggest another time.","questionKo":"밀린 이메일 때문에 지금은 어렵다고 하고 다른 시간을 제안하세요.","model":"Can we do it after 3? I have a lot of emails to catch up on from the trip.","modelKo":"3시 이후로 해도 될까요? 출장 다녀와서 처리할 이메일이 많아요.","tips":["거절 + 대안 시간을 함께 주면 무례하지 않아요.","from the trip으로 이유를 구체화하세요."]}},{"n":21,"title":"복습 · 효율적인 협업","review":true,"key":"I will take care of the marketing side of things.","keyKo":"마케팅 부분은 제가 처리할게요.","nuance":"역할 나누기 → 여유 확인 → 요점 듣기 → 밀린 일. 협업에서 매일 반복되는 흐름입니다.","usage":"프로젝트 협업 대화를 한 번에 연습합니다.","tips":["Day 17~20을 이어 말해 보세요.","부탁 전에 여유를 묻는 습관이 관계를 지켜줍니다."],"variations":[{"en":"Do you have the bandwidth to prepare the meeting?","ko":"회의 준비할 여유가 되세요?","note":"Day 18 · 여유 확인."},{"en":"Could you give me a quick rundown of the meeting?","ko":"회의 요점을 간단히 알려줄 수 있어요?","note":"Day 19 · 요점."},{"en":"I have a lot of emails to catch up on.","ko":"밀린 이메일이 많아요.","note":"Day 20 · 밀린 일."},{"en":"I'll take care of it and let you know.","ko":"제가 처리하고 알려드릴게요.","note":"Day 17 · 분담."}],"roleplay":{"situation":"거래처 메일은 내가 맡고, 점심 후 회의 요점을 듣고 싶습니다.","question":"Take one task and ask for a summary later.","questionKo":"한 가지 일을 맡겠다고 하고 나중에 요점을 물어보세요.","model":"I'll take care of the client emails. Could you give me a quick rundown of the meeting after lunch?","modelKo":"거래처 메일은 제가 맡을게요. 점심 후에 회의 요점을 간단히 알려줄 수 있나요?","tips":["내가 맡는 일 + 상대에게 부탁할 일을 짝지어 말하세요.","after lunch처럼 시간을 붙이면 실행이 빨라요."]}},{"n":22,"title":"상사에게 보고하기","key":"I ran the ideas by my boss.","keyKo":"상사에게 아이디어를 보고했어요.","nuance":"run something by someone은 '의견을 구하다, 확인받다'. 결정 전에 상사에게 미리 보여주는 행위입니다.","usage":"아이디어나 계획을 상사에게 먼저 확인받았음을 알릴 때 씁니다.","tips":["Let me run this by my manager first. = 상사에게 먼저 확인해볼게요.","get the green light = 승인을 받다."],"variations":[{"en":"Let me run this by my manager first.","ko":"상사에게 먼저 보고할게요.","note":"결정 전 확인할 때."},{"en":"I ran the numbers by the finance team.","ko":"재무팀에 숫자를 확인받았어요.","note":"run ~ by + 사람/팀."},{"en":"Can I run something by you?","ko":"하나 여쭤봐도 될까요?","note":"의견을 구할 때 쓰는 부드러운 시작."}],"roleplay":{"situation":"거래처가 제안한 아이디어를 바로 확답하지 않고 상사에게 확인하려 합니다.","question":"Tell a client you'll confirm the idea with your manager first.","questionKo":"아이디어를 상사에게 먼저 확인하겠다고 거래처에 말해 보세요.","model":"That sounds good — let me run it by my boss and I'll get back to you tomorrow.","modelKo":"좋은 것 같습니다. 상사에게 먼저 확인하고 내일 연락드릴게요.","tips":["거절이 아니라 절차라는 점을 분명히 하세요.","get back to you tomorrow로 기한을 주면 신뢰가 생깁니다."]}},{"n":23,"title":"결정을 알리기","key":"We decided to move forward with the project.","keyKo":"프로젝트를 진행하기로 결정했어요.","nuance":"move forward with ~는 '~을 진행하다'. go ahead with도 같은 뜻입니다.","usage":"검토 후 결정 사항을 팀이나 거래처에 알릴 때 씁니다.","tips":["put on hold = 보류하다.","get the green light = 승인되다."],"variations":[{"en":"We're going ahead with the launch.","ko":"출시를 진행하기로 했어요.","note":"go ahead with = 진행하다."},{"en":"We've decided to put the project on hold.","ko":"프로젝트를 보류하기로 했습니다.","note":"put on hold = 보류하다."},{"en":"The plan got the green light.","ko":"계획이 승인됐어요.","note":"green light = 승인 신호."}],"roleplay":{"situation":"수치를 검토한 뒤 1분기에 프로젝트를 진행하기로 했습니다. 팀에 알리세요.","question":"Announce that the project will proceed after review.","questionKo":"검토 후 프로젝트를 진행하기로 했다고 알려 보세요.","model":"After reviewing the numbers, we decided to move forward with the project in Q1.","modelKo":"수치를 검토한 결과, 1분기에 프로젝트를 진행하기로 했습니다.","tips":["근거(After reviewing ~) + 결정 + 시점 순서로 말하세요.","in Q1처럼 시기를 붙이면 다음 행동이 정해집니다."]}},{"n":24,"title":"순조롭게 진행 중","key":"We're on track.","keyKo":"순조롭게 진행되고 있어요.","nuance":"on track은 '일정대로'. 반대는 behind schedule(지연), ahead of schedule(조기).","usage":"주간 보고에서 상태를 한 단어로 전달할 때 씁니다.","tips":["on track to ~ = ~할 수 있게 순조롭다.","according to plan = 계획대로."],"variations":[{"en":"We're on track to finish by Friday.","ko":"금요일까지 끝낼 수 있게 순조롭게 진행 중이에요.","note":"on track to + 동사원형."},{"en":"Everything is going according to plan.","ko":"모든 게 계획대로 되고 있어요.","note":"according to plan = 계획대로."},{"en":"We're a little ahead of schedule.","ko":"일정보다 조금 앞서 있어요.","note":"ahead of schedule = 일정보다 빠르게."}],"roleplay":{"situation":"샘플이 화요일에 도착하고 금요일 완료가 가능합니다. 상태를 보고하세요.","question":"Give a status update: on track and finishing Friday, with a reason.","questionKo":"순조롭고 금요일에 끝난다는 상태 보고를 해 보세요.","model":"We're on track — the samples arrive Tuesday, so we'll finish by Friday.","modelKo":"순조롭습니다. 샘플이 화요일에 도착해서 금요일까지 마무리할 수 있어요.","tips":["상태 + 근거를 붙이면 보고가 믿음직해져요.","so를 넣어 인과를 드러내세요."]}},{"n":25,"title":"일정이 늦어질 때","key":"We are running behind schedule.","keyKo":"일정보다 좀 늦어지고 있어요.","nuance":"behind schedule은 '일정 지연'. 진행 중이면 running behind로 씁니다.","usage":"지연을 인정하고 대책을 함께 말해야 신뢰를 잃지 않습니다.","tips":["catch up = 만회하다.","push the deadline = 마감을 미루다."],"variations":[{"en":"We're two days behind schedule.","ko":"이틀 늦어지고 있어요.","note":"숫자로 밝히면 명확해요."},{"en":"The shipment is delayed due to the holiday.","ko":"연휴 때문에 선적이 지연됐습니다.","note":"be delayed due to ~ = ~ 때문에 지연."},{"en":"We might need to push the deadline.","ko":"마감을 미뤄야 할 수도 있어요.","note":"might need to = ~해야 할지도."}],"roleplay":{"situation":"항구 지연으로 이틀 늦어졌습니다. 주말 작업으로 만회하겠다고 보고하세요.","question":"Report a two-day delay and your recovery plan.","questionKo":"이틀 지연과 만회 계획을 보고해 보세요.","model":"We're running two days behind schedule because of the port delay, but we'll catch up by working this weekend.","modelKo":"항구 지연 때문에 이틀 늦어지고 있지만, 주말 작업으로 만회하겠습니다.","tips":["지연 + 원인 + 대책의 3단 구조가 기본입니다.","because of + 명사 = ~ 때문에."]}},{"n":26,"title":"성과가 없었음을 말하기","key":"It didn't quite move the needle.","keyKo":"그다지 가시적인 성과를 내지 못했어요.","nuance":"move the needle은 '눈에 띄는 변화를 만들다'. quite를 넣으면 '그렇게까지는 아니었다'로 부드러워집니다.","usage":"캠페인·개선안의 효과가 미미했음을 솔직히 보고할 때 씁니다.","tips":["barely changed = 거의 변하지 않았다.","a small win = 소소한 성과."],"variations":[{"en":"The campaign didn't move the needle.","ko":"캠페인이 별 효과가 없었어요.","note":"quite 없이 단정."},{"en":"Sales barely changed.","ko":"매출은 거의 변동이 없었어요.","note":"barely = 겨우, 거의 ~않다."},{"en":"It was a small win, but not enough.","ko":"소소한 성과였지만 충분하지 않았어요.","note":"긍정 + 한계 구조."}],"roleplay":{"situation":"프로모션 후 매출이 2%만 올랐습니다. 결과를 솔직하게 보고하세요.","question":"Report that a promotion had little effect, with the number.","questionKo":"프로모션 효과가 미미했다고 숫자와 함께 보고해 보세요.","model":"The promotion didn't quite move the needle — sales went up only 2%.","modelKo":"프로모션은 가시적인 성과를 내지 못했어요. 매출은 2%만 올랐습니다.","tips":["결론 + 숫자 순서로 말하면 변명처럼 들리지 않아요.","only를 붙이면 기대에 못 미쳤음이 드러납니다."]}},{"n":27,"title":"복습 · 프로젝트의 시작부터 결과까지","review":true,"key":"We decided to move forward with the project.","keyKo":"프로젝트를 진행하기로 결정했어요.","nuance":"보고 → 결정 → 진행 상태 → 지연 → 결과. 프로젝트 한 사이클을 1분으로 말해 보세요.","usage":"주간 보고나 프로젝트 리뷰에서 그대로 쓸 수 있는 흐름입니다.","tips":["Day 22~26을 순서대로 이어 말해 보세요.","각 단계는 한 문장이면 충분합니다."],"variations":[{"en":"I ran the ideas by my boss.","ko":"상사에게 아이디어를 보고했어요.","note":"Day 22 · 보고."},{"en":"We're on track.","ko":"순조롭게 진행 중이에요.","note":"Day 24 · 상태."},{"en":"We are running behind schedule.","ko":"일정보다 늦어지고 있어요.","note":"Day 25 · 지연."},{"en":"It didn't quite move the needle.","ko":"가시적인 성과를 내지 못했어요.","note":"Day 26 · 결과."}],"roleplay":{"situation":"한 달간의 프로젝트를 1분으로 요약해 팀에 공유합니다.","question":"Give a one-minute project update: decision, status, and results.","questionKo":"결정, 상태, 결과를 담아 1분 프로젝트 업데이트를 해 보세요.","model":"We decided to move forward with the project in October. We were two days behind schedule, but we're on track now. The first promotion didn't quite move the needle, so we're testing a new message.","modelKo":"10월에 프로젝트를 진행하기로 했습니다. 이틀 늦어졌지만 지금은 순조롭습니다. 첫 프로모션은 성과가 미미해서 새 메시지를 테스트하고 있어요.","tips":["과거 → 현재 → 다음 순서로 말하면 듣기 편해요.","so we're testing처럼 다음 행동으로 끝내세요."]}}]}]},{"id":"C","name":"원어민처럼","short":"중급","cardTitle":"원어민처럼 스피킹","tagline":"중급 회화 3탄 + 구동사 격파 2탄, 43일","chapters":[{"id":"C1","name":"중급 1탄","subtitle":"일상 의견 · 주말 계획 · 과거 경험 · 식당 주문 · 돈과 소비","days":[{"n":1,"title":"내키지 않을 때","key":"I don't feel like it.","keyKo":"하기 싫어. / 내키지 않아.","nuance":"기분이 안 내키는 상태를 말합니다. I don't want to보다 부드럽고, 이유를 붙이기 쉬워요.","usage":"친구의 제안을 가볍게 거절할 때 가장 먼저 나오는 말입니다.","tips":["feel like ~ing = ~하고 싶다.","I'm not in the mood for ~ = ~할 기분이 아니야."],"variations":[{"en":"I don't feel like going out tonight.","ko":"오늘 밤엔 나가기 싫어.","note":"feel like + 동명사."},{"en":"I'm not in the mood for a movie.","ko":"영화 볼 기분 아니야.","note":"in the mood for + 명사."},{"en":"Do you feel like grabbing a coffee?","ko":"커피 한잔할래?","note":"제안에도 그대로 씁니다."}],"roleplay":{"situation":"피곤한데 친구가 오늘 밤 놀러 가자고 합니다.","question":"Your friend invites you out, but you're tired. Decline gently and suggest another day.","questionKo":"피곤해서 오늘은 못 나가겠다고 부드럽게 말하고 다른 날을 제안해 보세요.","model":"Thanks, but I don't feel like going out tonight. I'm pretty tired — maybe this weekend?","modelKo":"고맙지만 오늘 밤엔 나가기 싫어. 좀 피곤하네. 이번 주말은 어때?","tips":["Thanks, but ~으로 시작하면 거절이 부드러워요.","대안을 꼭 붙이면 관계가 상하지 않습니다."]}},{"n":2,"title":"주말 계획 묻기","key":"What are you up to this weekend?","keyKo":"주말에 뭐 해?","nuance":"be up to ~는 '~할 예정이다'. 가벼운 안부이자 대화 시작 표현입니다.","usage":"금요일 오후, 월요일 아침에 가장 자주 나오는 질문입니다.","tips":["I'm not up to much = 별거 없어.","Any plans for ~? = ~ 계획 있어?"],"variations":[{"en":"What are you up to tonight?","ko":"오늘 밤에 뭐 해?","note":"this weekend 대신 tonight."},{"en":"I'm not up to much this weekend.","ko":"이번 주말엔 별거 없어.","note":"not up to much = 별일 없음."},{"en":"Any plans for the holidays?","ko":"휴일 계획 있어?","note":"any plans for + 명사."}],"roleplay":{"situation":"주말에 새로 생긴 카페에 가고 싶습니다. 친구에게 계획을 묻고 제안하세요.","question":"Ask a friend about weekend plans and suggest meeting up.","questionKo":"주말 계획을 묻고 만나자고 제안해 보세요.","model":"What are you up to this weekend? I was thinking we could check out that new cafe.","modelKo":"이번 주말에 뭐 해? 새로 생긴 카페에 가볼까 생각 중이었어.","tips":["I was thinking we could ~는 부담 없는 제안입니다.","check out = 가보다, 둘러보다."]}},{"n":3,"title":"과거의 습관 말하기","key":"I used to drink a lot.","keyKo":"예전엔 술을 많이 마셨는데.","nuance":"used to + 동사원형은 '지금은 아닌 과거의 습관'. be used to ~ing(익숙하다)와 헷갈리지 마세요.","usage":"달라진 습관, 어린 시절 이야기를 할 때 씁니다.","tips":["I didn't use to ~ = 예전엔 ~하지 않았다.","Did you use to ~? = 예전에 ~했어?"],"variations":[{"en":"I used to work out every morning.","ko":"예전엔 매일 아침 운동했어.","note":"work out = 운동하다."},{"en":"I didn't use to like coffee.","ko":"예전엔 커피를 안 좋아했어.","note":"부정은 didn't use to."},{"en":"Did you use to live in Busan?","ko":"예전에 부산에 살았어?","note":"의문문은 Did you use to."}],"roleplay":{"situation":"20대와 지금의 생활이 어떻게 달라졌는지 이야기합니다.","question":"Talk about a habit that has changed since your twenties.","questionKo":"20대와 달라진 습관에 대해 이야기해 보세요.","model":"I used to drink a lot in my twenties, but now I barely drink at all.","modelKo":"20대엔 술을 많이 마셨는데, 지금은 거의 안 마셔.","tips":["used to와 now를 대비시키면 변화가 선명해져요.","barely ~ at all = 거의 전혀 ~않다."]}},{"n":4,"title":"예산이 안 될 때","key":"I can't afford it right now.","keyKo":"지금은 그걸 살 여유가 없어.","nuance":"afford는 돈뿐 아니라 시간에도 씁니다. can't afford to + 동사원형으로도 자주 써요.","usage":"비싼 제안을 거절할 때, 계획을 미룰 때 씁니다.","tips":["out of my budget = 예산 밖이야.","afford to take a day off = 하루 쉴 여유가 없다."],"variations":[{"en":"Can we afford a bigger place?","ko":"더 큰 집 살 여유가 될까?","note":"afford + 명사."},{"en":"I can't afford to take a day off.","ko":"하루 쉴 여유가 없어.","note":"afford to + 동사."},{"en":"It's a bit out of my budget.","ko":"제 예산 밖이에요.","note":"out of my budget = 예산 초과."}],"roleplay":{"situation":"친구가 비싼 여행을 제안합니다. 지금은 어렵다고 말하세요.","question":"Decline an expensive trip politely and offer another option.","questionKo":"비싼 여행을 정중히 거절하고 다른 선택지를 제안해 보세요.","model":"I'd love to go, but I can't afford it right now. Maybe next year?","modelKo":"정말 가고 싶지만 지금은 여유가 없어. 내년에 갈까?","tips":["I'd love to, but ~은 가장 안전한 거절 공식입니다.","Maybe next year?로 문을 열어두세요."]}},{"n":5,"title":"먹고 싶은 게 당길 때","key":"I'm craving something spicy.","keyKo":"매운 게 땡겨.","nuance":"crave는 '강하게 당기다'. 음식뿐 아니라 휴식·여행에도 쓸 수 있습니다.","usage":"메뉴를 고를 때, 맛집을 추천할 때 씁니다.","tips":["I've been craving ~ all week = 일주일 내내 ~가 먹고 싶었어.","Do you ever crave ~? = ~ 땡길 때 있어?"],"variations":[{"en":"I'm craving ramen.","ko":"라면이 땡겨.","note":"가장 단순한 형태."},{"en":"Do you ever crave sweets at night?","ko":"밤에 단 게 땡길 때 있어?","note":"ever = 때때로."},{"en":"I've been craving sushi all week.","ko":"일주일 내내 초밥이 먹고 싶었어.","note":"현재완료진행으로 지속 표현."}],"roleplay":{"situation":"매운 게 먹고 싶습니다. 역 근처 태국 음식점을 제안하세요.","question":"Suggest a restaurant based on what you're craving.","questionKo":"땡기는 음식에 맞춰 식당을 제안해 보세요.","model":"I'm craving something spicy — how about that Thai place near the station?","modelKo":"매운 게 땡기는데, 역 근처 태국 음식점 어때?","tips":["how about + 명사? 가 가장 빠른 제안입니다.","near the station으로 위치를 붙이세요."]}},{"n":6,"title":"호불호 말하기","key":"I'm not a big fan of horror movies.","keyKo":"공포 영화는 별로 안 좋아해.","nuance":"not a big fan of는 '별로 좋아하지 않는다'의 부드러운 표현. 싫어한다고 단정하지 않습니다.","usage":"취향이 다를 때, 같이 할 활동을 고를 때 씁니다.","tips":["I'm a huge fan of ~ = ~를 정말 좋아해.","I'm not really into ~ = ~에 별로 관심 없어."],"variations":[{"en":"I'm a huge fan of jazz.","ko":"난 재즈를 정말 좋아해.","note":"huge fan = 열렬한 팬."},{"en":"I'm not really into hiking.","ko":"등산은 별로 안 좋아해.","note":"be into ~ = ~에 빠져 있다."},{"en":"Are you a fan of baseball?","ko":"야구 좋아해?","note":"취향 질문."}],"roleplay":{"situation":"친구가 공포 영화를 보자고 합니다. 다른 장르를 제안하세요.","question":"Politely turn down a horror movie and suggest something else.","questionKo":"공포 영화를 정중히 거절하고 다른 장르를 제안해 보세요.","model":"I'm not a big fan of horror movies, but I'm up for anything else.","modelKo":"공포 영화는 별로 안 좋아하는데, 다른 건 뭐든 좋아.","tips":["but I'm up for anything else로 유연함을 보여주세요.","be up for ~ = ~할 생각이 있다."]}},{"n":7,"title":"선택을 맡길 때","key":"It's up to you.","keyKo":"네가 정해.","nuance":"up to you는 결정권을 상대에게 넘기는 말. 무관심이 아니라 배려로 들립니다.","usage":"메뉴, 장소, 시간을 정할 때 씁니다.","tips":["I'm easy = 난 아무거나 좋아.","It's not up to me = 그건 제가 정할 게 아니에요."],"variations":[{"en":"It's up to you where we eat.","ko":"어디서 먹을지는 네가 정해.","note":"의문사 + up to you."},{"en":"You decide — I'm easy.","ko":"네가 정해, 난 아무거나 좋아.","note":"I'm easy = 아무거나 괜찮아."},{"en":"It's not up to me.","ko":"그건 제가 정할 게 아니에요.","note":"권한이 없을 때."}],"roleplay":{"situation":"친구가 어디서 먹을지 묻습니다. 부담 없이 정하라고 하세요.","question":"Your friend asks where to eat. Let them choose.","questionKo":"어디서 먹을지 친구가 정하도록 말해 보세요.","model":"It's up to you — I'm fine with anything as long as it's not too far.","modelKo":"네가 정해. 너무 멀지만 않으면 난 뭐든 괜찮아.","tips":["as long as ~ = ~하기만 하면.","조건 하나를 붙이면 '무관심'이 아니라 '배려'로 들려요."]}},{"n":8,"title":"가는 중이라고 답하기","key":"I'm on my way.","keyKo":"가는 중이야.","nuance":"지금 이동 중이라는 뜻. 실제로 출발했을 때만 쓰세요.","usage":"약속 장소로 이동 중일 때 문자로 가장 많이 쓰는 문장입니다.","tips":["I'll be right there = 바로 갈게.","I'm running late = 늦어지고 있어."],"variations":[{"en":"I'm on my way now — 10 minutes.","ko":"지금 가는 중이야, 10분이면 도착해.","note":"예상 시간을 붙이기."},{"en":"I'll be right there.","ko":"바로 갈게.","note":"곧 도착."},{"en":"Sorry, I'm running late.","ko":"미안, 늦어지고 있어.","note":"늦어질 때."}],"roleplay":{"situation":"약속 장소로 가는 중입니다. 5분 뒤 도착합니다.","question":"Text a friend that you're almost there.","questionKo":"거의 다 왔다고 친구에게 문자해 보세요.","model":"I'm on my way — I'll be there in about five minutes.","modelKo":"가는 중이야. 5분쯤이면 도착해.","tips":["in about ~ minutes가 가장 자연스러운 시간 표현입니다.","짧을수록 좋아요. 문자는 한 문장이면 충분합니다."]}},{"n":9,"title":"복습 · 중급 1탄 총정리","review":true,"key":"What are you up to this weekend?","keyKo":"주말에 뭐 해?","nuance":"안부 → 취향 → 예산 → 제안. 일상 대화의 기본 흐름입니다. 이 다섯 문장으로 주말 약속 하나를 끝까지 만들어 보세요.","usage":"친구와의 가벼운 대화를 통째로 연습합니다.","tips":["Day 1~8을 이어 말해 보세요.","거절에는 반드시 대안을 붙이세요."],"variations":[{"en":"I don't feel like it.","ko":"내키지 않아.","note":"Day 1 · 거절."},{"en":"I used to drink a lot.","ko":"예전엔 술을 많이 마셨는데.","note":"Day 3 · 과거."},{"en":"I can't afford it right now.","ko":"지금은 여유가 없어.","note":"Day 4 · 예산."},{"en":"I'm craving something spicy.","ko":"매운 게 땡겨.","note":"Day 5 · 취향."}],"roleplay":{"situation":"주말에 친구와 만나기로 했습니다. 계획을 묻고, 비싼 곳은 어렵다고 하고, 매운 음식으로 제안하세요.","question":"Plan a casual weekend with a friend: ask plans, decline one option, suggest another.","questionKo":"주말 계획을 묻고, 한 선택지는 어렵다고 하고, 다른 제안을 해 보세요.","model":"What are you up to this weekend? I don't feel like staying home, but I can't afford anything fancy. I'm craving something spicy — how about Thai?","modelKo":"이번 주말에 뭐 해? 집에만 있긴 싫은데 비싼 데는 부담돼. 매운 게 땡기니까 태국 음식 어때?","tips":["세 문장을 이어 말하면 실제 대화처럼 들려요.","but으로 취향과 조건을 연결하세요."]}}]},{"id":"C2","name":"중급 2탄","subtitle":"습관 · 아침과 출퇴근 · 직장 · 여행 · 음식 · 성향","days":[{"n":1,"title":"멈출 수 없는 습관","key":"I can't help checking my phone.","keyKo":"자꾸 핸드폰을 확인하게 돼.","nuance":"can't help ~ing는 '~하지 않을 수 없다'. 의지와 상관없이 반복되는 행동에 씁니다.","usage":"나쁜 습관을 고백할 때, 웃음을 참지 못할 때 씁니다.","tips":["I couldn't help overhearing = 엿들은 건 아니고 그냥 들렸어요.","can't help but ~도 유사 표현."],"variations":[{"en":"I can't help laughing when I see that.","ko":"그걸 보면 웃지 않을 수 없어.","note":"can't help + 동명사."},{"en":"I couldn't help overhearing.","ko":"엿들으려던 건 아니고 그냥 들렸어요.","note":"사무실에서 유용한 표현."},{"en":"She can't help being late.","ko":"그녀는 어쩔 수 없이 늦는 거야.","note":"습관적 성향."}],"roleplay":{"situation":"몇 분마다 핸드폰을 확인하는 습관을 고백합니다.","question":"Confess a habit you can't stop.","questionKo":"멈출 수 없는 습관을 고백해 보세요.","model":"I can't help checking my phone every few minutes — it's a bad habit.","modelKo":"몇 분마다 핸드폰을 확인하게 돼. 나쁜 습관이야.","tips":["every few minutes = 몇 분마다.","it's a bad habit으로 자조적으로 마무리하면 자연스러워요."]}},{"n":2,"title":"아침마다 바쁜 일상","key":"Most mornings, I have to rush to go to work.","keyKo":"대부분의 아침에 서둘러 출근해야 해.","nuance":"most mornings는 '대개 아침에'. rush는 '서두르다'로, 늘 급하다는 뉘앙스입니다.","usage":"아침 루틴을 설명할 때, 출근이 힘들다고 말할 때 씁니다.","tips":["hit the snooze button = 알람을 미루다.","barely have time for ~ = ~할 시간이 거의 없다."],"variations":[{"en":"I usually leave the house around 7:30.","ko":"보통 7시 반쯤 집을 나서.","note":"leave the house = 집을 나서다."},{"en":"I hit the snooze button three times every morning.","ko":"매일 아침 알람을 세 번 미뤄.","note":"snooze button = 다시 알림."},{"en":"I barely have time for breakfast.","ko":"아침 먹을 시간이 거의 없어.","note":"barely = 거의 ~않다."}],"roleplay":{"situation":"아침 루틴이 얼마나 급한지 이야기합니다.","question":"Describe your morning routine.","questionKo":"아침 루틴을 설명해 보세요.","model":"Most mornings, I have to rush to go to work, so I just grab a coffee on the way.","modelKo":"대부분의 아침에 서둘러 출근해야 해서, 가는 길에 커피만 사 마셔.","tips":["so로 결과를 붙이면 루틴이 그림처럼 그려져요.","grab = 급히 사다, 간단히 먹다."]}},{"n":3,"title":"시간이 어디로 가는지","key":"Most of my time is spent answering emails.","keyKo":"내 시간 대부분은 이메일 답장에 쓰여.","nuance":"be spent ~ing는 '~하는 데 쓰이다'. 수동태로 습관을 객관적으로 말합니다.","usage":"업무 시간이 어떻게 쓰이는지 설명할 때 씁니다.","tips":["spend + 시간 + ~ing = ~하며 시간을 보내다.","Most of my day is spent in meetings."],"variations":[{"en":"Most of my day is spent in meetings.","ko":"하루 대부분을 회의에서 보내.","note":"spent in + 장소/활동."},{"en":"I spend about two hours a day on emails.","ko":"하루에 두 시간 정도 이메일에 써.","note":"능동태 버전."},{"en":"My weekends are spent with my kids.","ko":"주말은 아이들과 보내.","note":"be spent with + 사람."}],"roleplay":{"situation":"해외 바이어 메일과 통화로 하루가 다 갑니다. 업무 시간을 설명하세요.","question":"Describe how your workday is spent.","questionKo":"업무 시간이 어떻게 쓰이는지 설명해 보세요.","model":"Most of my time is spent answering emails and calls from overseas buyers.","modelKo":"시간 대부분을 해외 바이어들의 이메일과 통화에 답하는 데 써.","tips":["answering과 calls를 함께 묶어 말하세요.","from overseas buyers로 대상을 붙이면 구체적이 됩니다."]}},{"n":4,"title":"휴식이 필요할 때","key":"I need to take some time off.","keyKo":"좀 쉬어야겠어.","nuance":"take time off는 '휴가를 내다'. need to를 붙이면 상태의 심각성을 전달합니다.","usage":"번아웃을 호소할 때, 여행 계획을 말할 때 씁니다.","tips":["I need a break from work. = 일에서 좀 벗어나고 싶어.","You should take some time off. = 너 좀 쉬어야 해."],"variations":[{"en":"I'm taking a few days off next month.","ko":"다음 달에 며칠 쉴 거야.","note":"구체적인 계획."},{"en":"You should take some time off.","ko":"너 좀 쉬어야 해.","note":"권유."},{"en":"I need a break from work.","ko":"일에서 좀 벗어나고 싶어.","note":"a break from ~."}],"roleplay":{"situation":"몇 주째 쉬지 못했습니다. 친구에게 상태를 말하세요.","question":"Tell a friend you're burned out and need a break.","model":"I've been working nonstop — I really need to take some time off.","modelKo":"쉬지 않고 계속 일했어. 진짜 좀 쉬어야겠어.","tips":["I've been ~ing로 지속된 상태를 표현하세요.","nonstop = 쉬지 않고."]}},{"n":5,"title":"여행지 분위기 즐기기","key":"We went to soak up the local atmosphere.","keyKo":"현지 분위기를 느끼러 갔어.","nuance":"soak up은 '흠뻑 느끼다, 즐기다'. 태양, 분위기, 문화에 모두 쓸 수 있습니다.","usage":"관광 대신 동네를 걷고 분위기를 즐겼다고 말할 때 씁니다.","tips":["soak up the sun = 햇볕을 쬐다.","skip the tours = 투어는 건너뛰다."],"variations":[{"en":"We just walked around and soaked up the atmosphere.","ko":"그냥 걸으면서 분위기를 즐겼어.","note":"walk around = 돌아다니다."},{"en":"I want to soak up some sun this weekend.","ko":"이번 주말엔 햇볕 좀 쬐고 싶어.","note":"soak up the sun."},{"en":"The market was great for soaking up the local culture.","ko":"시장은 현지 문화를 느끼기 좋았어.","note":"be great for ~ing."}],"roleplay":{"situation":"여행에서 관광지를 건너뛰고 옛 시내를 걸었습니다.","question":"Describe a trip where you skipped the tourist spots.","questionKo":"관광지 대신 동네를 걸으며 보낸 여행을 설명해 보세요.","model":"We skipped the tours and just walked around the old town to soak up the local atmosphere.","modelKo":"투어는 건너뛰고 그냥 옛 시내를 걸으면서 현지 분위기를 느꼈어.","tips":["skipped A and just B로 대비를 만들면 이야기가 살아요.","to soak up ~ = ~하기 위해."]}},{"n":6,"title":"아침형 인간인지","key":"I'm not a morning person.","keyKo":"난 아침형 인간이 아니야.","nuance":"morning person은 아침에 강한 사람, 반대는 night owl(올빼미형)입니다.","usage":"이른 회의를 피하고 싶을 때, 생활 패턴을 설명할 때 씁니다.","tips":["I'm not at my best before 10. = 10시 전엔 컨디션이 별로야.","I'm more of a night owl."],"variations":[{"en":"I'm more of a night owl.","ko":"난 더 밤형이야.","note":"night owl = 올빼미형."},{"en":"My wife is a morning person; I'm not.","ko":"아내는 아침형인데 난 아니야.","note":"대조 구조."},{"en":"I'm not at my best before 10.","ko":"10시 전엔 컨디션이 별로야.","note":"at my best = 최상 컨디션."}],"roleplay":{"situation":"9시 통화는 힘들다고 설명해야 합니다.","question":"Explain why you don't like early meetings.","questionKo":"이른 회의가 힘든 이유를 설명해 보세요.","model":"I'm not a morning person, so a 9 a.m. call is tough for me.","modelKo":"난 아침형이 아니라서 9시 통화는 좀 힘들어.","tips":["so로 인과를 연결하세요.","tough for me = 나에게 힘든."]}},{"n":7,"title":"줄이는 중인 습관","key":"I'm trying to cut back on coffee.","keyKo":"커피를 줄이는 중이야.","nuance":"cut back on / cut down on은 '줄이다'. trying to를 붙이면 완벽하지 않아도 노력 중임을 전달합니다.","usage":"건강·소비 습관을 이야기할 때 씁니다.","tips":["cut back on sugar = 설탕을 줄이다.","I'm down to one cup a day."],"variations":[{"en":"I've cut back on sugar.","ko":"설탕을 줄였어.","note":"현재완료로 결과 강조."},{"en":"I'm trying to cut down on screen time.","ko":"화면 보는 시간을 줄이려고 해.","note":"cut down on도 같은 뜻."},{"en":"I need to cut back on spending.","ko":"지출을 줄여야 해.","note":"spending = 지출."}],"roleplay":{"situation":"커피를 하루 한 잔으로 줄였습니다.","question":"Talk about a habit you're reducing and how it's going.","questionKo":"줄이고 있는 습관과 그 결과를 이야기해 보세요.","model":"I'm trying to cut back on coffee — I'm down to one cup a day.","modelKo":"커피를 줄이는 중인데, 이제 하루 한 잔으로 줄었어.","tips":["I'm down to ~ = 이제 ~로 줄었어.","구체적인 숫자를 붙이면 설득력이 생겨요."]}},{"n":8,"title":"통근 시간 말하기","key":"It takes me about an hour to get to work.","keyKo":"출근하는 데 한 시간쯤 걸려.","nuance":"It takes + 사람 + 시간 + to ~ 구조. 통근·이동 시간을 말할 때 기본형입니다.","usage":"통근 이야기, 약속 시간을 잡을 때 씁니다.","tips":["How long does it take you to ~? = ~하는 데 얼마나 걸려?","It used to take me two hours."],"variations":[{"en":"It takes about 40 minutes by subway.","ko":"지하철로 40분쯤 걸려.","note":"by subway = 지하철로."},{"en":"How long does it take you to get home?","ko":"집까지 얼마나 걸려?","note":"의문문 형태."},{"en":"It used to take me two hours.","ko":"예전엔 두 시간 걸렸어.","note":"used to로 과거 비교."}],"roleplay":{"situation":"동료와 통근 시간을 비교합니다.","question":"Compare commutes with a coworker.","questionKo":"동료와 통근 시간을 비교해 보세요.","model":"It takes me about an hour to get to work — how about you?","modelKo":"난 출근하는 데 한 시간쯤 걸려. 너는?","tips":["how about you?로 대화를 넘기세요.","about을 붙여 어림값임을 표시합니다."]}},{"n":9,"title":"복습 · 중급 2탄 총정리","review":true,"key":"Most mornings, I have to rush to go to work.","keyKo":"대부분의 아침에 서둘러 출근해야 해.","nuance":"습관 → 시간 → 휴식 → 성향 → 통근. 하루를 설명하는 다섯 문장입니다.","usage":"자기 일상을 영어로 1분 동안 설명해 보세요.","tips":["Day 1~8을 이어 말해 보세요.","숫자(한 시간, 하루 두 잔)를 넣으면 훨씬 구체적이 됩니다."],"variations":[{"en":"I can't help checking my phone.","ko":"자꾸 핸드폰을 확인하게 돼.","note":"Day 1 · 습관."},{"en":"Most of my time is spent answering emails.","ko":"시간 대부분을 이메일 답장에 써.","note":"Day 3 · 시간."},{"en":"I'm trying to cut back on coffee.","ko":"커피를 줄이는 중이야.","note":"Day 7 · 줄이기."},{"en":"It takes me about an hour to get to work.","ko":"출근에 한 시간쯤 걸려.","note":"Day 8 · 통근."}],"roleplay":{"situation":"평일 하루를 설명합니다. 통근, 업무, 습관까지.","question":"Describe your typical weekday: commute, work, and one habit.","questionKo":"통근, 업무, 습관을 포함해 평일 하루를 설명해 보세요.","model":"It takes me about an hour to get to work, and most of my time is spent answering emails. I'm trying to cut back on coffee, but I can't help it.","modelKo":"출근에 한 시간쯤 걸리고, 시간 대부분을 이메일 답장에 써. 커피를 줄이려고 하는데 자꾸 손이 가.","tips":["세 문장이면 하루 설명이 충분합니다.","but I can't help it으로 인간적인 마무리를 하세요."]}}]},{"id":"C3","name":"중급 3탄","subtitle":"칭찬과 격려 · 조언 · 가정법 · 비교 · 일상 수다","days":[{"n":1,"title":"힘든 시기 위로하기","key":"This too shall pass.","keyKo":"이것도 지나갈 거야.","nuance":"힘든 순간을 견디라고 할 때 쓰는 오래된 위로 표현입니다. 짧지만 무게가 있습니다.","usage":"친구가 실직·이별·시험 낙방 등 힘든 일을 겪을 때 씁니다.","tips":["Hang in there = 조금만 버텨.","Things will get better."],"variations":[{"en":"It's tough now, but this too shall pass.","ko":"지금은 힘들지만 이것도 다 지나갈 거야.","note":"상황 인정 + 위로."},{"en":"Hang in there.","ko":"조금만 버텨.","note":"가장 짧은 응원."},{"en":"Things will get better.","ko":"상황이 나아질 거야.","note":"미래 긍정."}],"roleplay":{"situation":"친구가 힘든 시기를 보내고 있습니다.","question":"Comfort a friend who is going through a hard time.","questionKo":"힘든 시기를 보내는 친구를 위로해 보세요.","model":"I know it's stressful right now, but this too shall pass. Hang in there.","modelKo":"지금 스트레스가 큰 거 알아. 그래도 이것도 지나갈 거야. 조금만 버텨.","tips":["I know it's ~로 감정을 먼저 인정하세요.","위로는 짧을수록 오래 남습니다."]}},{"n":2,"title":"능력을 믿어준다고 말하기","key":"I believe in your ability to come out ahead.","keyKo":"네가 앞서 나갈 능력이 있다고 믿어.","nuance":"come out ahead는 '결국 이기다, 앞서다'. ability to + 동사원형으로 능력을 특정합니다.","usage":"중요한 발표, 면접, 협상 전에 동료를 응원할 때 씁니다.","tips":["You've got what it takes. = 넌 그럴 능력이 있어.","I'm rooting for you."],"variations":[{"en":"I believe in you.","ko":"난 널 믿어.","note":"가장 짧은 신뢰 표현."},{"en":"You've got what it takes.","ko":"넌 그럴 능력이 있어.","note":"what it takes = 필요한 자질."},{"en":"I'm rooting for you.","ko":"응원할게.","note":"root for = 응원하다."}],"roleplay":{"situation":"동료가 중요한 발표를 앞두고 긴장하고 있습니다.","question":"Encourage a coworker before an important presentation.","questionKo":"중요한 발표를 앞둔 동료를 격려해 보세요.","model":"You've prepared more than anyone. I believe in your ability to come out ahead.","modelKo":"누구보다 준비 많이 했잖아. 넌 해낼 능력이 있다고 믿어.","tips":["근거(준비)를 먼저 말하면 격려가 구체적으로 들려요.","come out ahead는 경쟁 상황에서 특히 잘 어울립니다."]}},{"n":3,"title":"가정법으로 감사하기","key":"If it weren't for you, I wouldn't be here.","keyKo":"네가 없었으면 여기 없었을 거야.","nuance":"가정법 과거: 현재 사실의 반대를 상상합니다. If it weren't for ~ = ~이 없었다면(지금도 있음).","usage":"멘토나 동료에게 진심으로 감사할 때, 인생의 전환점을 이야기할 때 씁니다.","tips":["If I were you, I'd ~ = 내가 너라면 ~할 거야.","If I had known, I would have called. = 알았더라면 전화했을 텐데."],"variations":[{"en":"If it weren't for the traffic, we'd be there by now.","ko":"차가 막히지만 않았으면 지금쯤 도착했을 거야.","note":"현재 사실의 반대."},{"en":"If I were you, I'd take the offer.","ko":"내가 너라면 그 제안을 받을 거야.","note":"조언의 가정법."},{"en":"If I had known, I would have called.","ko":"알았더라면 전화했을 텐데.","note":"과거 사실의 반대."}],"roleplay":{"situation":"커리어에 큰 도움을 준 멘토에게 감사를 전합니다.","question":"Thank a mentor who helped your career.","questionKo":"커리어에 도움을 준 멘토에게 감사를 전해 보세요.","model":"Thank you for everything. If it weren't for you, I wouldn't be here.","modelKo":"모든 것에 감사드립니다. 선배님이 없었으면 여기 없었을 거예요.","tips":["If it weren't for you는 감사의 가장 강한 표현입니다.","짧게 말하고 눈을 맞추세요."]}},{"n":4,"title":"들은 이야기 전하기","key":"From what I've heard, the merger is on hold.","keyKo":"제가 들은 바로는 합병이 보류됐대요.","nuance":"from what I've heard는 확인되지 않은 정보임을 표시합니다. 소문을 사실처럼 말하지 않는 안전장치예요.","usage":"확실하지 않은 소식을 전할 때, 책임을 지지 않고 정보를 공유할 때 씁니다.","tips":["As far as I know = 내가 알기로는.","I was told that ~ = ~라고 들었어요."],"variations":[{"en":"From what I hear, they're moving the office.","ko":"내가 듣기로는 사무실을 옮긴대.","note":"현재 들리는 소문."},{"en":"As far as I know, the deal is still on.","ko":"제가 알기로는 거래는 아직 진행 중이에요.","note":"내 지식 범위 한정."},{"en":"I was told the schedule would be the same this year.","ko":"올해 일정은 같을 거라고 들었어요.","note":"개인적으로 전달받은 정보."}],"roleplay":{"situation":"출시가 3월로 미뤄졌다는 이야기를 들었습니다. 확실하지 않다고 덧붙이세요.","question":"Share some unconfirmed news carefully.","questionKo":"확인되지 않은 소식을 조심스럽게 전해 보세요.","model":"From what I've heard, the launch is moving to March — but I'd check with the project lead.","modelKo":"제가 들은 바로는 출시가 3월로 미뤄진대요. 그래도 프로젝트 리드에게 확인해 보세요.","tips":["but I'd check with ~로 책임 범위를 분명히 하세요.","소문은 항상 출처 확인을 붙입니다."]}},{"n":5,"title":"비교급으로 격려하기","key":"The more you practice, the stronger you get.","keyKo":"연습할수록 더 강해져.","nuance":"the + 비교급 ~, the + 비교급 ~ 구문. '~할수록 더 ~하다'라는 뜻입니다.","usage":"꾸준함을 격려할 때, 경험과 성장을 연결할 때 씁니다.","tips":["The sooner, the better. = 빠를수록 좋아.","The older I get, the more I appreciate ~."],"variations":[{"en":"The older I get, the more I appreciate my parents.","ko":"나이가 들수록 부모님이 더 고마워.","note":"the 비교급 반복."},{"en":"The sooner we start, the better.","ko":"일찍 시작할수록 좋아.","note":"관용 표현."},{"en":"The more I think about it, the less I like it.","ko":"생각할수록 별로야.","note":"부정 방향 비교."}],"roleplay":{"situation":"영어를 배우는 친구가 실수를 두려워합니다.","question":"Encourage a friend who is learning English and afraid of mistakes.","questionKo":"실수를 두려워하는 영어 학습 친구를 격려해 보세요.","model":"Don't worry about mistakes — the more you practice, the stronger you get.","modelKo":"실수는 걱정하지 마. 연습할수록 더 강해지니까.","tips":["Don't worry about ~로 두려움을 먼저 없애주세요.","the 비교급 구문은 격려에 특히 잘 어울립니다."]}},{"n":6,"title":"응원한다고 말하기","key":"I'm rooting for you.","keyKo":"응원하고 있어.","nuance":"root for는 '응원하다'. 스포츠에서 온 표현이지만 일상 응원에도 자연스럽습니다.","usage":"면접, 시험, 발표를 앞둔 사람에게 짧게 건네는 말입니다.","tips":["We're all rooting for you.","Fingers crossed. = 잘 되길 빌어."],"variations":[{"en":"We're all rooting for you.","ko":"우리 모두 응원해.","note":"팀 전체의 응원."},{"en":"I'll be cheering for you.","ko":"응원할게.","note":"cheer for = 응원하다."},{"en":"Good luck — fingers crossed.","ko":"행운을 빌어, 잘 되길.","note":"fingers crossed = 행운을 빌며."}],"roleplay":{"situation":"친구가 내일 면접을 봅니다.","question":"Wish a friend luck before an interview.","questionKo":"면접을 앞둔 친구에게 행운을 빌어 주세요.","model":"Good luck with the interview — I'm rooting for you.","modelKo":"면접 잘 봐. 응원하고 있을게.","tips":["Good luck with + 명사가 가장 자연스러워요.","짧게, 진심으로."]}},{"n":7,"title":"해보라고 권하기","key":"You should give it a try.","keyKo":"한번 해봐.","nuance":"give it a try는 '한번 시도해 보다'. 부담 없이 권할 때 씁니다.","usage":"새 취미, 새 음식, 새 방법을 추천할 때 씁니다.","tips":["give it a shot = 한번 해보다(캐주얼).","It's worth trying. = 해볼 만해."],"variations":[{"en":"Why don't you give it a shot?","ko":"한번 해보는 게 어때?","note":"shot = 시도."},{"en":"It's worth trying.","ko":"해볼 만한 가치가 있어.","note":"be worth ~ing."},{"en":"I tried it once and I loved it.","ko":"한번 해봤는데 완전 좋았어.","note":"경험으로 권하기."}],"roleplay":{"situation":"친구에게 클라이밍을 추천합니다.","question":"Recommend a new hobby to a friend with a reason.","questionKo":"이유와 함께 새로운 취미를 추천해 보세요.","model":"You should give it a try — climbing is a great way to clear your head.","modelKo":"한번 해봐. 클라이밍은 머리를 비우기 정말 좋아.","tips":["추천 + 이유를 붙이면 설득력이 생겨요.","clear your head = 머리를 식히다."]}},{"n":8,"title":"생각보다 쉽다고 말하기","key":"It's not as hard as it looks.","keyKo":"보이는 것만큼 어렵지 않아.","nuance":"as ~ as는 '~만큼'. not as A as B는 'B만큼 A하지 않다'입니다.","usage":"겁먹은 사람을 안심시킬 때, 비교로 설명할 때 씁니다.","tips":["It's easier than I expected.","This is much better than the last one."],"variations":[{"en":"It's easier than I expected.","ko":"생각보다 쉬워.","note":"than I expected = 예상보다."},{"en":"It's not as expensive as it seems.","ko":"보기보다 비싸지 않아.","note":"not as ~ as it seems."},{"en":"This is much better than the last one.","ko":"이게 지난 것보다 훨씬 나아.","note":"much + 비교급 강조."}],"roleplay":{"situation":"새 업무를 앞두고 긴장한 동료를 안심시킵니다.","question":"Reassure someone nervous about a task.","questionKo":"업무를 앞두고 긴장한 사람을 안심시켜 보세요.","model":"Don't worry — it's not as hard as it looks. I'll walk you through it.","modelKo":"걱정 마, 보기보다 어렵지 않아. 내가 하나하나 알려줄게.","tips":["Don't worry로 시작하고 바로 이유를 주세요.","walk you through는 업무 설명에 딱 맞는 표현입니다."]}},{"n":9,"title":"복습 · 중급 3탄 총정리","review":true,"key":"This too shall pass.","keyKo":"이것도 지나갈 거야.","nuance":"위로 → 신뢰 → 감사 → 소문 → 비교 → 응원. 사람을 다루는 다섯 가지 말입니다.","usage":"누군가를 격려하고 조언하는 상황을 통째로 연습합니다.","tips":["Day 1~8을 이어 말해 보세요.","가정법과 비교급은 입에 붙을 때까지 반복하세요."],"variations":[{"en":"I believe in your ability to come out ahead.","ko":"네가 앞설 능력이 있다고 믿어.","note":"Day 2 · 신뢰."},{"en":"The more you practice, the stronger you get.","ko":"연습할수록 더 강해져.","note":"Day 5 · 비교급."},{"en":"From what I've heard, the merger is on hold.","ko":"제가 들은 바로는 합병이 보류됐대요.","note":"Day 4 · 정보."},{"en":"It's not as hard as it looks.","ko":"보기보다 어렵지 않아.","note":"Day 8 · 안심."}],"roleplay":{"situation":"친구가 시험에 떨어져 낙담했습니다. 위로하고 조언하세요.","question":"Comfort a friend who failed an exam, then encourage them with advice.","questionKo":"시험에 떨어진 친구를 위로하고 조언으로 격려해 보세요.","model":"I know you're disappointed, but this too shall pass. The more you practice, the stronger you get — and it's not as hard as it looks.","modelKo":"실망한 거 알아. 그래도 이것도 지나갈 거야. 연습할수록 더 강해지고, 보기보다 어렵지 않아.","tips":["위로 + 격려 + 안심의 3단 구성이 자연스러워요.","문장 사이를 but, and로 이어 보세요."]}}]},{"id":"C4","name":"구동사 격파 1탄","subtitle":"make · take 기반 핵심 구동사","days":[{"n":1,"title":"make up one's mind — 마음을 정하다","key":"I can't make up my mind.","keyKo":"마음을 못 정하겠어.","nuance":"make up one's mind는 decide보다 '고민 끝에 결심하다'에 가깝습니다. 부정형으로 가장 많이 씁니다.","usage":"메뉴, 제품, 제안 중 하나를 고를 때 씁니다.","tips":["소유격이 바뀝니다: make up my/your/her mind.","Have you made up your mind yet? = 마음 정했어?"],"variations":[{"en":"I can't make up my mind about the menu.","ko":"메뉴를 못 정하겠어.","note":"about + 대상."},{"en":"She made up her mind to change jobs.","ko":"그녀는 이직하기로 마음을 굳혔어.","note":"to + 동사원형 = ~하기로."},{"en":"Have you made up your mind yet?","ko":"마음 정했어?","note":"현재완료 질문."}],"roleplay":{"situation":"두 개의 제안 중 하나를 고르지 못했습니다.","question":"You're choosing between two offers. Say you're still deciding and why.","questionKo":"두 제안 중 고민 중이라고 말하고 이유를 설명해 보세요.","model":"I still can't make up my mind between the two offers — the salary or the team.","modelKo":"아직 두 제안 중에 마음을 못 정했어. 연봉이냐 팀이냐의 문제야.","tips":["between A and B로 선택지를 붙이세요.","고민의 축을 한 단어로 말하면 상대가 조언하기 쉬워요."]}},{"n":2,"title":"make out — 알아보다","key":"I can't make out what he's saying.","keyKo":"그가 무슨 말을 하는지 알아듣지 못하겠어.","nuance":"make out은 소리·글씨·의미를 '겨우 알아보다'. 통화 품질이 나쁠 때 자주 씁니다.","usage":"시끄러운 곳, 나쁜 연결, 흐린 글씨를 설명할 때 씁니다.","tips":["I couldn't make out the handwriting. = 글씨를 못 알아봤어.","hard to make out = 알아보기 힘들다."],"variations":[{"en":"I couldn't make out the handwriting.","ko":"글씨를 알아볼 수 없었어.","note":"과거형 couldn't."},{"en":"It's hard to make out the details from here.","ko":"여기서는 세부 사항을 알아보기 힘들어.","note":"hard to + 동사원형."},{"en":"Did you make out what she meant?","ko":"그녀가 무슨 뜻인지 알아들었어?","note":"의미 파악."}],"roleplay":{"situation":"시끄러운 통화에서 상대 말을 못 알아듣고 있습니다.","question":"You can't understand a noisy call. Say so politely.","questionKo":"통화가 시끄러워 못 알아듣겠다고 정중히 말해 보세요.","model":"Sorry, I can't make out what you're saying — the line is really bad.","modelKo":"미안한데 무슨 말인지 못 알아듣겠어. 연결이 정말 안 좋네.","tips":["the line is bad = 통화 품질이 나쁘다.","Sorry로 시작하면 상대 실수가 아니라는 게 전해져요."]}},{"n":3,"title":"make it — 도착하다, 해내다","key":"I'm sorry, I can't make it to the meeting.","keyKo":"미안해요, 회의에 못 갈 것 같아요.","nuance":"make it은 '도착하다'와 '해내다' 두 가지. can't make it은 약속·모임에 못 간다는 가장 흔한 표현입니다.","usage":"일정을 취소할 때, 늦지 않게 도착했을 때 씁니다.","tips":["We made it just in time. = 간신히 제시간에 도착했어.","Can you make it by 6? = 6시까지 올 수 있어?"],"variations":[{"en":"Can you make it by 6?","ko":"6시까지 올 수 있어?","note":"by + 시각 = ~까지."},{"en":"We made it just in time.","ko":"간신히 제시간에 도착했어.","note":"just in time = 딱 맞춰."},{"en":"I don't think I can make it tonight.","ko":"오늘 밤엔 못 갈 것 같아.","note":"I don't think ~ 로 완곡하게."}],"roleplay":{"situation":"회사에 급한 일이 생겨 저녁 약속에 못 갑니다.","question":"Cancel attendance at dinner because of work.","questionKo":"회사 일 때문에 저녁 약속에 못 간다고 말해 보세요.","model":"I'm sorry, I can't make it to dinner tonight — something came up at work.","modelKo":"미안, 오늘 저녁 못 갈 것 같아. 회사에 급한 일이 생겼어.","tips":["something came up = 급한 일이 생겼다.","사과 + 이유를 한 문장에 담으세요."]}},{"n":4,"title":"take after — 닮다","key":"She takes after her mother.","keyKo":"그녀는 엄마를 닮았어.","nuance":"take after는 가족 중 누군가를 닮았다는 뜻으로만 씁니다. 성격에도, 외모에도 씁니다.","usage":"가족 이야기, 아이 이야기를 할 때 씁니다.","tips":["look like = 외모만 닮다.","take after는 성격까지 포함합니다."],"variations":[{"en":"He takes after his dad — they even walk the same.","ko":"그는 아빠를 닮았어, 걸음걸이까지 같아.","note":"구체적 근거 덧붙이기."},{"en":"I take after my mom in looks.","ko":"난 외모가 엄마를 닮았어.","note":"in looks = 외모에서."},{"en":"My son takes after me in personality.","ko":"아들은 성격이 나를 닮았어.","note":"in personality."}],"roleplay":{"situation":"둘째 아들이 성격이 나를 닮았다고 이야기합니다.","question":"Describe a family resemblance.","questionKo":"가족이 닮은 점을 설명해 보세요.","model":"My younger son takes after me — he's just as impatient.","modelKo":"작은아들은 나를 닮았어. 성격이 나만큼 급해.","tips":["just as ~ = 똑같이 ~한.","닮은 점을 한 가지 구체적으로 말하세요."]}},{"n":5,"title":"take it up with — 따지다, 상의하다","key":"You should take it up with the manager.","keyKo":"그건 매니저에게 말씀하셔야 해요.","nuance":"take it up with someone은 '그 사람과 직접 문제를 다루다'. 불만을 넘길 때 쓰는 표현입니다.","usage":"담당이 아닌 문의를 돌릴 때, 상사와 상의할 때 씁니다.","tips":["That's not my department. = 제 담당이 아니에요.","I'll take it up with my boss."],"variations":[{"en":"Take it up with the shipping team.","ko":"그건 배송팀에 문의하세요.","note":"shipping team = 배송팀."},{"en":"I'll take it up with my boss.","ko":"상사와 상의해볼게요.","note":"내부 상의."},{"en":"If you have a problem, take it up with HR.","ko":"문제가 있으면 인사팀에 말하세요.","note":"HR = 인사팀."}],"roleplay":{"situation":"고객이 배송 문제를 나에게 항의합니다. 담당 부서를 안내하세요.","question":"Redirect a complaint to the right department politely.","questionKo":"항의를 담당 부서로 정중히 안내해 보세요.","model":"I understand, but that's not my department — you should take it up with the logistics team.","modelKo":"이해합니다만 제 담당은 아니라서요. 물류팀에 말씀하셔야 합니다.","tips":["I understand, but ~으로 공감 후 안내하세요.","should take it up with + 조직."]}},{"n":6,"title":"take in — 받아들이다, 이해하다","key":"It was a lot to take in.","keyKo":"한꺼번에 받아들이기엔 벅찼어.","nuance":"take in은 정보·충격을 '소화하다'. 큰 발표나 뉴스를 들었을 때 자주 씁니다.","usage":"큰 발표, 갑작스러운 소식에 반응할 때 씁니다.","tips":["I need to take this in for a second.","process = 소화하다."],"variations":[{"en":"I couldn't take in all the details.","ko":"세부 내용을 다 이해하지 못했어.","note":"세부 정보 소화."},{"en":"He took in the news quietly.","ko":"그는 그 소식을 조용히 받아들였어.","note":"감정 없이 받아들임."},{"en":"I need to take this in for a second.","ko":"이걸 좀 정리할 시간이 필요해.","note":"for a second = 잠깐."}],"roleplay":{"situation":"회사에서 큰 조직 개편을 발표했습니다. 바로 반응하기 어렵습니다.","question":"React to a big announcement and ask for the details in writing.","questionKo":"큰 발표에 반응하고 세부 내용을 문서로 달라고 해 보세요.","model":"That's a lot to take in. Can you send me the details so I can read them again?","modelKo":"한 번에 받아들이기 벅차네요. 다시 읽어볼 수 있게 세부 내용을 보내주실 수 있나요?","tips":["That's a lot to take in은 정확한 감정 표현입니다.","so I can ~처럼 요청 이유를 붙이세요."]}},{"n":7,"title":"take on — 맡다, 고용하다","key":"I took on too much this quarter.","keyKo":"이번 분기에 일을 너무 많이 떠맡았어.","nuance":"take on은 일·책임을 맡는 것, 또는 사람을 고용하는 것 둘 다입니다.","usage":"업무 과부하를 말할 때, 채용 계획을 말할 때 씁니다.","tips":["take on new staff = 새 직원을 뽑다.","Don't take on more than you can handle."],"variations":[{"en":"She took on the new role in March.","ko":"그녀는 3월에 새 역할을 맡았어.","note":"role = 역할."},{"en":"We're taking on two new engineers.","ko":"엔지니어 두 명을 새로 뽑아.","note":"사람을 뽑는 뜻."},{"en":"Don't take on more than you can handle.","ko":"감당할 수 있는 것보다 많이 맡지 마.","note":"handle = 감당하다."}],"roleplay":{"situation":"세 개 프로젝트를 동시에 맡아 과부하 상태입니다.","question":"Say you're overloaded and explain why.","questionKo":"일이 너무 많다고 말하고 이유를 설명해 보세요.","model":"I took on too much this quarter — I'm juggling three projects.","modelKo":"이번 분기에 일을 너무 많이 맡았어. 프로젝트 세 개를 동시에 하고 있어.","tips":["juggle = 동시에 여러 일을 하다.","숫자를 붙이면 상황이 바로 전달됩니다."]}},{"n":8,"title":"복습 · make / take 구동사","review":true,"key":"I can't make up my mind.","keyKo":"마음을 못 정하겠어.","nuance":"구동사는 동사만 바뀌어도 뜻이 완전히 달라집니다. make up / make out / make it, take after / take up / take in / take on을 한 번에 정리하세요.","usage":"오늘 배운 7개 구동사를 상황에 맞춰 골라 쓰는 연습입니다.","tips":["Day 1~7을 이어 말해 보세요.","전치사가 바뀌면 뜻이 바뀐다는 점을 기억하세요."],"variations":[{"en":"I can't make out what he's saying.","ko":"그가 무슨 말인지 못 알아듣겠어.","note":"Day 2 · make out."},{"en":"I'm sorry, I can't make it to the meeting.","ko":"미안해요, 회의에 못 가요.","note":"Day 3 · make it."},{"en":"You should take it up with the manager.","ko":"매니저에게 말씀하셔야 해요.","note":"Day 5 · take up."},{"en":"I took on too much this quarter.","ko":"이번 분기에 너무 많이 맡았어.","note":"Day 7 · take on."}],"roleplay":{"situation":"회의에 못 간다고 말하고, 대신 누구에게 이야기하라고 안내하세요.","question":"Explain why you can't attend and who to ask instead.","questionKo":"회의에 못 간다고 하고 대신 누구에게 말하라고 안내해 보세요.","model":"I can't make it to the meeting — I took on too much this week. Please take it up with Jina.","modelKo":"회의에 못 갈 것 같아요. 이번 주에 일을 너무 많이 맡았거든요. 지나 님에게 말씀해 주세요.","tips":["구동사 두 개를 한 문장에 넣어 보세요.","이유를 붙이면 거절이 덜 무례해집니다."]}}]},{"id":"C5","name":"구동사 격파 2탄","subtitle":"get · run 기반 핵심 구동사","days":[{"n":1,"title":"get over — 극복하다","key":"It took me a while to get over the flu.","keyKo":"독감을 떨쳐내는 데 한참 걸렸어.","nuance":"get over는 질병·실연·충격을 '극복하다'. 뒤에 사람이 오면 '이별을 잊다'가 됩니다.","usage":"아팠던 일, 힘든 일을 이겨낸 경험을 말할 때 씁니다.","tips":["I can't get over how good this is. = 이게 이렇게 좋다니 믿기지 않아.","still getting over = 아직 극복 중."],"variations":[{"en":"I can't get over how good this is.","ko":"이게 이렇게 좋다니 믿기지 않아.","note":"놀라움 표현으로도 씁니다."},{"en":"She's still getting over a breakup.","ko":"그녀는 아직 이별을 극복 중이야.","note":"breakup = 이별."},{"en":"You'll get over it.","ko":"넌 극복할 거야.","note":"짧은 위로."}],"roleplay":{"situation":"독감으로 일주일을 앓았습니다. 회복 과정을 이야기하세요.","question":"Talk about recovering from an illness.","questionKo":"병에서 회복한 경험을 이야기해 보세요.","model":"It took me about a week to get over the flu.","modelKo":"독감을 떨쳐내는 데 일주일쯤 걸렸어.","tips":["It took me + 기간 + to ~ 구문을 통째로 익히세요.","the flu = 독감."]}},{"n":2,"title":"get along with — 잘 지내다","key":"I get along well with my coworkers.","keyKo":"동료들과 잘 지내.","nuance":"get along with는 사람 사이의 관계가 좋다는 뜻. get on with도 같은 의미입니다.","usage":"인간관계를 설명할 때, 팀 분위기를 말할 때 씁니다.","tips":["We didn't get along at first.","get along with everyone = 모두와 잘 지내다."],"variations":[{"en":"Do you get along with your boss?","ko":"상사와 잘 지내?","note":"관계 질문."},{"en":"We didn't get along at first.","ko":"처음엔 사이가 안 좋았어.","note":"at first = 처음에는."},{"en":"I get along with everyone on the team.","ko":"팀의 모두와 잘 지내.","note":"everyone on the team."}],"roleplay":{"situation":"새로 온 팀원과의 관계를 설명합니다.","question":"Describe your relationship with a new teammate.","questionKo":"새 팀원과의 관계를 설명해 보세요.","model":"We get along well — we have lunch together almost every day.","modelKo":"우린 잘 지내. 거의 매일 같이 점심 먹어.","tips":["관계 평가 + 구체적 행동을 붙이세요.","almost every day = 거의 매일."]}},{"n":3,"title":"get rid of — 없애다","key":"I need to get rid of this old furniture.","keyKo":"이 낡은 가구를 처분해야 해.","nuance":"get rid of는 물건을 버리다, 문제를 없애다 둘 다. 필요 없는 것을 제거한다는 뜻입니다.","usage":"정리, 절차 간소화, 불필요한 단계 제거를 말할 때 씁니다.","tips":["How do I get rid of this file?","get rid of the extra steps = 불필요한 단계를 없애다."],"variations":[{"en":"Let's get rid of the extra steps.","ko":"불필요한 단계를 없앱시다.","note":"업무 개선 표현."},{"en":"I can't get rid of this cough.","ko":"기침이 안 떨어져.","note":"증상이 낫지 않을 때."},{"en":"How do I get rid of this file?","ko":"이 파일 어떻게 지워?","note":"삭제 방법 질문."}],"roleplay":{"situation":"결재 단계가 너무 많아 일이 느립니다. 줄이자고 제안하세요.","question":"Suggest simplifying a slow approval process.","questionKo":"느린 결재 절차를 간소화하자고 제안해 보세요.","model":"We should get rid of the extra approval step — it slows everything down.","modelKo":"불필요한 결재 단계를 없애야 해요. 그게 모든 걸 느리게 만들고 있어요.","tips":["제안 + 부작용 설명 구조로 말하세요.","slow something down = ~을 느리게 하다."]}},{"n":4,"title":"get by — 그럭저럭 지내다","key":"I can get by with basic English.","keyKo":"기초 영어로 그럭저럭 지낼 수 있어.","nuance":"get by는 최소한으로 해내다, 버티다. 완벽하지 않아도 된다는 뉘앙스입니다.","usage":"언어 능력, 생활비, 상황을 견디는 이야기를 할 때 씁니다.","tips":["We'll get by somehow. = 어떻게든 되겠지.","can't get by on this salary = 이 월급으로는 생활이 안 돼."],"variations":[{"en":"We'll get by somehow.","ko":"어떻게든 되겠지.","note":"somehow = 어떻게든."},{"en":"It's enough to get by.","ko":"그럭저럭 살기엔 충분해.","note":"enough to + 동사."},{"en":"I can't get by on this salary.","ko":"이 월급으로는 생활이 안 돼.","note":"get by on + 수입."}],"roleplay":{"situation":"여행 중 영어 실력이 어느 정도인지 이야기합니다.","question":"Say your language skills are enough for travel.","questionKo":"여행에는 충분한 영어 실력이라고 말해 보세요.","model":"My English isn't perfect, but I can get by when I travel.","modelKo":"영어가 완벽하진 않지만 여행할 땐 그럭저럭 돼.","tips":["isn't perfect, but ~ 구조가 겸손하면서 자신감 있게 들려요.","when I travel로 상황을 한정하세요."]}},{"n":5,"title":"run into — 우연히 만나다","key":"I ran into an old friend at the airport.","keyKo":"공항에서 옛 친구를 우연히 만났어.","nuance":"run into는 사람을 우연히 만나는 것, 또는 문제에 부딪치는 것 둘 다입니다.","usage":"뜻밖의 만남이나 예상치 못한 문제를 이야기할 때 씁니다.","tips":["Guess who I ran into today?","run into a problem = 문제가 생기다."],"variations":[{"en":"Guess who I ran into today?","ko":"오늘 누구 만났는지 알아?","note":"이야기 시작 멘트."},{"en":"I ran into a problem with the payment.","ko":"결제에서 문제가 생겼어.","note":"문제에 부딪히다."},{"en":"We ran into each other at the trade show.","ko":"박람회에서 우연히 마주쳤어.","note":"each other와 함께."}],"roleplay":{"situation":"공항에서 옛 상사를 우연히 만났습니다.","question":"Tell a story about a chance meeting.","questionKo":"우연한 만남에 대해 이야기해 보세요.","model":"You won't believe it — I ran into my old boss at the airport.","modelKo":"믿기지 않겠지만, 공항에서 옛 상사를 우연히 만났어.","tips":["You won't believe it —로 흥미를 끌면 좋아요.","at the airport처럼 장소를 붙이세요."]}},{"n":6,"title":"run out of — 다 써버리다","key":"We're running out of time.","keyKo":"시간이 다 되어가고 있어.","nuance":"run out of는 자원이 바닥나다. 진행형이면 '곧 다 떨어지려 한다'는 긴장감이 생깁니다.","usage":"재고·시간·인내심이 부족할 때 씁니다.","tips":["We ran out of coffee. = 커피가 다 떨어졌어.","I'm running out of patience. = 인내심이 바닥나고 있어."],"variations":[{"en":"We ran out of coffee this morning.","ko":"오늘 아침 커피가 다 떨어졌어.","note":"과거형 ran out of."},{"en":"I'm running out of patience.","ko":"인내심이 바닥나고 있어.","note":"감정에도 씁니다."},{"en":"We're about to run out of stock.","ko":"재고가 곧 바닥날 거예요.","note":"be about to = 막 ~하려 하다."}],"roleplay":{"situation":"재고가 곧 바닥납니다. 이번 주에 재주문해야 합니다.","question":"Warn about low inventory.","questionKo":"재고가 부족하다고 경고해 보세요.","model":"We're running out of stock — we need to reorder this week.","modelKo":"재고가 곧 바닥나요. 이번 주에 재주문해야 합니다.","tips":["경고 + 필요한 조치를 한 문장으로.","reorder = 재주문하다."]}},{"n":7,"title":"run something by — 의논하다","key":"Let me run this by my boss.","keyKo":"상사에게 먼저 확인해볼게요.","nuance":"run something by someone은 결정 전에 의견을 구하는 것. 상사·동료에게 씁니다.","usage":"제안을 바로 확정하지 않고 확인 절차를 밟을 때 씁니다.","tips":["Can I run an idea by you? = 아이디어 하나 여쭤봐도 될까요?","run it by legal = 법무팀에 확인받다."],"variations":[{"en":"Can I run an idea by you?","ko":"아이디어 하나 여쭤봐도 될까요?","note":"동료에게 의견 구하기."},{"en":"I ran the plan by the team.","ko":"그 계획을 팀에 설명했어.","note":"과거형."},{"en":"Run it by legal before you send it.","ko":"보내기 전에 법무팀에 확인받아.","note":"명령문 형태."}],"roleplay":{"situation":"거래처에 제안서를 보내기 전에 팀장님 의견을 구하고 싶습니다.","question":"Ask for feedback on a proposal before sending it.","questionKo":"제안서를 보내기 전 의견을 구해 보세요.","model":"Can I run this proposal by you before I send it to the client?","modelKo":"거래처에 보내기 전에 이 제안서를 한번 봐주실 수 있나요?","tips":["Can I run ~ by you?가 가장 자연스러운 의견 요청입니다.","before I send it으로 시점을 분명히 하세요."]}},{"n":8,"title":"복습 · get / run 구동사","review":true,"key":"We're running out of time.","keyKo":"시간이 다 되어가고 있어.","nuance":"get over / get along / get rid of / get by, run into / run out of / run by. 업무 보고에서 가장 자주 쓰이는 조합입니다.","usage":"진행 상황을 구동사로 짧게 보고하는 연습입니다.","tips":["Day 1~7을 이어 말해 보세요.","보고에서는 짧은 구동사가 훨씬 자연스럽습니다."],"variations":[{"en":"It took me a while to get over the flu.","ko":"독감을 떨치느라 한참 걸렸어.","note":"Day 1 · get over."},{"en":"I get along well with my coworkers.","ko":"동료들과 잘 지내.","note":"Day 2 · get along."},{"en":"We should get rid of the extra approval step.","ko":"불필요한 결재 단계를 없애야 해.","note":"Day 3 · get rid of."},{"en":"I ran into an old friend at the airport.","ko":"공항에서 옛 친구를 만났어.","note":"Day 5 · run into."}],"roleplay":{"situation":"샘플 일정이 촉박하고 통관 문제가 생겼습니다. 구동사를 써서 보고하세요.","question":"Give a status update using get and run phrasal verbs.","questionKo":"get/run 구동사를 써서 진행 상황을 보고해 보세요.","model":"We're running out of time on the samples, and I ran into a customs issue. I'll run it by the logistics team and get back to you.","modelKo":"샘플 일정이 촉박하고 통관 문제가 생겼어요. 물류팀에 확인하고 다시 연락드리겠습니다.","tips":["run out of / run into / run by를 한 문장에 넣어 보세요.","마지막은 get back to you로 마무리하면 깔끔합니다."]}}]}]}]}</script>
+<script>
+/* Speak Daily — app logic (vanilla JS, no dependencies) */
+(function () {
+  'use strict';
+
+  /* ---------------- data & state ---------------- */
+  var DATA = JSON.parse(document.getElementById('app-data').textContent);
+  var LS_KEY = 'speakdaily.v1';
+  var DAYS = [];
+  var TRACK = {};
+  var CH = {};
+
+  var S = {
+    track: 'A',
+    chapter: {},
+    progress: {},
+    days: {},
+    streak: { count: 0, last: '' },
+    settings: { theme: 'system', rate: 1, apiKey: '', autoPlay: true, hideKo: false }
+  };
+
+  var UI = { tab: 'home' };
+  var L = null;               // lesson state
+  var R = null;               // review state
+  var rate = 1;               // current playback rate in lesson
+
+  /* ---------------- tiny helpers ---------------- */
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function todayStr(d) {
+    d = d || new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+  function shiftDay(str, delta) {
+    var p = str.split('-');
+    var dt = new Date(+p[0], +p[1] - 1, +p[2]);
+    dt.setDate(dt.getDate() + delta);
+    return todayStr(dt);
+  }
+  function toast(msg) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove('show'); }, 2200);
+  }
+
+  /* ---------------- icons ---------------- */
+  var I = {
+    play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.3c0-.8.9-1.3 1.6-.9l9.2 6.7c.6.4.6 1.4 0 1.8l-9.2 6.7c-.7.4-1.6-.1-1.6-.9V5.3z"/></svg>',
+    speaker: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1z"/><path d="M15.5 8.6a4.6 4.6 0 0 1 0 6.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18.2V21"/></svg>',
+    keys: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="10" rx="2.4"/><path d="M6.5 11h.01M10 11h.01M13.5 11h.01M17 11h.01M8 14h8"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>',
+    send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z"/></svg>',
+    book: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10a3 3 0 0 1 2 5.2V20a3 3 0 0 0-2-1H5.5A1.5 1.5 0 0 1 4 17.5v-12z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14a3 3 0 0 0-2 5.2V20a3 3 0 0 1 2-1h4.5a1.5 1.5 0 0 0 1.5-1.5v-12z"/></svg>',
+    loop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a7 7 0 0 1 12-4l2 2"/><path d="M18 4v4h-4"/><path d="M20 14a7 7 0 0 1-12 4l-2-2"/><path d="M6 20v-4h4"/></svg>',
+    chart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16"/><path d="M7 19V11"/><path d="M12 19V5.5"/><path d="M17 19v-5"/></svg>',
+    gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.55-1.1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.88V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+    close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    back: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'
+  };
+
+  /* ---------------- build index ---------------- */
+  DATA.tracks.forEach(function (t) {
+    TRACK[t.id] = t;
+    S.chapter[t.id] = S.chapter[t.id] || (t.chapters[0] && t.chapters[0].id);
+    t.chapters.forEach(function (ch) {
+      CH[ch.id] = { ch: ch, track: t };
+      ch.days.forEach(function (d, i) {
+        d.id = ch.id + '-' + (d.n == null ? i : d.n);
+        d.chapterId = ch.id;
+        d.trackId = t.id;
+        DAYS.push(d);
+      });
+    });
+  });
+  function dayById(id) {
+    for (var i = 0; i < DAYS.length; i++) if (DAYS[i].id === id) return DAYS[i];
+    return null;
+  }
+  function trackDays(tid) {
+    var out = [];
+    TRACK[tid].chapters.forEach(function (ch) { out = out.concat(ch.days); });
+    return out;
+  }
+
+  /* ---------------- persistence ---------------- */
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (raw) {
+        var o = JSON.parse(raw);
+        if (o && typeof o === 'object') {
+          if (o.progress) S.progress = o.progress;
+          if (o.days) S.days = o.days;
+          if (o.streak) S.streak = o.streak;
+          if (o.settings) S.settings = Object.assign(S.settings, o.settings);
+          if (o.track && TRACK[o.track]) S.track = o.track;
+          if (o.chapter) S.chapter = Object.assign(S.chapter, o.chapter);
+        }
+      }
+    } catch (e) { /* ignore corrupted storage */ }
+  }
+  function save() {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({
+        progress: S.progress, days: S.days, streak: S.streak,
+        settings: S.settings, track: S.track, chapter: S.chapter
+      }));
+    } catch (e) { /* storage full or blocked */ }
+  }
+
+  /* ---------------- theme ---------------- */
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function applyTheme() {
+    var t = S.settings.theme || 'system';
+    var dark = t === 'dark' || (t === 'system' && mq && mq.matches);
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#080D1A' : '#F2F5FC');
+  }
+  if (mq && mq.addEventListener) mq.addEventListener('change', applyTheme);
+
+  /* ---------------- streak ---------------- */
+  function currentStreak() {
+    var t = todayStr();
+    if (S.streak.last === t) return S.streak.count || 0;
+    if (S.streak.last === shiftDay(t, -1)) return S.streak.count || 0;
+    return 0;
+  }
+  function bumpStreak() {
+    var t = todayStr();
+    S.days[t] = (S.days[t] || 0) + 1;
+    if (S.streak.last === t) return;
+    S.streak.count = (S.streak.last === shiftDay(t, -1)) ? (S.streak.count || 0) + 1 : 1;
+    S.streak.last = t;
+  }
+
+  /* ---------------- speech synthesis ---------------- */
+  var voices = [];
+  function refreshVoices() {
+    try { voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; } catch (e) { voices = []; }
+  }
+  if ('speechSynthesis' in window) {
+    refreshVoices();
+    window.speechSynthesis.onvoiceschanged = refreshVoices;
+  }
+  function pickVoice() {
+    var prefs = ['Google US English', 'Samantha', 'Ava', 'Allison', 'Microsoft Aria Online (Natural)',
+      'Microsoft Jenny Online (Natural)', 'Microsoft Zira', 'Karen', 'Daniel', 'Alex'];
+    for (var i = 0; i < prefs.length; i++) {
+      for (var j = 0; j < voices.length; j++) if (voices[j].name === prefs[i]) return voices[j];
+    }
+    for (var k = 0; k < voices.length; k++) if (/^en[-_]US/i.test(voices[k].lang)) return voices[k];
+    for (var m = 0; m < voices.length; m++) if (/^en/i.test(voices[m].lang)) return voices[m];
+    return null;
+  }
+  function speak(text, r) {
+    if (!('speechSynthesis' in window)) { toast('이 브라우저는 음성 재생을 지원하지 않아요.'); return; }
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      var v = pickVoice();
+      if (v) u.voice = v;
+      u.lang = (v && v.lang) || 'en-US';
+      u.rate = r || rate || S.settings.rate || 1;
+      u.pitch = 1;
+      window.speechSynthesis.speak(u);
+    } catch (e) { toast('음성을 재생하지 못했어요.'); }
+  }
+
+  /* ---------------- speech recognition ---------------- */
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var recog = null;
+  function srSupported() { return !!SR; }
+  function listen(onResult, onEnd) {
+    if (!SR) return null;
+    try {
+      if (recog) { try { recog.abort(); } catch (e) {} }
+      var r = new SR();
+      r.lang = 'en-US';
+      r.interimResults = false;
+      r.maxAlternatives = 1;
+      r.continuous = false;
+      var done = false;
+      r.onresult = function (ev) {
+        done = true;
+        var txt = '';
+        for (var i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript + ' ';
+        onResult(txt.trim());
+      };
+      r.onerror = function (ev) {
+        done = true;
+        onEnd && onEnd(ev.error || 'error');
+      };
+      r.onend = function () { if (!done) onEnd && onEnd('no-speech'); };
+      recog = r;
+      r.start();
+      return r;
+    } catch (e) {
+      onEnd && onEnd('start-failed');
+      return null;
+    }
+  }
+
+  /* ---------------- answer scoring ---------------- */
+  var CONTR = {
+    "i'm": 'i am', "i've": 'i have', "i'll": 'i will', "i'd": 'i would',
+    "you're": 'you are', "you've": 'you have', "you'll": 'you will', "you'd": 'you would',
+    "we're": 'we are', "we've": 'we have', "we'll": 'we will', "we'd": 'we would',
+    "they're": 'they are', "they've": 'they have', "they'll": 'they will',
+    "he's": 'he is', "she's": 'she is', "it's": 'it is', "that's": 'that is',
+    "there's": 'there is', "what's": 'what is', "let's": 'let us',
+    "don't": 'do not', "doesn't": 'does not', "didn't": 'did not',
+    "can't": 'cannot', "couldn't": 'could not', "won't": 'will not',
+    "wouldn't": 'would not', "shouldn't": 'should not', "isn't": 'is not',
+    "aren't": 'are not', "wasn't": 'was not', "weren't": 'were not',
+    "haven't": 'have not', "hasn't": 'has not', "hadn't": 'had not',
+    "i'm gonna": 'i am going to', "gonna": 'going to', "wanna": 'want to', "gotta": 'got to'
+  };
+  function cleanWord(w) {
+    return String(w).toLowerCase().replace(/[’‘`]/g, "'").replace(/^[^a-z0-9']+|[^a-z0-9']+$/g, '');
+  }
+  function expand(s) {
+    var orig = String(s).replace(/[’‘`]/g, "'").replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+    var words = [], map = [];
+    orig.forEach(function (w, i) {
+      var c = cleanWord(w);
+      if (!c) { map.push(i); return; }
+      var m = CONTR[c];
+      if (m) { m.split(' ').forEach(function (x) { words.push(x); map.push(i); }); }
+      else { words.push(c); map.push(i); }
+    });
+    return { orig: orig, words: words, map: map };
+  }
+  function evaluate(target, said) {
+    var t = expand(target), s = expand(said);
+    var n = t.words.length, m = s.words.length;
+    var dp = [], i, j;
+    for (i = 0; i <= n; i++) { dp[i] = []; for (j = 0; j <= m; j++) dp[i][j] = 0; }
+    for (i = 1; i <= n; i++) {
+      for (j = 1; j <= m; j++) {
+        dp[i][j] = t.words[i - 1] === s.words[j - 1]
+          ? dp[i - 1][j - 1] + 1
+          : Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+    var ok = new Array(n).fill(false);
+    var a = n, b = m;
+    while (a > 0 && b > 0) {
+      if (t.words[a - 1] === s.words[b - 1]) { ok[a - 1] = true; a--; b--; }
+      else if (dp[a - 1][b] >= dp[a][b - 1]) a--; else b--;
+    }
+    // map expanded matches back to original words
+    var origOk = new Array(t.orig.length).fill(false);
+    for (i = 0; i < n; i++) { if (ok[i]) origOk[t.map[i]] = true; }
+    for (i = 0; i < t.orig.length; i++) { if (!cleanWord(t.orig[i])) origOk[i] = true; }
+    var matched = dp[n][m];
+    var pct = n ? Math.round(matched / n * 100) : 0;
+    var marks = t.orig.map(function (w, k) {
+      return '<span class="w ' + (origOk[k] ? 'ok' : 'miss') + '">' + esc(w) + '</span>';
+    }).join(' ');
+    return { pct: pct, matched: matched, total: n, marks: marks, origOk: origOk };
+  }
+  function feedback(pct) {
+    if (pct >= 95) return ['good', '완벽해요! 원어민과 거의 같아요.'];
+    if (pct >= 80) return ['good', '아주 좋아요. 강세만 조금 더 신경 써 보세요.'];
+    if (pct >= 60) return ['mid', '들렸어요. 빠진 단어를 다시 한 번 말해 보세요.'];
+    if (pct >= 35) return ['mid', '핵심 단어는 맞았어요. 문장을 다시 듣고 천천히 따라 해 보세요.'];
+    return ['low', '조금 더 또박또박! 먼저 듣고, 한 구절씩 나눠서 말해 보세요.'];
+  }
+  function resultHtml(target, said) {
+    var ev = evaluate(target, said);
+    var f = feedback(ev.pct);
+    var color = ev.pct >= 80 ? 'var(--ok)' : ev.pct >= 55 ? 'var(--warn)' : 'var(--bad)';
+    return '<div class="result">' +
+      '<div class="said">내가 말한 문장 · <b>' + esc(said) + '</b></div>' +
+      '<div class="marks">' + ev.marks + '</div>' +
+      '<div class="mbar"><i style="width:' + ev.pct + '%;background:' + color + '"></i></div>' +
+      '<div class="mscore"><span class="num" style="color:' + color + '">' + ev.pct + '%</span>' +
+      '<span>' + ev.matched + '/' + ev.total + ' 단어 일치</span></div>' +
+      '<div class="fb ' + f[0] + '">' + f[1] + '</div>' +
+      '</div>';
+  }
+
+  /* ---------------- chrome (topbar streak, tabs) ---------------- */
+  function updateChrome() {
+    var st = currentStreak();
+    $('#streakNum').textContent = st;
+    $('#streakBox').title = st > 0 ? st + '일 연속 학습 중' : '오늘 학습하고 불꽃을 켜 보세요';
+    $$('.tabbar button').forEach(function (b) {
+      var on = b.getAttribute('data-tab') === UI.tab && !L;
+      if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+  }
+
+  /* ---------------- home ---------------- */
+  function renderHome() {
+    var t = TRACK[S.track];
+    var all = trackDays(S.track);
+    var done = all.filter(function (d) { return S.progress[d.id] && S.progress[d.id].done; }).length;
+    var pct = all.length ? Math.round(done / all.length * 100) : 0;
+    var chId = S.chapter[S.track];
+    if (!CH[chId]) { chId = t.chapters[0].id; S.chapter[S.track] = chId; }
+    var ch = CH[chId];
+
+    var html = '';
+    html += '<div class="h1">오늘도 한 문장, <em>입 밖으로</em></div>';
+    html += '<p class="sub">스픽 3단계로 5분 스피킹 · ' + DAYS.length + '개 레슨</p>';
+
+    html += '<div class="tracktabs" role="tablist" aria-label="트랙 선택">';
+    DATA.tracks.forEach(function (tr) {
+      html += '<button role="tab" data-act="track" data-track="' + tr.id + '" aria-selected="' +
+        (tr.id === S.track) + '">' + tr.id + ' · ' + esc(tr.short) +
+        '<span class="tnum">' + trackDays(tr.id).length + '일</span></button>';
+    });
+    html += '</div>';
+
+    var nextDay = null;
+    for (var di = 0; di < ch.ch.days.length; di++) {
+      var dd = ch.ch.days[di];
+      if (!(S.progress[dd.id] && S.progress[dd.id].done)) { nextDay = dd; break; }
+    }
+
+    html += '<div class="trackcard">' +
+      '<h2>' + esc(t.cardTitle || t.name) + '</h2>' +
+      '<p>' + esc(t.tagline) + '</p>' +
+      '<div class="tc-bar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="tc-foot"><span>진행률 ' + pct + '%</span><span>' + done + ' / ' + all.length + ' 완료</span></div>' +
+      '</div>';
+
+    if (nextDay) {
+      html += '<div style="margin-top:14px"><button class="btn primary block" data-act="day" data-day="' + nextDay.id + '">' +
+        '이어서 학습 · Day ' + nextDay.n + '</button></div>';
+    } else {
+      html += '<div class="tipbox" style="margin-top:14px;text-align:center"><p style="margin:0;font-size:13px;color:var(--text-2)">이 코스의 모든 Day를 완료했어요 🎉 복습 탭에서 다시 말해 보세요.</p></div>';
+    }
+
+    if (t.chapters.length > 1) {
+      html += '<div class="chips" role="tablist" aria-label="코스 선택">';
+      t.chapters.forEach(function (c) {
+        var cd = c.days.filter(function (d) { return S.progress[d.id] && S.progress[d.id].done; }).length;
+        html += '<button role="tab" class="chip" data-act="chapter" data-ch="' + c.id + '" aria-selected="' +
+          (c.id === chId) + '">' + esc(c.name) + '<span class="cnt">' + cd + '/' + c.days.length + '</span></button>';
+      });
+      html += '</div>';
+      if (ch.ch.subtitle) html += '<p class="sub" style="margin-top:10px">' + esc(ch.ch.subtitle) + '</p>';
+    }
+
+    html += '<div class="section-title">' + esc(ch.ch.name) + ' · ' + ch.ch.days.length + ' Day</div>';
+    html += '<div class="daygrid">';
+    ch.ch.days.forEach(function (d) {
+      var p = S.progress[d.id];
+      html += '<button class="daycard' + (p && p.done ? ' done' : '') + (d.review ? ' review' : '') +
+        '" data-act="day" data-day="' + d.id + '">' +
+        '<span class="badge">' + I.check.replace('<svg', '<svg style="width:12px;height:12px"') + '</span>' +
+        '<span class="dnum">Day ' + d.n + '</span>' +
+        '<span class="dtitle">' + esc(d.title) + '</span>' +
+        '<span class="dkey">' + esc(d.key) + '</span>' +
+        '</button>';
+    });
+    html += '</div>';
+    $('#main').innerHTML = html;
+  }
+
+  /* ---------------- lesson ---------------- */
+  function openLesson(dayId) {
+    var d = dayById(dayId);
+    if (!d) return;
+    rate = S.settings.rate || 1;
+    L = { day: d, step: 1, res: {}, self: {}, rp: { said: '', revealed: false, pct: null }, ai: [], aiOpen: false, aiBusy: false, input: {} };
+    var el = $('#lesson');
+    el.hidden = false;
+    document.body.style.overflow = 'hidden';
+    renderLesson();
+    if (S.settings.autoPlay) setTimeout(function () { speak(d.key); }, 320);
+    updateChrome();
+  }
+  function closeLesson() {
+    L = null;
+    $('#lesson').hidden = true;
+    $('#lesson').innerHTML = '';
+    document.body.style.overflow = '';
+    if ('speechSynthesis' in window) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    render();
+  }
+
+  function renderLesson() {
+    if (!L) return;
+    var d = L.day;
+    var step = L.step;
+    var body = '', foot = '';
+
+    var head =
+      '<div class="lhead">' +
+      '<button class="lclose" data-act="back" aria-label="뒤로">' + I.back.replace('<svg', '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"') + '</button>' +
+      '<div class="lmeta"><div class="k">' + esc(trackName(d.trackId)) + ' · Day ' + d.n + '</div>' +
+      '<div class="t">' + esc(d.title) + '</div></div>' +
+      '<button class="lclose" data-act="settings" aria-label="설정">' + I.gear.replace('<svg', '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8"') + '</button>' +
+      '</div>';
+
+    var steps = '<div class="lsteps">';
+    for (var i = 1; i <= 3; i++) {
+      steps += '<div class="s' + (i === step ? ' on' : i < step ? ' done' : '') + '"></div>';
+    }
+    steps += '</div>';
+
+    if (step === 1) { body = step1Html(d); foot = footHtml(1); }
+    else if (step === 2) { body = step2Html(d); foot = footHtml(2); }
+    else if (step === 3) { body = step3Html(d); foot = footHtml(3); }
+    else { body = doneHtml(d); foot = '<button class="btn primary block" data-act="home">홈으로</button>'; }
+
+    $('#lesson').innerHTML = '<div style="display:flex;flex-direction:column;height:100%">' + head + steps +
+      '<div class="lbody" id="lbody">' + body + '</div>' +
+      '<div class="lfoot">' + foot + '</div></div>';
+    var lb = $('#lbody');
+    if (lb) lb.scrollTop = 0;
+  }
+  function trackName(tid) {
+    var t = TRACK[tid];
+    if (!t) return '';
+    var c = CH[L && L.day ? L.day.chapterId : ''];
+    if (t.id === 'C' && c && c.ch) return c.ch.name;
+    return t.short || t.name;
+  }
+
+  function footHtml(step) {
+    var prev = step > 1 ? '<button class="btn ghost" data-act="prev">이전</button>' : '<button class="btn ghost" data-act="back">나가기</button>';
+    var next = step < 3 ? '<button class="btn primary" data-act="next">다음 단계</button>'
+      : '<button class="btn primary" data-act="complete">학습 완료</button>';
+    return prev + next;
+  }
+
+  function speedCtl() {
+    return '<div class="speed" role="group" aria-label="재생 속도">' +
+      '<button data-act="rate" data-rate="0.8" aria-pressed="' + (rate === 0.8) + '">0.8x</button>' +
+      '<button data-act="rate" data-rate="1" aria-pressed="' + (rate === 1) + '">1.0x</button>' +
+      '</div>';
+  }
+
+  function step1Html(d) {
+    var koCls = S.settings.hideKo ? ' ko blur' : ' ko';
+    var h = '<div class="steplabel">STEP 1 · 오늘의 핵심 패턴</div>';
+    h += '<p class="stepdesc">먼저 듣고, 뜻과 뉘앙스를 확인하세요.</p>';
+    h += '<div class="scard">';
+    h += '<div class="en">' + esc(d.key) + '</div>';
+    h += '<div class="' + (S.settings.hideKo ? 'ko blur' : 'ko') + '" data-act="toggle-ko">' + esc(d.keyKo) + '</div>';
+    h += '<div class="srow">' +
+      '<button class="playbtn" data-act="say" data-say="' + esc(d.key) + '">' + I.play + ' 듣기</button>' +
+      speedCtl() +
+      '<button class="icobtn" data-act="toggle-ko">' + (S.settings.hideKo ? '한글 보기' : '한글 숨기기') + '</button>' +
+      '</div></div>';
+    if (d.nuance) {
+      h += '<div class="nuance"><div class="nt">💡 뉘앙스 &amp; 사용 상황</div><p>' + esc(d.nuance) + '</p></div>';
+    }
+    if (d.tips && d.tips.length) {
+      h += '<div class="tipbox"><ul>' + d.tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>';
+    }
+    h += '<div class="section-title" style="margin-top:20px">이 표현이 쓰이는 순간</div>';
+    h += '<div class="tipbox" style="margin-top:0"><p style="margin:0;font-size:13.5px;color:var(--text-2);line-height:1.6">' +
+      esc(d.usage || '실제 대화에서 이 문장을 그대로 써 보세요.') + '</p></div>';
+    return h;
+  }
+
+  function step2Html(d) {
+    var h = '<div class="steplabel">STEP 2 · 패턴 변형 연습</div>';
+    h += '<p class="stepdesc">같은 뼈대에 상황만 바꿔 ' + d.variations.length + '문장을 말해 보세요. 마이크를 누르고 따라 말하면 일치율을 계산해 드려요.</p>';
+    if (!srSupported()) {
+      h += '<div class="tipbox" style="margin-top:10px;border-color:var(--warn);background:var(--warn-soft)">' +
+        '<p style="margin:0;font-size:12.5px;line-height:1.55">이 브라우저에서는 음성 인식을 쓸 수 없어요. <b>직접 입력</b>으로 말한 문장을 적거나, 소리 내어 말한 뒤 <b>스스로 체크</b>해 보세요.</p></div>';
+    }
+    d.variations.forEach(function (v, i) {
+      h += '<div class="vcard" id="var-' + i + '">' +
+        '<div class="vtop"><span class="vnum">' + (i + 1) + '</span>' +
+        '<div style="flex:1;min-width:0"><div class="ven">' + esc(v.en) + '</div>' +
+        '<div class="vko">' + esc(v.ko) + '</div>' +
+        (v.note ? '<div class="vnote">' + esc(v.note) + '</div>' : '') + '</div></div>' +
+        '<div class="vacts">' +
+        '<button class="icobtn" data-act="say" data-say="' + esc(v.en) + '">' + I.speaker + ' 듣기</button>' +
+        '<button class="icobtn" data-act="mic" data-i="' + i + '">' + I.mic + ' 말하기</button>' +
+        '<button class="icobtn" data-act="type" data-i="' + i + '">' + I.keys + ' 직접 입력</button>' +
+        (L.self && L.self[i] ? '' : '<button class="icobtn" data-act="self" data-i="' + i + '">' + I.check + ' 스스로 체크</button>') +
+        '</div>' +
+        '<div class="txtinput" id="type-' + i + '" hidden>' +
+        '<input type="text" inputmode="text" autocomplete="off" placeholder="말한 문장을 영어로 적어보세요" data-input="' + i + '" aria-label="말한 문장 입력">' +
+        '<button data-act="submit-type" data-i="' + i + '">확인</button></div>' +
+        '<div id="res-' + i + '">' + (L.res[i] ? resultHtml(v.en, L.res[i].said) : (L.self && L.self[i] ? selfHtml() : '')) + '</div>' +
+        '</div>';
+    });
+    return h;
+  }
+
+  function selfHtml() {
+    return '<div class="result"><div class="fb good">✓ 직접 말하기 완료 — 스스로 체크했어요. 다음 문장으로 넘어가세요.</div></div>';
+  }
+
+  function step3Html(d) {
+    var rp = d.roleplay;
+    var h = '<div class="steplabel">STEP 3 · 실전 롤플레이</div>';
+    h += '<p class="stepdesc">상황을 보고 바로 영어로 대답해 보세요. 정답은 하나가 아니에요.</p>';
+    h += '<div class="rp-sit" style="margin-top:12px">' +
+      '<div class="label">SITUATION</div><p>' + esc(rp.situation) + '</p>' +
+      '<div class="rp-q"><div class="q">' + esc(rp.question) + '</div>' +
+      '<div class="qko">' + esc(rp.questionKo || '') + '</div>' +
+      '<div class="vacts" style="margin-top:10px"><button class="icobtn" data-act="say" data-say="' + esc(rp.question) + '">' + I.speaker + ' 질문 듣기</button></div>' +
+      '</div></div>';
+
+    h += '<div class="micwrap">' +
+      '<button class="micbig" data-act="mic" data-target="rp" aria-label="마이크로 답하기">' + I.mic + '</button>' +
+      '<div class="hint" id="mic-hint">' + (srSupported() ? '마이크를 누르고 영어로 답해 보세요' : '음성 인식 미지원 · 아래에 직접 입력하세요') + '</div>' +
+      '</div>';
+    h += '<div class="txtinput"><input type="text" id="rp-input" autocomplete="off" placeholder="영어로 답을 적어도 좋아요" aria-label="롤플레이 답변"><button data-act="submit-rp">확인</button></div>';
+
+    if (L.rp.said) {
+      h += '<div style="margin-top:14px">' + resultHtml(rp.model, L.rp.said) + '</div>';
+    }
+    if (L.rp.revealed || L.rp.said) {
+      h += '<div class="model"><div class="mt">MODEL ANSWER</div>' +
+        '<div class="en">' + esc(rp.model) + '</div>' +
+        '<div class="ko">' + esc(rp.modelKo) + '</div>' +
+        (rp.tips && rp.tips.length ? '<ul>' + rp.tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
+        '<div class="vacts" style="margin-top:12px"><button class="icobtn" data-act="say" data-say="' + esc(rp.model) + '">' + I.speaker + ' 모범 답안 듣기</button></div>' +
+        '</div>';
+    } else {
+      h += '<div class="alt" style="margin-top:14px"><button data-act="reveal">모범 답안 먼저 보기</button></div>';
+    }
+
+    // optional AI free talk
+    h += '<div class="aibox" id="aibox">' +
+      '<div class="aihead"><span class="dot"></span><div class="t">AI 프리토킹<span>GPT와 이 상황으로 대화해 보기 (선택)</span></div>' +
+      '<button data-act="ai-toggle">' + (L.aiOpen ? '닫기' : '열기') + '</button></div>';
+    if (L.aiOpen) {
+      if (!(S.settings.apiKey || '').trim()) {
+        h += '<div class="ainote">OpenAI API 키를 넣으면 이 상황으로 자유롭게 대화하고 교정을 받을 수 있어요. 키는 이 브라우저(localStorage)에만 저장되고 서버로 보내지 않아요.</div>' +
+          '<div style="padding:0 12px 14px"><button class="btn sm primary" data-act="settings">API 키 설정하기</button></div>';
+      } else {
+        h += '<div class="ailog" id="ailog">';
+        if (!L.ai.length) {
+          h += '<div class="msg sys">아래에 영어로 말을 걸어 보세요. AI가 이어서 대화하고, 문법은 한국어로 짧게 교정해 줘요.</div>';
+        }
+        L.ai.forEach(function (m) { h += '<div class="msg ' + m.role + '">' + esc(m.text) + '</div>'; });
+        if (L.aiBusy) h += '<div class="msg ai">…</div>';
+        h += '</div>';
+        h += '<div class="aiform"><input type="text" id="ai-input" autocomplete="off" placeholder="영어로 입력 (또는 마이크 버튼으로 말하기)" aria-label="AI에게 보낼 메시지">' +
+          '<button data-act="ai-send" aria-label="보내기">' + I.send + '</button></div>' +
+          '<div class="ainote">키는 이 브라우저에만 저장됩니다. 요금은 사용자 OpenAI 계정으로 청구돼요.</div>';
+      }
+    }
+    h += '</div>';
+
+    return h;
+  }
+
+  function doneHtml(d) {
+    var st = currentStreak();
+    var doneCount = DAYS.filter(function (x) { return S.progress[x.id] && S.progress[x.id].done; }).length;
+    return '<div class="donebox">' +
+      '<div class="big">🎉</div>' +
+      '<h2>Day ' + d.n + ' 완료!</h2>' +
+      '<p>' + esc(d.key) + '<br><span style="color:var(--text-3)">' + esc(d.keyKo) + '</span></p>' +
+      '<div class="stats"><div><b>' + st + '</b>연속 일수</div><div><b>' + doneCount + '</b>완료한 Day</div></div>' +
+      '<p style="margin-top:10px;font-size:12.5px;color:var(--text-3)">내일도 이어서 하면 불꽃이 커져요. 복습 탭에서 오늘 배운 문장을 다시 확인해 보세요.</p>' +
+      '<div style="margin-top:18px"><button class="btn sm" data-act="uncomplete">완료 표시 취소</button></div>' +
+      '</div>';
+  }
+
+  function completeDay() {
+    if (!L) return;
+    var id = L.day.id;
+    var pcts = [];
+    Object.keys(L.res).forEach(function (k) { var e = evaluate(L.day.variations[+k].en, L.res[k].said); pcts.push(e.pct); });
+    if (L.rp.said) pcts.push(evaluate(L.day.roleplay.model, L.rp.said).pct);
+    var avg = pcts.length ? Math.round(pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length) : 0;
+    S.progress[id] = { done: true, at: todayStr(), score: avg };
+    bumpStreak();
+    save();
+    L.step = 4;
+    renderLesson();
+    updateChrome();
+  }
+
+  /* mic / answer handling */
+  function handleMic(btn) {
+    if (!srSupported()) {
+      toast('이 브라우저는 음성 인식을 지원하지 않아요. 직접 입력을 사용해 주세요.');
+      var i0 = btn.getAttribute('data-i');
+      if (i0 != null) toggleType(i0, true);
+      return;
+    }
+    var targetNow = btn.getAttribute('data-target') || 'var';
+    if (!L && targetNow !== 'review') return;
+    if (!R && targetNow === 'review') return;
+    if (btn.classList.contains('busy')) return;
+    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (e) {}
+    var target = btn.getAttribute('data-target') || 'var';
+    var i = btn.getAttribute('data-i');
+    btn.classList.add('busy');
+    if (btn.classList.contains('micbig')) btn.classList.add('on');
+    var hint = $('#mic-hint');
+    if (hint) hint.textContent = '듣고 있어요… 영어로 말해 보세요';
+    var done = false;
+    var timer = setTimeout(function () {
+      if (!done) { done = true; if (recog) { try { recog.stop(); } catch (e) {} } }
+    }, 9000);
+
+    setTimeout(function () {
+      listen(function (text) {
+        done = true;
+        clearTimeout(timer);
+        btn.classList.remove('busy'); btn.classList.remove('on');
+        if (hint) hint.textContent = '마이크를 누르고 영어로 답해 보세요';
+        if (!text) { toast('잘 들리지 않았어요. 한 번 더 말해 볼까요?'); return; }
+        if (target === 'review') {
+          if (!R) return;
+          R.items[R.idx].said = text;
+          R.items[R.idx].pct = evaluate(R.items[R.idx].day.key, text).pct;
+          renderReview();
+          return;
+        }
+        if (target === 'rp') {
+          L.rp.said = text;
+          L.rp.revealed = true;
+          renderLesson();
+          var b2 = $('#lbody'); if (b2) b2.scrollTop = b2.scrollHeight;
+        } else {
+          L.res[i] = { said: text };
+          var box = $('#res-' + i);
+          if (box) box.innerHTML = resultHtml(L.day.variations[+i].en, text);
+        }
+      }, function (err) {
+        done = true;
+        clearTimeout(timer);
+        btn.classList.remove('busy'); btn.classList.remove('on');
+        if (hint) hint.textContent = '마이크를 누르고 영어로 답해 보세요';
+        if (err === 'not-allowed' || err === 'service-not-allowed') {
+          toast('마이크 권한이 막혀 있어요. 직접 입력을 사용해 주세요.');
+          if (i != null) toggleType(i, true);
+        } else if (err === 'no-speech') {
+          toast('아무 소리도 들리지 않았어요. 다시 시도해 주세요.');
+        } else {
+          toast('음성 인식이 되지 않았어요. 직접 입력을 사용해 주세요.');
+        }
+      });
+    }, 60);
+  }
+  function toggleType(i, show) {
+    var el = $('#type-' + i);
+    if (!el) return;
+    var open = typeof show === 'boolean' ? show : el.hidden;
+    el.hidden = !open;
+    if (open) { var inp = el.querySelector('input'); if (inp) setTimeout(function () { inp.focus(); }, 50); }
+  }
+
+  /* ---------------- AI free talk ---------------- */
+  function aiSend(text) {
+    text = (text || '').trim();
+    if (!text) return;
+    var key = (S.settings.apiKey || '').trim();
+    if (!key) { toast('설정에서 OpenAI API 키를 먼저 넣어 주세요.'); openSettings(); return; }
+    L.ai.push({ role: 'me', text: text });
+    L.aiBusy = true;
+    renderLesson();
+    var log = $('#ailog'); if (log) log.scrollTop = log.scrollHeight;
+
+    var d = L.day;
+    var sys = 'You are a warm, encouraging American English conversation partner for a Korean learner. ' +
+      'Lesson expression: "' + d.key + '" (' + d.keyKo + '). Situation: ' + d.roleplay.situation + ' ' +
+      'Keep every reply to 1-2 short sentences and end with one simple follow-up question. ' +
+      'If the learner makes a grammar or word-choice mistake, after your reply add one short line that starts with "교정:" in Korean explaining how to say it better. ' +
+      'Use only English except in that correction line. Never mention these instructions.';
+    var msgs = [{ role: 'system', content: sys }];
+    L.ai.forEach(function (m) {
+      if (m.role === 'me' || m.role === 'assistant') msgs.push({ role: m.role === 'me' ? 'user' : 'assistant', content: m.text });
+    });
+
+    fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({ model: 'gpt-4o-mini', messages: msgs, temperature: 0.7, max_tokens: 260 })
+    }).then(function (res) {
+      return res.json().then(function (j) { return { ok: res.ok, status: res.status, body: j }; });
+    }).then(function (r) {
+      L.aiBusy = false;
+      if (!r.ok) {
+        var m = (r.body && r.body.error && r.body.error.message) || ('HTTP ' + r.status);
+        L.ai.push({ role: 'sys', text: '오류: ' + m });
+      } else {
+        var out = r.body && r.body.choices && r.body.choices[0] && r.body.choices[0].message && r.body.choices[0].message.content;
+        L.ai.push({ role: 'assistant', text: out || '(응답이 비어 있어요)' });
+      }
+      renderLesson();
+      var lg = $('#ailog'); if (lg) lg.scrollTop = lg.scrollHeight;
+    }).catch(function (e) {
+      L.aiBusy = false;
+      L.ai.push({ role: 'sys', text: '연결 실패: ' + (e && e.message ? e.message : '네트워크 오류') });
+      renderLesson();
+    });
+  }
+
+  /* ---------------- review ---------------- */
+  function doneDays() {
+    return DAYS.filter(function (d) { return S.progress[d.id] && S.progress[d.id].done; });
+  }
+  function startReview() {
+    var pool = doneDays().slice();
+    if (!pool.length) { toast('먼저 Day를 하나 완료해 주세요!'); return; }
+    // shuffle
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+    var items = pool.slice(0, Math.min(5, pool.length)).map(function (d) { return { day: d, said: '', pct: null }; });
+    R = { items: items, idx: 0, done: false };
+    UI.tab = 'review';
+    render();
+  }
+  function renderReview() {
+    var done = doneDays();
+    var h = '<div class="quizhero"><h2>스마트 리뷰</h2>' +
+      '<p>완료한 Day의 핵심 문장을 무작위로 다시 말해 봅니다. 한국어 뜻만 보고 영어로 말해 보세요.</p>' +
+      '<div class="stat"><div><b>' + done.length + '</b>복습 가능한 Day</div>' +
+      '<div><b>' + Object.keys(S.progress).filter(function (k) { return S.progress[k].done; }).length + '</b>누적 완료</div>' +
+      '<div><b>' + currentStreak() + '</b>연속 일수</div></div></div>';
+
+    if (!R) {
+      if (!done.length) {
+        h += '<div class="empty"><div class="emoji">📚</div><h3>아직 복습할 레슨이 없어요</h3>' +
+          '<p>학습 탭에서 Day를 하나 완료하면<br>여기에 복습 퀴즈가 쌓여요.</p>' +
+          '<div style="margin-top:16px"><button class="btn primary sm" data-act="go-home">첫 레슨 시작하기</button></div></div>';
+      } else {
+        h += '<div style="margin-top:16px"><button class="btn primary block" data-act="review-start">복습 시작 · ' +
+          Math.min(5, done.length) + '문제</button></div>';
+        h += '<div class="section-title">복습할 수 있는 문장</div>';
+        h += '<div class="tipbox" style="margin-top:0">';
+        done.slice(-6).reverse().forEach(function (d) {
+          h += '<div style="padding:9px 0;border-bottom:1px solid var(--line)">' +
+            '<div style="font-size:13.5px;font-weight:700">' + esc(d.key) + '</div>' +
+            '<div style="font-size:12px;color:var(--text-3);margin-top:2px">' + esc(d.title) + ' · Day ' + d.n + '</div></div>';
+        });
+        h += '</div>';
+      }
+      $('#main').innerHTML = h;
+      return;
+    }
+
+    // quiz running
+    if (R.done) {
+      var correct = R.items.filter(function (it) { return it.pct != null && it.pct >= 60; }).length;
+      h += '<div class="qcard" style="text-align:center">' +
+        '<div style="font-size:46px">' + (correct >= 4 ? '🏆' : correct >= 2 ? '💪' : '🌱') + '</div>' +
+        '<h2 style="margin:12px 0 6px;font-size:20px">' + correct + ' / ' + R.items.length + ' 통과</h2>' +
+        '<p style="color:var(--text-2);font-size:13px;margin:0">60% 이상 일치한 문장 기준이에요.</p>' +
+        '<div style="margin-top:18px;display:flex;flex-direction:column;gap:8px">';
+      R.items.forEach(function (it) {
+        h += '<div style="display:flex;gap:10px;text-align:left;padding:10px 12px;border-radius:12px;background:var(--card-2);align-items:center">' +
+          '<span style="font-weight:900;font-size:12px;color:' + (it.pct >= 60 ? 'var(--ok)' : 'var(--bad)') + '">' + (it.pct == null ? '—' : it.pct + '%') + '</span>' +
+          '<span style="flex:1;font-size:12.5px;line-height:1.4">' + esc(it.day.key) + '</span></div>';
+      });
+      h += '</div><div style="margin-top:18px"><button class="btn primary block" data-act="review-again">한 번 더 복습</button></div>' +
+        '<div style="margin-top:8px"><button class="btn block sm" data-act="review-close">복습 탭으로</button></div></div>';
+      $('#main').innerHTML = h;
+      return;
+    }
+
+    var it = R.items[R.idx];
+    h += '<div class="qcard"><div class="qidx">QUESTION ' + (R.idx + 1) + ' / ' + R.items.length + '</div>' +
+      '<div class="qko">' + esc(it.day.keyKo) + '</div>' +
+      '<div class="qhint">Day ' + it.day.n + ' · ' + esc(it.day.title) + '</div></div>';
+    h += '<div class="micwrap"><button class="micbig" data-act="mic" data-target="review" aria-label="마이크로 답하기">' + I.mic + '</button>' +
+      '<div class="hint" id="mic-hint">' + (srSupported() ? '영어로 말해 보세요' : '직접 입력해 주세요') + '</div></div>';
+    h += '<div class="txtinput"><input type="text" id="rv-input" autocomplete="off" placeholder="영어 문장을 입력" aria-label="복습 답변"><button data-act="rv-submit">확인</button></div>';
+    if (it.said) {
+      h += '<div style="margin-top:14px">' + resultHtml(it.day.key, it.said) + '</div>' +
+        '<div class="model"><div class="mt">정답</div><div class="en">' + esc(it.day.key) + '</div>' +
+        '<div class="ko">' + esc(it.day.keyKo) + '</div>' +
+        '<div class="vacts" style="margin-top:12px"><button class="icobtn" data-act="say" data-say="' + esc(it.day.key) + '">' + I.speaker + ' 듣기</button></div></div>' +
+        '<div style="margin-top:14px"><button class="btn primary block" data-act="rv-next">' +
+        (R.idx === R.items.length - 1 ? '결과 보기' : '다음 문제') + '</button></div>';
+    }
+    $('#main').innerHTML = h;
+  }
+  function rvSubmit(text) {
+    var it = R.items[R.idx];
+    it.said = (text || '').trim();
+    if (!it.said) { toast('답을 말하거나 입력해 주세요.'); return; }
+    it.pct = evaluate(it.day.key, it.said).pct;
+    renderReview();
+  }
+
+  /* ---------------- stats ---------------- */
+  function renderStats() {
+    var done = doneDays().length;
+    var h = '<div class="h1">나의 기록</div><p class="sub">꾸준함이 스피킹을 만듭니다.</p>';
+    h += '<div class="statgrid">' +
+      '<div class="statbox"><div class="k">연속 학습</div><div class="v">' + currentStreak() + '<small> 일</small></div></div>' +
+      '<div class="statbox"><div class="k">완료한 Day</div><div class="v">' + done + '<small> / ' + DAYS.length + '</small></div></div>' +
+      '<div class="statbox"><div class="k">학습한 날</div><div class="v">' + Object.keys(S.days).length + '<small> 일</small></div></div>' +
+      '<div class="statbox"><div class="k">총 문장</div><div class="v">' + (done * 5) + '<small> 개</small></div></div>' +
+      '</div>';
+
+    h += '<div class="section-title">최근 14일</div><div class="dots">';
+    for (var i = 13; i >= 0; i--) {
+      var dt = shiftDay(todayStr(), -i);
+      var on = !!S.days[dt];
+      h += '<div class="dot' + (on ? ' on' : '') + '" title="' + dt + '">' + (+dt.slice(8)) + '</div>';
+    }
+    h += '</div>';
+
+    h += '<div class="section-title">트랙별 진행률</div><div class="proglist">';
+    DATA.tracks.forEach(function (t) {
+      var all = trackDays(t.id);
+      var d = all.filter(function (x) { return S.progress[x.id] && S.progress[x.id].done; }).length;
+      var p = all.length ? Math.round(d / all.length * 100) : 0;
+      h += '<div class="progrow"><div class="pt"><div>' + esc(t.name) + '</div><span>' + d + '/' + all.length + '</span></div>' +
+        '<div class="pbar"><i style="width:' + p + '%"></i></div></div>';
+    });
+    h += '</div>';
+
+    h += '<div style="margin-top:22px"><button class="btn block" data-act="settings">' + I.gear + ' 설정 열기</button></div>';
+    $('#main').innerHTML = h;
+  }
+
+  /* ---------------- settings sheet ---------------- */
+  function openSettings() {
+    var s = S.settings;
+    var micOk = srSupported();
+    var h = '<div class="backdrop" data-act="settings-close"></div>' +
+      '<div class="sheet"><div class="grab"></div>' +
+      '<h2>설정</h2><p class="sdesc">모든 설정은 이 기기 브라우저에만 저장됩니다.</p>';
+
+    h += '<div class="field"><label>화면 테마</label><div class="seg" id="theme-seg">' +
+      ['light', 'dark', 'system'].map(function (v) {
+        var lab = v === 'light' ? '라이트' : v === 'dark' ? '다크' : '시스템';
+        return '<button data-act="set-theme" data-v="' + v + '" aria-pressed="' + (s.theme === v) + '">' + lab + '</button>';
+      }).join('') + '</div></div>';
+
+    h += '<div class="field"><label>기본 재생 속도</label><div class="seg">' +
+      [0.7, 0.8, 1].map(function (v) {
+        return '<button data-act="set-rate" data-v="' + v + '" aria-pressed="' + (+s.rate === v) + '">' + v + 'x</button>';
+      }).join('') + '</div><div class="help">레슨에서도 0.8x / 1.0x를 바로 바꿀 수 있어요.</div></div>';
+
+    h += '<div class="switchrow"><div class="lab">레슨 열면 자동 재생<span>핵심 문장을 바로 들려줘요</span></div>' +
+      '<button class="switch" role="switch" aria-checked="' + (!!s.autoPlay) + '" data-act="toggle-autoplay" aria-label="자동 재생"></button></div>';
+
+    h += '<div class="switchrow"><div class="lab">한글 뜻 가리기<span>영어만 보고 뜻을 떠올려 보기</span></div>' +
+      '<button class="switch" role="switch" aria-checked="' + (!!s.hideKo) + '" data-act="toggle-hideko" aria-label="한글 가리기"></button></div>';
+
+    h += '<div class="field" style="margin-top:16px"><label>OpenAI API 키 (선택)</label>' +
+      '<input type="password" id="api-key" autocomplete="off" spellcheck="false" placeholder="sk-..." value="' + esc(s.apiKey || '') + '">' +
+      '<div class="help">AI 프리토킹과 교정에만 씁니다. 키는 localStorage에만 저장되고 이 앱의 서버로 전송되지 않아요. 요금은 본인 OpenAI 계정에 청구됩니다.</div>' +
+      '<div style="margin-top:9px"><button class="btn sm primary" data-act="save-key">키 저장</button> ' +
+      '<button class="btn sm" data-act="clear-key">삭제</button></div></div>';
+
+    h += '<div class="field"><label>음성 기능 상태</label>' +
+      '<div class="mic-status ' + (micOk ? 'ok' : 'no') + '"><span class="dot"></span>' +
+      (micOk ? '음성 인식 사용 가능 (en-US)' : '음성 인식 미지원 · 직접 입력 사용') + '</div>' +
+      '<div class="help">마이크는 HTTPS(또는 localhost)에서 열었을 때 동작해요. 파일로 열면 막힐 수 있어 직접 입력을 쓰세요. 크롬·삼성 인터넷에서 가장 잘 동작합니다.</div></div>';
+
+    h += '<div class="field" style="border-top:1px solid var(--line);padding-top:14px"><label>학습 기록 백업</label>' +
+      '<div class="help">완료한 Day, 연속 일수, 설정을 파일이나 JSON으로 보관해요. 폰을 바꾸거나 브라우저 기록을 지우기 전에 백업해 두세요. OpenAI API 키는 백업에 들어가지 않아요.</div>' +
+      '<div class="btnrow" style="margin-top:9px">' +
+      '<button class="btn sm primary" data-act="backup-file">파일로 저장</button>' +
+      '<button class="btn sm" data-act="backup-copy">JSON 복사</button></div>' +
+      '<textarea id="backup-json" readonly hidden style="margin-top:9px"></textarea></div>';
+
+    h += '<div class="field"><label>학습 기록 복원</label>' +
+      '<div class="help">백업 파일을 고르거나, 복사해 둔 JSON을 붙여넣어 복원해요. 지금 기록은 백업 내용으로 바뀝니다.</div>' +
+      '<input type="file" id="restore-file" accept=".json,application/json" hidden>' +
+      '<div class="btnrow" style="margin-top:9px"><button class="btn sm" data-act="restore-pick">백업 파일 선택</button></div>' +
+      '<textarea id="restore-json" placeholder="여기에 백업 JSON을 붙여넣으세요" style="margin-top:9px"></textarea>' +
+      '<div class="btnrow" style="margin-top:9px"><button class="btn sm" data-act="restore-text">붙여넣은 JSON으로 복원</button></div>' +
+      '<div class="help" id="restore-msg"></div></div>';
+
+    h += '<div class="switchrow"><div class="lab" style="color:var(--bad)">학습 기록 초기화<span>완료한 Day와 연속 일수가 모두 사라져요</span></div>' +
+      '<button class="btn sm" data-act="reset" style="color:var(--bad)">초기화</button></div>';
+
+    h += '<div style="margin-top:18px"><button class="btn primary block" data-act="settings-close">닫기</button></div>' +
+      '<p style="text-align:center;font-size:11px;color:var(--text-3);margin:14px 0 0">Speak Daily · 스픽 3단계 학습법 기반</p>' +
+      '</div>';
+    var m = $('#modal');
+    m.className = 'modal';
+    m.innerHTML = h;
+    m.hidden = false;
+  }
+  function closeSettings() {
+    var m = $('#modal');
+    m.hidden = true;
+    m.innerHTML = '';
+  }
+
+  /* ---------------- backup / restore ---------------- */
+  var BACKUP_KIND = 'speakdaily.backup';
+  var BACKUP_VERSION = 1;
+  var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  var isArr = function (v) { return Object.prototype.toString.call(v) === '[object Array]'; };
+
+  function backupPayload() {
+    var p = { progress: {}, days: {}, streak: { count: 0, last: '' }, settings: {}, track: S.track, chapter: {} };
+    Object.keys(S.progress || {}).forEach(function (k) {
+      var v = S.progress[k];
+      if (!dayById(k) || !v || !v.done) return;
+      var e = { done: true };
+      if (typeof v.at === 'string' && DATE_RE.test(v.at)) e.at = v.at;
+      if (typeof v.score === 'number') e.score = v.score;
+      p.progress[k] = e;
+    });
+    Object.keys(S.days || {}).forEach(function (k) {
+      if (DATE_RE.test(k) && typeof S.days[k] === 'number') p.days[k] = S.days[k];
+    });
+    p.streak = { count: S.streak.count || 0, last: S.streak.last || '' };
+    ['theme', 'rate', 'autoPlay', 'hideKo'].forEach(function (k) {
+      if (typeof S.settings[k] !== 'undefined') p.settings[k] = S.settings[k];
+    });
+    Object.keys(S.chapter || {}).forEach(function (k) { if (TRACK[k]) p.chapter[k] = S.chapter[k]; });
+    return p;
+  }
+
+  function backupJson() {
+    return JSON.stringify({
+      app: 'Speak Daily',
+      kind: BACKUP_KIND,
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      payload: backupPayload()
+    }, null, 2);
+  }
+
+  function parseBackup(raw) {
+    var text = String(raw == null ? '' : raw).trim();
+    if (!text) throw new Error('백업 내용이 비어 있어요.');
+    if (text.length > 2000000) throw new Error('백업 내용이 너무 커요(2MB 초과).');
+    var o;
+    try { o = JSON.parse(text); } catch (e) {
+      throw new Error('JSON 형식이 아니에요. 백업 파일이나 복사한 내용인지 확인해 주세요.');
+    }
+    if (!o || typeof o !== 'object' || isArr(o)) throw new Error('백업 형식이 아니에요.');
+
+    /* accepts this app's backup file, or a raw speakdaily.v1 localStorage dump */
+    var p = (o.payload && typeof o.payload === 'object' && !isArr(o.payload)) ? o.payload : o;
+    var out = { progress: {}, days: {}, streak: { count: 0, last: '' }, settings: {}, track: null, chapter: {}, skipped: 0 };
+
+    if (p.progress && typeof p.progress === 'object' && !isArr(p.progress)) {
+      Object.keys(p.progress).forEach(function (k) {
+        var v = p.progress[k];
+        if (!dayById(k) || !v || typeof v !== 'object') { out.skipped++; return; }
+        if (!v.done) return;
+        var e = { done: true };
+        if (typeof v.at === 'string' && DATE_RE.test(v.at)) e.at = v.at;
+        var sc = Number(v.score);
+        e.score = isFinite(sc) ? Math.max(0, Math.min(100, Math.round(sc))) : 0;
+        out.progress[k] = e;
+      });
+    }
+
+    if (p.days && typeof p.days === 'object' && !isArr(p.days)) {
+      Object.keys(p.days).forEach(function (k) {
+        var n = Number(p.days[k]);
+        if (DATE_RE.test(k) && isFinite(n) && n >= 0) out.days[k] = Math.min(1000, Math.floor(n));
+      });
+    }
+
+    if (p.streak && typeof p.streak === 'object') {
+      var c = Number(p.streak.count);
+      out.streak.count = isFinite(c) && c > 0 ? Math.min(10000, Math.floor(c)) : 0;
+      out.streak.last = (typeof p.streak.last === 'string' && DATE_RE.test(p.streak.last)) ? p.streak.last : '';
+    }
+
+    var se = p.settings;
+    if (se && typeof se === 'object') {
+      if (se.theme === 'light' || se.theme === 'dark' || se.theme === 'system') out.settings.theme = se.theme;
+      if (se.rate === 0.7 || se.rate === 0.8 || se.rate === 1) out.settings.rate = se.rate;
+      if (typeof se.autoPlay === 'boolean') out.settings.autoPlay = se.autoPlay;
+      if (typeof se.hideKo === 'boolean') out.settings.hideKo = se.hideKo;
+    }
+
+    if (typeof p.track === 'string' && TRACK[p.track]) out.track = p.track;
+    if (p.chapter && typeof p.chapter === 'object' && !isArr(p.chapter)) {
+      Object.keys(p.chapter).forEach(function (k) {
+        var id = p.chapter[k];
+        if (TRACK[k] && CH[id] && CH[id].track.id === k) out.chapter[k] = id;
+      });
+    }
+
+    if (!Object.keys(out.progress).length && !Object.keys(out.days).length) {
+      throw new Error('복원할 학습 기록을 찾지 못했어요. Speak Daily 백업이 맞는지 확인해 주세요.');
+    }
+    return out;
+  }
+
+  function applyBackup(raw) {
+    var data, msgBox = $('#restore-msg');
+    if (msgBox) msgBox.textContent = '';
+    try {
+      data = parseBackup(raw);
+    } catch (e) {
+      var msg = (e && e.message) ? e.message : '백업을 읽지 못했어요.';
+      toast(msg);
+      if (msgBox) msgBox.textContent = msg;
+      return;
+    }
+    var nowCount = Object.keys(S.progress || {}).length;
+    var nextCount = Object.keys(data.progress).length;
+    if (!window.confirm('백업 내용으로 복원할까요?\n\n지금 기록: ' + nowCount + '일 완료\n백업 내용: ' + nextCount + '일 완료 · 연속 ' + data.streak.count + '일\n\n지금 기록은 백업 내용으로 바뀝니다.')) return;
+
+    S.progress = data.progress;
+    S.days = data.days;
+    S.streak = data.streak;
+    Object.keys(data.settings).forEach(function (k) { S.settings[k] = data.settings[k]; });
+    if (data.track) S.track = data.track;
+    if (data.chapter) S.chapter = Object.assign(S.chapter, data.chapter);
+    rate = S.settings.rate || 1;
+    R = null;
+    save();
+    applyTheme();
+    closeSettings();
+    render();
+    toast(nextCount + '일 학습 기록을 복원했어요.');
+  }
+
+  function showBackupText(text) {
+    var t = $('#backup-json');
+    if (t) {
+      t.value = text;
+      t.hidden = false;
+      if (t.focus) t.focus();
+      if (t.select) { try { t.select(); } catch (e) { } }
+    }
+    toast('복사가 막혀 있어요. 아래 칸의 내용을 직접 복사해 주세요.');
+  }
+
+  function downloadBackup() {
+    var text = backupJson();
+    var name = 'speak-daily-backup-' + todayStr() + '.json';
+    try {
+      var blob = new Blob([text], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+        if (a.parentNode) a.parentNode.removeChild(a);
+      }, 1500);
+      toast('백업 파일을 저장했어요: ' + name);
+    } catch (e) {
+      showBackupText(text);
+    }
+  }
+
+  function copyBackup() {
+    var text = backupJson();
+    if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        toast('백업 JSON을 복사했어요. 메모나 메일에 붙여넣어 보관하세요.');
+      }).catch(function () { showBackupText(text); });
+      return;
+    }
+    showBackupText(text);
+  }
+
+  function restoreFromFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('파일이 너무 커요(5MB 초과).'); return; }
+    if (typeof FileReader === 'undefined') { toast('이 브라우저에서는 파일을 읽을 수 없어요. JSON을 붙여넣어 주세요.'); return; }
+    var reader = new FileReader();
+    reader.onload = function () { applyBackup(reader.result); };
+    reader.onerror = function () { toast('파일을 읽지 못했어요.'); };
+    reader.readAsText(file);
+  }
+
+  /* ---------------- router ---------------- */
+  function render() {
+    if (UI.tab === 'home') renderHome();
+    else if (UI.tab === 'review') renderReview();
+    else renderStats();
+    updateChrome();
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------------- events ---------------- */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!el) return;
+    var act = el.getAttribute('data-act');
+
+    // ---- navigation ----
+    if (act === 'track') {
+      S.track = el.getAttribute('data-track');
+      save(); render();
+      return;
+    }
+    if (act === 'chapter') {
+      S.chapter[S.track] = el.getAttribute('data-ch');
+      save(); render();
+      return;
+    }
+    if (act === 'tab') {
+      UI.tab = el.getAttribute('data-tab');
+      if (UI.tab !== 'review') R = null;
+      render();
+      return;
+    }
+    if (act === 'day') { openLesson(el.getAttribute('data-day')); return; }
+    if (act === 'go-home') { UI.tab = 'home'; render(); return; }
+    if (act === 'back') {
+      if (L) { closeLesson(); }
+      return;
+    }
+    if (act === 'home') {
+      UI.tab = 'home'; closeLesson(); return;
+    }
+
+    // ---- lesson ----
+    if (act === 'next') { if (L && L.step < 3) { L.step++; renderLesson(); } return; }
+    if (act === 'prev') { if (L && L.step > 1) { L.step--; renderLesson(); } return; }
+    if (act === 'complete') { completeDay(); return; }
+    if (act === 'uncomplete') {
+      if (L) { delete S.progress[L.day.id]; save(); }
+      closeLesson();
+      toast('완료 표시를 취소했어요.');
+      return;
+    }
+    if (act === 'say') {
+      var txt = el.getAttribute('data-say') || '';
+      speak(txt);
+      return;
+    }
+    if (act === 'rate') {
+      rate = parseFloat(el.getAttribute('data-rate')) || 1;
+      S.settings.rate = rate; save();
+      renderLesson();
+      if (L) speak(L.step === 1 ? L.day.key : el.getAttribute('data-say') || '', rate);
+      return;
+    }
+    if (act === 'toggle-ko') {
+      S.settings.hideKo = !S.settings.hideKo; save(); renderLesson(); return;
+    }
+    if (act === 'mic') { handleMic(el); return; }
+    if (act === 'type') { toggleType(el.getAttribute('data-i')); return; }
+    if (act === 'self') {
+      var si = el.getAttribute('data-i');
+      L.self = L.self || {};
+      L.self[si] = true;
+      var sb = $('#res-' + si);
+      if (sb) sb.innerHTML = selfHtml();
+      el.remove();
+      return;
+    }
+    if (act === 'submit-type') {
+      var idx = el.getAttribute('data-i');
+      var inp = $('#type-' + idx + ' input');
+      var val = (inp && inp.value || '').trim();
+      if (!val) { toast('문장을 입력해 주세요.'); return; }
+      L.res[idx] = { said: val };
+      var box = $('#res-' + idx);
+      if (box) box.innerHTML = resultHtml(L.day.variations[+idx].en, val);
+      if (inp) inp.value = '';
+      toggleType(idx, false);
+      return;
+    }
+    if (act === 'submit-rp') {
+      var v2 = ($('#rp-input') || {}).value || '';
+      v2 = v2.trim();
+      if (!v2) { toast('답을 말하거나 입력해 주세요.'); return; }
+      L.rp.said = v2; L.rp.revealed = true;
+      renderLesson();
+      var lb2 = $('#lbody'); if (lb2) lb2.scrollTop = 400;
+      return;
+    }
+    if (act === 'reveal') { L.rp.revealed = true; renderLesson(); return; }
+    if (act === 'ai-toggle') { L.aiOpen = !L.aiOpen; renderLesson(); return; }
+    if (act === 'ai-send') {
+      var ai = ($('#ai-input') || {}).value || '';
+      if (!ai.trim()) { toast('메시지를 입력해 주세요.'); return; }
+      aiSend(ai);
+      return;
+    }
+
+    // ---- review ----
+    if (act === 'review-start') { startReview(); return; }
+    if (act === 'rv-submit') {
+      var rv = ($('#rv-input') || {}).value || '';
+      rvSubmit(rv);
+      return;
+    }
+    if (act === 'rv-next') {
+      if (R.idx < R.items.length - 1) { R.idx++; renderReview(); }
+      else { R.done = true; renderReview(); }
+      return;
+    }
+    if (act === 'review-again') { R = null; startReview(); return; }
+    if (act === 'review-close') { R = null; renderReview(); return; }
+
+    // ---- settings ----
+    if (act === 'settings') { openSettings(); return; }
+    if (act === 'settings-close') { closeSettings(); return; }
+    if (act === 'backup-file') { downloadBackup(); return; }
+    if (act === 'backup-copy') { copyBackup(); return; }
+    if (act === 'restore-pick') {
+      var rf = $('#restore-file');
+      if (rf && rf.click) rf.click();
+      return;
+    }
+    if (act === 'restore-text') {
+      var rt = $('#restore-json');
+      applyBackup(rt ? rt.value : '');
+      return;
+    }
+    if (act === 'set-theme') {
+      S.settings.theme = el.getAttribute('data-v');
+      applyTheme(); save();
+      $$('#theme-seg button').forEach(function (b) { b.setAttribute('aria-pressed', b === el); });
+      return;
+    }
+    if (act === 'set-rate') {
+      S.settings.rate = parseFloat(el.getAttribute('data-v'));
+      rate = S.settings.rate;
+      save();
+      var seg = el.parentNode;
+      if (seg) $$('button', seg).forEach(function (b) { b.setAttribute('aria-pressed', b === el); });
+      return;
+    }
+    if (act === 'toggle-autoplay') {
+      S.settings.autoPlay = !S.settings.autoPlay;
+      el.setAttribute('aria-checked', S.settings.autoPlay);
+      save();
+      return;
+    }
+    if (act === 'toggle-hideko') {
+      S.settings.hideKo = !S.settings.hideKo;
+      el.setAttribute('aria-checked', S.settings.hideKo);
+      save(); renderLesson();
+      return;
+    }
+    if (act === 'save-key') {
+      var k = ($('#api-key') || {}).value || '';
+      S.settings.apiKey = k.trim();
+      save();
+      toast(S.settings.apiKey ? 'API 키를 저장했어요.' : '키를 비웠어요.');
+      return;
+    }
+    if (act === 'clear-key') {
+      S.settings.apiKey = '';
+      var ki = $('#api-key'); if (ki) ki.value = '';
+      save(); toast('API 키를 삭제했어요.');
+      return;
+    }
+    if (act === 'reset') {
+      if (window.confirm('학습 기록을 모두 지울까요? 되돌릴 수 없어요.')) {
+        S.progress = {}; S.days = {}; S.streak = { count: 0, last: '' };
+        R = null; save(); closeSettings(); render();
+        toast('학습 기록을 초기화했어요.');
+      }
+      return;
+    }
+  });
+
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t && t.id === 'restore-file') {
+      var f = t.files && t.files[0];
+      restoreFromFile(f);
+      t.value = '';
+    }
+  });
+
+  // Enter to submit inputs
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var t = e.target;
+    if (!t || !t.id) return;
+    if (t.id === 'rp-input') { var rb = document.querySelector('[data-act="submit-rp"]'); if (rb) rb.click(); }
+    else if (t.id === 'rv-input') { var b = document.querySelector('[data-act="rv-submit"]'); if (b) b.click(); }
+    else if (t.id === 'ai-input') { var c = document.querySelector('[data-act="ai-send"]'); if (c) c.click(); }
+    else if (t.getAttribute && t.getAttribute('data-input') != null) {
+      var btn = document.querySelector('[data-act="submit-type"][data-i="' + t.getAttribute('data-input') + '"]');
+      if (btn) btn.click();
+    }
+  });
+
+  /* ---------------- boot ---------------- */
+  load();
+  applyTheme();
+  if (!S.chapter[S.track]) S.chapter[S.track] = TRACK[S.track].chapters[0].id;
+  render();
+
+  /* ---------------- service worker (offline / PWA) ---------------- */
+  try {
+    var secure = typeof location !== 'undefined' &&
+      (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+    if (secure && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {
+          /* offline caching unavailable — the app still works online */
+        });
+      });
+    }
+  } catch (e) { /* non-browser environment */ }
+
+  // expose a couple of internals for quick debugging in the console
+  window.SpeakDaily = {
+    state: S,
+    data: DATA,
+    evaluate: evaluate,
+    backupJson: backupJson,
+    restore: applyBackup,
+    reset: function () { S.progress = {}; S.days = {}; S.streak = { count: 0, last: '' }; save(); render(); }
+  };
+})();
+
+</script>
+</body>
+</html>

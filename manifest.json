@@ -1,0 +1,41 @@
+{
+  "name": "Speak Daily",
+  "short_name": "Speak Daily",
+  "description": "스픽 3단계 학습법 기반 영어 스피킹 웹앱 — 핵심 패턴, 패턴 변형, 실전 롤플레이",
+  "lang": "ko",
+  "start_url": "/speak-english/",
+  "scope": "/speak-english/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#3B6EF6",
+  "background_color": "#F2F5FC",
+  "categories": [
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
