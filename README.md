@@ -4,6 +4,13 @@
 핵심 패턴 학습 → 패턴 변형 연습 → 실전 롤플레이 순서로 하루 분량을 진행합니다.
 배포 주소: https://danielsonghoon-sketch.github.io/speak-english/
 
+## 코스와 자료 출처
+
+- 트랙 A 비즈니스 실무 영어 29일 · 트랙 B 비즈니스 회사생활 영어 28일 · 트랙 C(원어민처럼 스피킹 중급 1~3탄, 구동사 격파 1~2탄) 137일 — **총 194 Day**.
+- 각 Day의 **핵심 문장(오늘의 패턴)과 뜻은 실제 스픽 커리큘럼의 Day 문장**입니다. 레슨 STEP 1에 `스픽 실제 Day 문장` 표시와 출처 링크가 붙습니다.
+- **패턴 변형 연습과 실전 롤플레이는 보충 연습**입니다. 스픽 유료 앱 안의 회차·변형 문장은 외부에서 열람할 수 없어, 그 Day의 주제와 패턴에 맞춰 새로 만들었습니다. STEP 2·3에 `보충 연습` 표시가 붙습니다.
+- 코스별 전체 출처 목록은 앱의 **기록 탭 → 자료 출처**에서 볼 수 있습니다.
+
 ## 앱으로 설치하기 (PWA)
 
 - **안드로이드(크롬·삼성 인터넷)**: 주소를 연 뒤 브라우저 메뉴에서 **앱 설치**(또는 홈 화면에 추가)를 누르면 주소창 없는 앱으로 열립니다.
@@ -28,14 +35,14 @@
 
 ## 구성
 
-- `index.html` — 앱 전체(HTML·CSS·JS·100일 학습 데이터)가 들어 있는 단일 파일. 외부 라이브러리가 없고, AI 프리토킹을 쓸 때만 `api.openai.com`으로 요청합니다.
+- `index.html` — 앱 전체(HTML·CSS·JS·194일 학습 데이터)가 들어 있는 단일 파일. 외부 라이브러리가 없고, AI 프리토킹을 쓸 때만 `api.openai.com`으로 요청합니다.
 - `manifest.json` — 앱 이름, 아이콘, 시작 주소·범위, standalone 표시, 테마 색.
 - `sw.js` — 오프라인 캐시. 앱 화면은 네트워크 우선, 아이콘·매니페스트는 캐시 우선이며 캐시 이름에 빌드 해시가 붙어 새 빌드에서 자동으로 갈아끼웁니다.
 - 아이콘 — `icon-192.png`, `icon-512.png`, `icon-maskable-192.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `favicon-32.png`.
 
 ## 갱신 방법
 
-원본은 `english-study/`에서 관리합니다.
+원본은 `english-study/`에서 관리합니다. 실제 스픽 Day 목록과 대조 근거는 `english-study/sources/speak-day-lists.md`에 있습니다.
 
 1. `english-study/src/` 수정 → `python3 english-study/build.py`
    (데이터 검증 + `speak-webapp.html` 빌드 + 이 저장소의 `index.html`·`manifest.json`·`sw.js`·아이콘 갱신)
