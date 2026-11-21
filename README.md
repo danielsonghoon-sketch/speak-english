@@ -10,6 +10,7 @@
 - 각 Day의 **핵심 문장(오늘의 패턴)과 뜻은 실제 스픽 커리큘럼의 Day 문장**입니다. 레슨 STEP 1에 `스픽 실제 Day 문장` 표시와 출처 링크가 붙습니다.
 - **패턴 변형 연습과 실전 롤플레이는 보충 연습**입니다. 스픽 유료 앱 안의 회차·변형 문장은 외부에서 열람할 수 없어, 그 Day의 주제와 패턴에 맞춰 새로 만들었습니다. STEP 2·3에 `보충 연습` 표시가 붙습니다.
 - 코스별 전체 출처 목록은 앱의 **기록 탭 → 자료 출처**에서 볼 수 있습니다.
+- 2026-11-21 194일 전수 점검에서 나온 오류·어색한 표현을 반영했습니다. 뜻이 틀리거나 원어민이 쓰지 않는 표현이던 16개 Day의 핵심 문장은 자연스러운 표현으로 다듬었고(예: C4 D5 `make away with` → `get rid of`), 고친 목록은 `english-study/sources/speak-day-lists.md`의 「앱에서 다듬은 핵심 문장」에 있습니다.
 
 ## 앱으로 설치하기 (PWA)
 
@@ -46,5 +47,5 @@
 
 1. `english-study/src/` 수정 → `python3 english-study/build.py`
    (데이터 검증 + `speak-webapp.html` 빌드 + 이 저장소의 `index.html`·`manifest.json`·`sw.js`·아이콘 갱신)
-2. `ALL_DAYS=1 WITH_SR=1 node english-study/test/dom-smoke.js` 로 동작 확인
+2. `ALL_DAYS=1 WITH_SR=1 node english-study/test/dom-smoke.js` 로 동작 확인 (node가 없는 환경에서는 `python3 english-study/test/data-smoke.py`)
 3. 이 폴더에서 커밋·푸시하면 GitHub Pages가 자동으로 다시 배포합니다.
